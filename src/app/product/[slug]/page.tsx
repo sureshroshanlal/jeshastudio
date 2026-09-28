@@ -87,7 +87,7 @@ export default function ProductDetailsPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-ivory-100">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#FFFDF9] via-[#FAF5EE] to-[#FFFDF9]">
       <Header onOpenFitModal={() => setFitModalOpen(true)} />
 
       {/* Breadcrumb Bar */}

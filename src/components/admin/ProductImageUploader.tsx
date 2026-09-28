@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import Image from 'next/image';
-import { UploadCloud, Link as LinkIcon, X, Star, Plus, Check, ImageIcon, AlertCircle } from 'lucide-react';
+import { UploadCloud, Link as LinkIcon, X, Star, Plus, Check, ImageIcon, AlertCircle, Sparkles } from 'lucide-react';
 
 interface ProductImageUploaderProps {
   images: string[];
@@ -16,8 +16,8 @@ export default function ProductImageUploader({ images, onChange }: ProductImageU
   const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Compress & convert file to Base64
-  const processFile = (file: File): Promise<string> => {
+  // Compress & convert file to Base64 (fallback or pre-upload)
+  const processFileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -27,7 +27,6 @@ export default function ProductImageUploader({ images, onChange }: ProductImageU
           let width = img.width;
           let height = img.height;
           
-          // Max dimension 1200px for optimal quality and fast storage
           const MAX_DIM = 1200;
           if (width > height && width > MAX_DIM) {
             height = Math.round((height * MAX_DIM) / width);
@@ -42,7 +41,6 @@ export default function ProductImageUploader({ images, onChange }: ProductImageU
           const ctx = canvas.getContext('2d');
           if (ctx) {
             ctx.drawImage(img, 0, 0, width, height);
-            // Convert to JPEG with 0.85 quality
             const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
             resolve(dataUrl);
           } else {
@@ -57,6 +55,25 @@ export default function ProductImageUploader({ images, onChange }: ProductImageU
     });
   };
 
+  const uploadFileToServer = async (file: File): Promise<string> => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.success && data.url) {
+        return data.url;
+      }
+    } catch (e) {
+      console.warn('Server upload failed, falling back to local optimized data URL:', e);
+    }
+    // Fallback to local Base64
+    return await processFileToBase64(file);
+  };
+
   const handleFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
     setIsProcessing(true);
@@ -65,13 +82,13 @@ export default function ProductImageUploader({ images, onChange }: ProductImageU
       const fileList = Array.from(files);
       const imageFiles = fileList.filter((f) => f.type.startsWith('image/'));
       
-      const newBase64Images = await Promise.all(
-        imageFiles.map((file) => processFile(file))
+      const newUrls = await Promise.all(
+        imageFiles.map((file) => uploadFileToServer(file))
       );
 
-      onChange([...images, ...newBase64Images]);
+      onChange([...images, ...newUrls]);
     } catch (err) {
-      console.error('Error reading files:', err);
+      console.error('Error handling files:', err);
     } finally {
       setIsProcessing(false);
       if (fileInputRef.current) {
@@ -113,21 +130,21 @@ export default function ProductImageUploader({ images, onChange }: ProductImageU
           <span>Product Photography Gallery ({images.length} added)</span>
         </label>
 
-        <div className="flex items-center gap-1 bg-ivory-100 p-1 rounded-xl border border-ivory-300 text-xs">
+        <div className="flex items-center gap-1 bg-amber-50/80 p-1 rounded-xl border border-amber-200/70 text-xs">
           <button
             type="button"
             onClick={() => setActiveMode('upload')}
             className={`px-3 py-1 rounded-lg font-medium transition-all ${
-              activeMode === 'upload' ? 'bg-white shadow-sm text-charcoal-900 font-semibold' : 'text-charcoal-600'
+              activeMode === 'upload' ? 'bg-white shadow-sm text-stone-900 font-semibold' : 'text-stone-600 hover:text-stone-900'
             }`}
           >
-            Upload from Device
+            Upload Photos
           </button>
           <button
             type="button"
             onClick={() => setActiveMode('url')}
             className={`px-3 py-1 rounded-lg font-medium transition-all ${
-              activeMode === 'url' ? 'bg-white shadow-sm text-charcoal-900 font-semibold' : 'text-charcoal-600'
+              activeMode === 'url' ? 'bg-white shadow-sm text-stone-900 font-semibold' : 'text-stone-600 hover:text-stone-900'
             }`}
           >
             Paste URL
@@ -144,8 +161,8 @@ export default function ProductImageUploader({ images, onChange }: ProductImageU
           onClick={() => fileInputRef.current?.click()}
           className={`relative border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all ${
             isDragging
-              ? 'border-rose-500 bg-rose-50/60 scale-[1.01]'
-              : 'border-ivory-300 hover:border-rose-400 bg-ivory-50/80'
+              ? 'border-rose-500 bg-rose-50/70 scale-[1.01]'
+              : 'border-amber-300/80 hover:border-rose-400 bg-amber-50/40 hover:bg-rose-50/20'
           }`}
         >
           <input
@@ -163,10 +180,10 @@ export default function ProductImageUploader({ images, onChange }: ProductImageU
             </div>
             <div>
               <p className="text-xs font-semibold text-charcoal-900">
-                {isProcessing ? 'Processing & Optimizing Images...' : 'Click to Browse or Drag & Drop Photos'}
+                {isProcessing ? 'Saving & Optimizing Photos to Atelier Database...' : 'Click to Browse or Drag & Drop Photos'}
               </p>
               <p className="text-[11px] text-charcoal-600 mt-0.5">
-                PNG, JPG, WEBP • Upload model shots, flat lays, &amp; fabric details (Multiple supported)
+                PNG, JPG, WEBP • Saves permanently to backend storage &amp; generates instant responsive web previews
               </p>
             </div>
           </div>
@@ -180,12 +197,12 @@ export default function ProductImageUploader({ images, onChange }: ProductImageU
             value={urlInput}
             onChange={(e) => setUrlInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddUrl(); } }}
-            className="flex-1 p-2.5 rounded-xl border border-ivory-300 bg-ivory-50 text-xs focus:outline-none focus:border-rose-400"
+            className="flex-1 p-2.5 rounded-xl border border-stone-300 bg-white text-xs focus:outline-none focus:border-rose-400"
           />
           <button
             type="button"
             onClick={handleAddUrl}
-            className="px-4 py-2 bg-charcoal-900 hover:bg-charcoal-800 text-white rounded-xl text-xs font-semibold"
+            className="px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-xs font-semibold"
           >
             Add Image Link
           </button>
@@ -198,15 +215,15 @@ export default function ProductImageUploader({ images, onChange }: ProductImageU
           {images.map((img, idx) => (
             <div
               key={idx}
-              className={`group relative aspect-[3/4] rounded-2xl overflow-hidden border-2 bg-ivory-100 transition-all ${
-                idx === 0 ? 'border-rose-500 shadow-md ring-2 ring-rose-200' : 'border-ivory-300 hover:border-charcoal-400'
+              className={`group relative aspect-[3/4] rounded-2xl overflow-hidden border-2 bg-amber-50/50 transition-all ${
+                idx === 0 ? 'border-rose-500 shadow-md ring-2 ring-rose-200' : 'border-stone-200 hover:border-stone-400'
               }`}
             >
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={img}
                 alt={`Photo ${idx + 1}`}
-                fill
-                className="object-cover"
+                className="w-full h-full object-cover"
               />
 
               {/* Cover badge */}
@@ -218,7 +235,7 @@ export default function ProductImageUploader({ images, onChange }: ProductImageU
                 <button
                   type="button"
                   onClick={() => handleSetPrimary(idx)}
-                  className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-md bg-charcoal-900/80 hover:bg-charcoal-900 text-white text-[9px] font-medium opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-md bg-stone-900/80 hover:bg-stone-900 text-white text-[9px] font-medium opacity-0 group-hover:opacity-100 transition-opacity"
                   title="Make this the primary cover photo"
                 >
                   Set as Cover
@@ -235,7 +252,7 @@ export default function ProductImageUploader({ images, onChange }: ProductImageU
                 <X className="w-3.5 h-3.5" />
               </button>
 
-              <div className="absolute bottom-2 right-2 bg-charcoal-900/70 backdrop-blur-sm text-white text-[9px] px-1.5 py-0.5 rounded font-mono">
+              <div className="absolute bottom-2 right-2 bg-stone-900/70 backdrop-blur-sm text-white text-[9px] px-1.5 py-0.5 rounded font-mono">
                 #{idx + 1}
               </div>
             </div>

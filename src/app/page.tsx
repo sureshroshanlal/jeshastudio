@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, HeartHandshake, Ruler } from 'lucide-react';
+import { ArrowRight, Sparkles, HeartHandshake, Ruler, Star } from 'lucide-react';
 import Header from '@/components/storefront/Header';
 import HeroLookbook from '@/components/storefront/HeroLookbook';
 import ShopByAge from '@/components/storefront/ShopByAge';
@@ -27,7 +27,7 @@ export default function HomePage() {
   const newArrivals = products.filter((p) => p.isNewArrival).slice(0, 4);
 
   return (
-    <div className="min-h-screen flex flex-col bg-ivory-100">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#FFFDF9] via-[#FAF5EE] to-[#FFFDF9] text-stone-900">
       {/* Header */}
       <Header onOpenFitModal={() => handleOpenFitModal()} />
 
@@ -40,21 +40,21 @@ export default function HomePage() {
 
         {/* Curated Collection 1: The Festive Edit */}
         <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-ivory-300">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-amber-200/60">
             <div>
-              <div className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.25em] text-rose-500 font-semibold font-sans mb-1">
-                <Sparkles className="w-3.5 h-3.5" /> Curated Seasonal Capsule
+              <div className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.25em] text-rose-600 font-bold font-sans mb-1">
+                <Sparkles className="w-3.5 h-3.5 text-rose-500" /> Curated Seasonal Capsule
               </div>
-              <h2 className="font-serif text-2xl sm:text-3xl font-semibold text-charcoal-900">
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900">
                 The Festive Twirl Edit
               </h2>
             </div>
             <Link
               href="/collections?occasion=Festive"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-charcoal-800 hover:text-rose-500 transition-colors mt-2 sm:mt-0"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-stone-800 hover:text-rose-600 transition-colors mt-2 sm:mt-0 group"
             >
               <span>View All Festive Pieces ({products.filter((p) => p.isFestiveEdit).length})</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-rose-500" />
             </Link>
           </div>
 
@@ -74,21 +74,21 @@ export default function HomePage() {
 
         {/* Curated Collection 2: New Season Arrivals */}
         <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-ivory-300">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-amber-200/60">
             <div>
-              <span className="text-[11px] uppercase tracking-[0.25em] text-pistachio-500 font-semibold font-sans">
-                Just Arrived at the Atelier
+              <span className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.25em] text-emerald-700 font-bold font-sans">
+                <Star className="w-3.5 h-3.5 fill-emerald-600 text-emerald-600" /> Just Arrived at the Atelier
               </span>
-              <h2 className="font-serif text-2xl sm:text-3xl font-semibold text-charcoal-900 mt-1">
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
                 Fresh Off the Loom
               </h2>
             </div>
             <Link
               href="/collections?newArrival=true"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-charcoal-800 hover:text-rose-500 transition-colors mt-2 sm:mt-0"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-stone-800 hover:text-rose-600 transition-colors mt-2 sm:mt-0 group"
             >
               <span>Explore All New Arrivals</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-emerald-600" />
             </Link>
           </div>
 

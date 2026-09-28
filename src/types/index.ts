@@ -112,3 +112,14 @@ export interface SizeRecommendationInput {
   build: 'Slim' | 'Regular' | 'Chubby/Broad';
   fitPreference: 'Snug Fit' | 'True to Size' | 'Room to Grow';
 }
+
+export interface AdminUser {
+  id: string;
+  email: string;
+  username: string;
+  name: string;
+  role: 'Master Atelier Admin' | 'Store Manager' | 'Inventory Curator';
+  avatar?: string;
+  lastLogin?: string;
+}
+

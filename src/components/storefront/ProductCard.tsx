@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { MessageCircle, Ruler, Sparkles, ArrowUpRight } from 'lucide-react';
+import { MessageCircle, Ruler, Sparkles, ArrowUpRight, Star } from 'lucide-react';
 import { Product } from '@/types';
 import { generateProductOrderUrl } from '@/lib/whatsapp';
 
@@ -24,42 +24,41 @@ export default function ProductCard({ product, onOpenFitModal }: ProductCardProp
 
   return (
     <div 
-      className="group relative flex flex-col bg-white rounded-3xl overflow-hidden border border-ivory-200/90 shadow-soft hover:shadow-soft-xl transition-all duration-500 hover:-translate-y-1"
+      className="group relative flex flex-col bg-white rounded-3xl overflow-hidden border border-amber-200/70 shadow-soft hover:shadow-joy transition-all duration-500 hover:-translate-y-1.5"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Image Showcase Container */}
-      <Link href={`/product/${product.slug}`} className="relative aspect-[4/5] overflow-hidden bg-ivory-100 block">
+      <Link href={`/product/${product.slug}`} className="relative aspect-[4/5] overflow-hidden bg-amber-50/40 block">
         {/* Main Image */}
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src={isHovered ? hoverImage : primaryImage}
           alt={product.name}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+          className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
         />
 
-        {/* Badges */}
+        {/* Floating Celebration Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
           {product.isFestiveEdit && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-semibold tracking-wider text-rose-500 uppercase shadow-sm border border-rose-100">
-              <Sparkles className="w-3 h-3" /> Festive Edit
+            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500 to-rose-500 text-white text-[10px] font-bold tracking-wider uppercase shadow-md">
+              <Sparkles className="w-3 h-3 text-amber-200" /> Festive Sparkle
             </span>
           )}
           {product.isNewArrival && !product.isFestiveEdit && (
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-semibold tracking-wider text-pistachio-500 uppercase shadow-sm border border-pistachio-100">
-              New Arrival
+            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-600 text-white text-[10px] font-bold tracking-wider uppercase shadow-md">
+              <Star className="w-3 h-3 fill-white" /> New Arrival
             </span>
           )}
         </div>
 
         {/* Model Fit Tag floating pill */}
         <div className="absolute bottom-3 left-3 right-3 z-10 transition-opacity duration-300">
-          <div className="px-3 py-1.5 rounded-xl bg-charcoal-900/75 backdrop-blur-md text-white text-[11px] flex items-center justify-between">
-            <span className="text-ivory-200 truncate">
+          <div className="px-3 py-1.5 rounded-xl bg-stone-900/80 backdrop-blur-md text-white text-[11px] flex items-center justify-between border border-white/10 shadow-md">
+            <span className="text-amber-100 truncate">
               Model {product.modelFit.modelName}: {product.modelFit.modelAge} ({product.modelFit.heightCm}cm)
             </span>
-            <span className="text-rose-200 font-medium ml-1 flex-shrink-0">
+            <span className="text-rose-300 font-semibold ml-1 flex-shrink-0">
               Wears {product.modelFit.wearingSize}
             </span>
           </div>
@@ -70,37 +69,37 @@ export default function ProductCard({ product, onOpenFitModal }: ProductCardProp
       <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
         <div>
           {/* Category & Style */}
-          <div className="flex items-center justify-between text-xs text-charcoal-600 mb-1.5">
-            <span className="tracking-wide uppercase text-[10px] font-semibold text-charcoal-600">
+          <div className="flex items-center justify-between text-xs text-stone-500 mb-1.5">
+            <span className="tracking-wide uppercase text-[10px] font-bold text-amber-800">
               {product.gender} • {product.styleCategory}
             </span>
-            <span className="text-[10px] bg-ivory-200 text-charcoal-700 px-2 py-0.5 rounded-full font-medium">
+            <span className="text-[10px] bg-amber-50 text-amber-900 border border-amber-200 px-2.5 py-0.5 rounded-full font-semibold">
               {product.ageGroups.join(', ')} Yrs
             </span>
           </div>
 
           {/* Product Name */}
-          <Link href={`/product/${product.slug}`} className="group-hover:text-rose-500 transition-colors">
-            <h3 className="font-serif text-lg font-semibold text-charcoal-900 line-clamp-1 leading-snug">
+          <Link href={`/product/${product.slug}`} className="group-hover:text-rose-600 transition-colors">
+            <h3 className="font-serif text-lg font-bold text-stone-900 line-clamp-1 leading-snug">
               {product.name}
             </h3>
           </Link>
 
           {/* Tagline */}
-          <p className="text-xs text-charcoal-600 line-clamp-1 mt-1">
+          <p className="text-xs text-stone-600 line-clamp-1 mt-1 font-normal">
             {product.tagline}
           </p>
 
-          {/* Price */}
+          {/* Price & Savings */}
           <div className="flex items-baseline gap-2 mt-2.5">
-            <span className="text-lg font-serif font-bold text-charcoal-900">
+            <span className="text-xl font-serif font-bold text-stone-900">
               ₹{product.price}
             </span>
-            <span className="text-xs text-charcoal-600 line-through">
+            <span className="text-xs text-stone-400 line-through">
               ₹{product.mrp}
             </span>
             {discountPercent > 0 && (
-              <span className="text-[11px] font-semibold text-rose-500 bg-rose-50 px-1.5 py-0.5 rounded">
+              <span className="text-[11px] font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full">
                 Save {discountPercent}%
               </span>
             )}
@@ -109,13 +108,13 @@ export default function ProductCard({ product, onOpenFitModal }: ProductCardProp
 
         {/* Size Selection Chips */}
         <div>
-          <div className="flex items-center justify-between text-[11px] text-charcoal-600 mb-1.5">
+          <div className="flex items-center justify-between text-[11px] text-stone-600 mb-1.5 font-medium">
             <span>Select Size:</span>
             {onOpenFitModal && (
               <button
                 type="button"
                 onClick={() => onOpenFitModal(product.name)}
-                className="text-rose-500 hover:underline flex items-center gap-0.5"
+                className="text-rose-600 hover:text-rose-700 font-semibold flex items-center gap-0.5 underline"
               >
                 <Ruler className="w-3 h-3" /> Size Guide
               </button>
@@ -127,10 +126,10 @@ export default function ProductCard({ product, onOpenFitModal }: ProductCardProp
                 key={v.sku}
                 type="button"
                 onClick={() => setSelectedSizeIndex(idx)}
-                className={`px-2.5 py-1 text-xs rounded-lg font-medium border transition-all ${
+                className={`px-2.5 py-1 text-xs rounded-xl font-semibold border transition-all ${
                   selectedSizeIndex === idx
-                    ? 'bg-charcoal-900 text-white border-charcoal-900'
-                    : 'bg-ivory-50 text-charcoal-700 border-ivory-300 hover:border-charcoal-400'
+                    ? 'bg-stone-900 text-white border-stone-900 shadow-sm'
+                    : 'bg-amber-50/60 text-stone-700 border-amber-200/80 hover:border-amber-400'
                 }`}
               >
                 {v.size}
@@ -139,28 +138,17 @@ export default function ProductCard({ product, onOpenFitModal }: ProductCardProp
           </div>
         </div>
 
-        {/* WhatsApp Order CTA Button */}
-        <div className="pt-2 border-t border-ivory-200/80 flex items-center gap-2">
+        {/* WhatsApp Quick Order Action */}
+        <div className="pt-2 border-t border-amber-100 flex items-center gap-2">
           <a
-            href={generateProductOrderUrl({
-              product,
-              selectedVariant: currentVariant,
-            })}
+            href={generateProductOrderUrl({ product, selectedVariant: currentVariant })}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 py-2.5 px-3 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-medium flex items-center justify-center gap-1.5 shadow-sm transition-transform active:scale-[0.98]"
+            className="w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md transition-all"
           >
             <MessageCircle className="w-4 h-4 fill-white" />
             <span>Order on WhatsApp</span>
           </a>
-
-          <Link
-            href={`/product/${product.slug}`}
-            className="p-2.5 rounded-2xl bg-ivory-100 hover:bg-rose-100 text-charcoal-700 hover:text-rose-500 transition-colors border border-ivory-300"
-            title="View Product Details"
-          >
-            <ArrowUpRight className="w-4 h-4" />
-          </Link>
         </div>
       </div>
     </div>

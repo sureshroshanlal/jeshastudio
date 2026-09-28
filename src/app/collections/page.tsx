@@ -83,21 +83,22 @@ function CollectionsContent() {
   const hasActiveFilters = selectedAge !== 'All' || selectedGender !== 'All' || selectedStyle !== 'All' || selectedOccasion !== 'All' || searchQuery.trim().length > 0;
 
   return (
-    <div className="min-h-screen flex flex-col bg-ivory-100">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#FFFDF9] via-[#FAF5EE] to-[#FFFDF9]">
       <Header onOpenFitModal={() => { setSelectedProductForFit(undefined); setFitModalOpen(true); }} />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        {/* Page Banner */}
-        <div className="rounded-3xl bg-gradient-to-r from-ivory-200 via-rose-100/50 to-pistachio-100/50 p-6 sm:p-8 mb-8 border border-ivory-300">
-          <div className="max-w-2xl">
-            <span className="text-[10px] uppercase tracking-[0.25em] text-rose-500 font-semibold font-sans">
-              The Complete Jesha Catalogue
+        {/* Page Banner with Joyful Luxury Colors */}
+        <div className="rounded-3xl bg-gradient-to-r from-amber-100/80 via-rose-50/90 to-emerald-50/80 p-6 sm:p-8 mb-8 border border-amber-200/80 shadow-soft relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-amber-300/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="max-w-2xl relative z-10">
+            <span className="text-[10px] uppercase tracking-[0.25em] text-rose-600 font-bold font-sans flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-rose-500" /> The Complete Jesha Catalogue
             </span>
-            <h1 className="font-serif text-3xl sm:text-4xl font-semibold text-charcoal-900 mt-1">
+            <h1 className="font-serif text-3xl sm:text-4xl font-bold text-stone-900 mt-1">
               Curated Kids Wardrobe
             </h1>
-            <p className="text-xs sm:text-sm text-charcoal-600 mt-2">
+            <p className="text-xs sm:text-sm text-stone-600 mt-2 font-normal">
               Explore timeless modern Indian, Western, and Indo-western pieces crafted from pure cottons, natural linens, and soft silks (Ages 0–14).
             </p>
           </div>

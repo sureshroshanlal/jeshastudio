@@ -22,7 +22,7 @@ import AdminAuthGate from '@/components/admin/AdminAuthGate';
 function AdminLayoutInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { resetToFactoryDefaults } = useJeshaStore();
-  const { isAuthenticated, isLoading, logout } = useAdminAuth();
+  const { isAuthenticated, isLoading, currentUser, logout } = useAdminAuth();
 
   if (isLoading) {
     return (
@@ -65,7 +65,34 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
             </Link>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
+            {/* User Profile Pill */}
+            {currentUser && (
+              <div className="hidden md:flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-charcoal-800/90 border border-charcoal-700 text-xs">
+                {currentUser.avatar ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={currentUser.avatar}
+                    alt={currentUser.name}
+                    className="w-6 h-6 rounded-full object-cover ring-1 ring-amber-400"
+                  />
+                ) : (
+                  <div className="w-6 h-6 rounded-full bg-amber-500 text-charcoal-900 font-bold flex items-center justify-center text-[10px]">
+                    {currentUser.name.charAt(0)}
+                  </div>
+                )}
+                <div className="text-left">
+                  <div className="text-white font-medium text-[11px] leading-tight flex items-center gap-1">
+                    <span>{currentUser.name}</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  </div>
+                  <div className="text-[10px] text-amber-200/70 font-sans leading-tight">
+                    {currentUser.role}
+                  </div>
+                </div>
+              </div>
+            )}
+
             <button
               onClick={() => {
                 if (confirm('Reset catalog, orders, and stock to initial factory defaults?')) {
@@ -74,11 +101,11 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
                   window.location.reload();
                 }
               }}
-              className="text-xs text-ivory-400 hover:text-white px-3 py-1.5 rounded-lg border border-charcoal-700 hover:border-charcoal-600 transition-colors flex items-center gap-1.5"
+              className="text-xs text-ivory-400 hover:text-white px-2.5 py-1.5 rounded-lg border border-charcoal-700 hover:border-charcoal-600 transition-colors flex items-center gap-1.5"
               title="Reset test data to initial seed catalog"
             >
               <RefreshCw className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Reset Seed Data</span>
+              <span className="hidden sm:inline">Reset Seed</span>
             </button>
 
             <Link
@@ -97,7 +124,7 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
               title="Lock Admin Portal & Logout"
             >
               <LogOut className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Lock / Logout</span>
+              <span className="hidden sm:inline">Sign Out</span>
             </button>
           </div>
         </div>
