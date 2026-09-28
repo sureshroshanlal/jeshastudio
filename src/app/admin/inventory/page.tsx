@@ -153,11 +153,11 @@ export default function InventoryManagementPage() {
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
                         <div className="relative w-10 h-12 rounded-lg overflow-hidden bg-ivory-100 flex-shrink-0 border border-ivory-200">
-                          <Image
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
                             src={row.product.images[0] || 'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=150&q=80'}
                             alt={row.product.name}
-                            fill
-                            className="object-cover"
+                            className="w-full h-full object-cover"
                           />
                         </div>
                         <div>

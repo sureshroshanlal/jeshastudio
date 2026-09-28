@@ -318,11 +318,11 @@ function ProductsManagementContent() {
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
                         <div className="relative w-12 h-14 rounded-xl overflow-hidden bg-ivory-100 flex-shrink-0 border border-ivory-300">
-                          <Image
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
                             src={p.images[0] || 'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=200&q=80'}
                             alt={p.name}
-                            fill
-                            className="object-cover"
+                            className="w-full h-full object-cover"
                           />
                         </div>
                         <div className="min-w-0">
