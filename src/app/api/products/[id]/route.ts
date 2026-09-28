@@ -8,7 +8,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const product = getProductById(params.id);
+    const product = await getProductById(params.id);
     if (!product) {
       return NextResponse.json({ success: false, message: 'Product not found' }, { status: 404 });
     }
@@ -27,15 +27,15 @@ export async function PUT(
 
     // Check if this is a specialized stock update
     if (body.action === 'updateStock' && body.sku && typeof body.stock === 'number') {
-      const ok = updateStockInDb(params.id, body.sku, body.stock);
+      const ok = await updateStockInDb(params.id, body.sku, body.stock);
       if (!ok) {
         return NextResponse.json({ success: false, message: 'Stock update failed' }, { status: 400 });
       }
-      const updated = getProductById(params.id);
+      const updated = await getProductById(params.id);
       return NextResponse.json({ success: true, product: updated });
     }
 
-    const updated = updateProductInDb(params.id, body);
+    const updated = await updateProductInDb(params.id, body);
     if (!updated) {
       return NextResponse.json({ success: false, message: 'Product not found' }, { status: 404 });
     }
@@ -52,7 +52,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const success = deleteProductFromDb(params.id);
+    const success = await deleteProductFromDb(params.id);
     if (!success) {
       return NextResponse.json({ success: false, message: 'Product not found' }, { status: 404 });
     }

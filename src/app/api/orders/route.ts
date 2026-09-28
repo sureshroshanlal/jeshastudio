@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const orders = getAllOrders();
+    const orders = await getAllOrders();
     return NextResponse.json({ success: true, count: orders.length, orders });
   } catch (error) {
     return NextResponse.json(
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const created = insertOrder(body as Order);
+    const created = await insertOrder(body as Order);
     return NextResponse.json({ success: true, order: created }, { status: 201 });
   } catch (error) {
     console.error('API Error creating order:', error);

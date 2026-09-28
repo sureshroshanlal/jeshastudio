@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search');
     const featured = searchParams.get('featured');
 
-    let products = getAllProducts();
+    let products = await getAllProducts();
 
     if (gender && gender !== 'All') {
       products = products.filter((p) => p.gender === gender || p.gender === 'Unisex');
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const created = insertProduct(body as Product);
+    const created = await insertProduct(body as Product);
     return NextResponse.json({ success: true, product: created }, { status: 201 });
   } catch (error) {
     console.error('API Error creating product:', error);

@@ -8,7 +8,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const order = getOrderById(params.id);
+    const order = await getOrderById(params.id);
     if (!order) {
       return NextResponse.json({ success: false, message: 'Order not found' }, { status: 404 });
     }
@@ -24,7 +24,7 @@ export async function PUT(
 ) {
   try {
     const body = await request.json();
-    const updated = updateOrderInDb(params.id, body);
+    const updated = await updateOrderInDb(params.id, body);
     if (!updated) {
       return NextResponse.json({ success: false, message: 'Order not found' }, { status: 404 });
     }
@@ -39,7 +39,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const success = deleteOrderFromDb(params.id);
+    const success = await deleteOrderFromDb(params.id);
     if (!success) {
       return NextResponse.json({ success: false, message: 'Order not found' }, { status: 404 });
     }

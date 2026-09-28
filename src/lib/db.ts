@@ -2,12 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import { Product, Order } from '@/types';
 import { INITIAL_PRODUCTS, INITIAL_ORDERS } from './initialData';
+import { isSupabaseConfigured, getSupabaseAdmin } from './supabase';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const PRODUCTS_FILE = path.join(DATA_DIR, 'products.json');
 const ORDERS_FILE = path.join(DATA_DIR, 'orders.json');
 
-// Ensure data directory and files exist with seed data
+// Ensure data directory and files exist with seed data for local fallback
 function ensureDataDir() {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -22,102 +23,252 @@ function ensureDataDir() {
   }
 }
 
-// Read products from persistent storage
-export function readProducts(): Product[] {
+// Data Converters between Postgres snake_case and TypeScript camelCase
+function rowToProduct(row: any): Product {
+  return {
+    id: row.id,
+    slug: row.slug,
+    name: row.name,
+    tagline: row.tagline || '',
+    description: row.description || '',
+    gender: row.gender,
+    styleCategory: row.style_category,
+    ageGroups: Array.isArray(row.age_groups) ? row.age_groups : JSON.parse(row.age_groups || '[]'),
+    occasions: Array.isArray(row.occasions) ? row.occasions : JSON.parse(row.occasions || '[]'),
+    price: Number(row.price),
+    mrp: Number(row.mrp),
+    featured: Boolean(row.featured),
+    isNewArrival: Boolean(row.is_new_arrival),
+    isFestiveEdit: Boolean(row.is_festive_edit),
+    images: Array.isArray(row.images) ? row.images : JSON.parse(row.images || '[]'),
+    variants: Array.isArray(row.variants) ? row.variants : JSON.parse(row.variants || '[]'),
+    modelFit: typeof row.model_fit === 'object' && row.model_fit !== null ? row.model_fit : JSON.parse(row.model_fit || '{}'),
+    details: typeof row.details === 'object' && row.details !== null ? row.details : JSON.parse(row.details || '{}'),
+    createdAt: row.created_at || new Date().toISOString(),
+  };
+}
+
+function productToRow(product: Product): any {
+  return {
+    id: product.id,
+    slug: product.slug,
+    name: product.name,
+    tagline: product.tagline,
+    description: product.description,
+    gender: product.gender,
+    style_category: product.styleCategory,
+    age_groups: product.ageGroups,
+    occasions: product.occasions,
+    price: product.price,
+    mrp: product.mrp,
+    featured: product.featured,
+    is_new_arrival: product.isNewArrival,
+    is_festive_edit: product.isFestiveEdit,
+    images: product.images,
+    variants: product.variants,
+    model_fit: product.modelFit,
+    details: product.details,
+    created_at: product.createdAt,
+    updated_at: new Date().toISOString(),
+  };
+}
+
+function rowToOrder(row: any): Order {
+  return {
+    id: row.id,
+    orderNumber: row.order_number,
+    source: row.source,
+    customer: typeof row.customer === 'object' ? row.customer : JSON.parse(row.customer || '{}'),
+    items: Array.isArray(row.items) ? row.items : JSON.parse(row.items || '[]'),
+    subtotal: Number(row.subtotal),
+    discount: Number(row.discount),
+    shippingFee: Number(row.shipping_fee),
+    grandTotal: Number(row.grand_total),
+    orderStatus: row.order_status,
+    paymentStatus: row.payment_status,
+    paymentMethod: row.payment_method,
+    awbNumber: row.awb_number,
+    courierPartner: row.courier_partner,
+    invoiceUrl: row.invoice_url,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+function orderToRow(order: Order): any {
+  return {
+    id: order.id,
+    order_number: order.orderNumber,
+    source: order.source,
+    customer: order.customer,
+    items: order.items,
+    subtotal: order.subtotal,
+    discount: order.discount,
+    shipping_fee: order.shippingFee,
+    grand_total: order.grandTotal,
+    order_status: order.orderStatus,
+    payment_status: order.paymentStatus,
+    payment_method: order.paymentMethod,
+    awb_number: order.awbNumber,
+    courier_partner: order.courierPartner,
+    invoice_url: order.invoiceUrl,
+    created_at: order.createdAt,
+    updated_at: new Date().toISOString(),
+  };
+}
+
+// Local File Read/Write Fallbacks
+export function readProductsLocal(): Product[] {
   try {
     ensureDataDir();
     const raw = fs.readFileSync(PRODUCTS_FILE, 'utf-8');
     return JSON.parse(raw);
   } catch (error) {
-    console.error('Error reading products database:', error);
+    console.error('Error reading local products database:', error);
     return INITIAL_PRODUCTS;
   }
 }
 
-// Write products to persistent storage
-export function writeProducts(products: Product[]): void {
+export function writeProductsLocal(products: Product[]): void {
   try {
     ensureDataDir();
     fs.writeFileSync(PRODUCTS_FILE, JSON.stringify(products, null, 2), 'utf-8');
   } catch (error) {
-    console.error('Error writing products database:', error);
-    throw new Error('Database write failure');
+    console.error('Error writing local products database:', error);
   }
 }
 
-// Read orders from persistent storage
-export function readOrders(): Order[] {
+export function readOrdersLocal(): Order[] {
   try {
     ensureDataDir();
     const raw = fs.readFileSync(ORDERS_FILE, 'utf-8');
     return JSON.parse(raw);
   } catch (error) {
-    console.error('Error reading orders database:', error);
+    console.error('Error reading local orders database:', error);
     return INITIAL_ORDERS;
   }
 }
 
-// Write orders to persistent storage
-export function writeOrders(orders: Order[]): void {
+export function writeOrdersLocal(orders: Order[]): void {
   try {
     ensureDataDir();
     fs.writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2), 'utf-8');
   } catch (error) {
-    console.error('Error writing orders database:', error);
-    throw new Error('Database write failure');
+    console.error('Error writing local orders database:', error);
   }
 }
 
-// CRUD Operations: Products
-export function getAllProducts(): Product[] {
-  return readProducts();
+// CRUD Operations: Products (Dual Support: Supabase or Local)
+export async function getAllProducts(): Promise<Product[]> {
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+      if (!error && data && data.length > 0) {
+        return data.map(rowToProduct);
+      }
+      if (!error && data && data.length === 0) {
+        // Auto-seed Supabase if empty
+        await resetDatabaseToSeed();
+        return INITIAL_PRODUCTS;
+      }
+    }
+  }
+  return readProductsLocal();
 }
 
-export function getProductById(idOrSlug: string): Product | undefined {
-  const products = readProducts();
+export async function getProductById(idOrSlug: string): Promise<Product | undefined> {
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .or(`id.eq.${idOrSlug},slug.eq.${idOrSlug}`)
+        .single();
+      if (!error && data) {
+        return rowToProduct(data);
+      }
+    }
+  }
+  const products = readProductsLocal();
   return products.find((p) => p.id === idOrSlug || p.slug === idOrSlug);
 }
 
-export function insertProduct(product: Product): Product {
-  const products = readProducts();
-  // Ensure unique ID and slug
+export async function insertProduct(product: Product): Promise<Product> {
   const newProduct: Product = {
     ...product,
     id: product.id || `prod-${Date.now()}`,
     slug: product.slug || product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
     createdAt: product.createdAt || new Date().toISOString(),
   };
+
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const row = productToRow(newProduct);
+      const { data, error } = await supabase.from('products').insert([row]).select().single();
+      if (!error && data) {
+        return rowToProduct(data);
+      }
+      console.error('Supabase product insert error:', error);
+    }
+  }
+
+  const products = readProductsLocal();
   const updated = [newProduct, ...products];
-  writeProducts(updated);
+  writeProductsLocal(updated);
   return newProduct;
 }
 
-export function updateProductInDb(id: string, updates: Partial<Product>): Product | null {
-  const products = readProducts();
+export async function updateProductInDb(id: string, updates: Partial<Product>): Promise<Product | null> {
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const existing = await getProductById(id);
+      if (!existing) return null;
+      const merged: Product = { ...existing, ...updates };
+      const row = productToRow(merged);
+      const { data, error } = await supabase.from('products').update(row).eq('id', id).select().single();
+      if (!error && data) {
+        return rowToProduct(data);
+      }
+      console.error('Supabase product update error:', error);
+    }
+  }
+
+  const products = readProductsLocal();
   const index = products.findIndex((p) => p.id === id);
   if (index === -1) return null;
 
   const updatedProduct = { ...products[index], ...updates };
   products[index] = updatedProduct;
-  writeProducts(products);
+  writeProductsLocal(products);
   return updatedProduct;
 }
 
-export function deleteProductFromDb(id: string): boolean {
-  const products = readProducts();
+export async function deleteProductFromDb(id: string): Promise<boolean> {
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const { error } = await supabase.from('products').delete().eq('id', id);
+      if (!error) return true;
+    }
+  }
+
+  const products = readProductsLocal();
   const filtered = products.filter((p) => p.id !== id);
   if (filtered.length === products.length) return false;
-  writeProducts(filtered);
+  writeProductsLocal(filtered);
   return true;
 }
 
-export function updateStockInDb(productId: string, sku: string, newStock: number): boolean {
-  const products = readProducts();
-  const product = products.find((p) => p.id === productId);
+export async function updateStockInDb(productId: string, sku: string, newStock: number): Promise<boolean> {
+  const product = await getProductById(productId);
   if (!product) return false;
 
   let variantFound = false;
-  product.variants = product.variants.map((v) => {
+  const updatedVariants = product.variants.map((v) => {
     if (v.sku === sku) {
       variantFound = true;
       return { ...v, stock: Math.max(0, newStock) };
@@ -126,44 +277,43 @@ export function updateStockInDb(productId: string, sku: string, newStock: number
   });
 
   if (!variantFound) return false;
-  writeProducts(products);
-  return true;
+  const updated = await updateProductInDb(productId, { variants: updatedVariants });
+  return Boolean(updated);
 }
 
 // CRUD Operations: Orders
-export function getAllOrders(): Order[] {
-  return readOrders();
+export async function getAllOrders(): Promise<Order[]> {
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const { data, error } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
+      if (!error && data) {
+        return data.map(rowToOrder);
+      }
+    }
+  }
+  return readOrdersLocal();
 }
 
-export function getOrderById(id: string): Order | undefined {
-  const orders = readOrders();
+export async function getOrderById(id: string): Promise<Order | undefined> {
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const { data, error } = await supabase
+        .from('orders')
+        .select('*')
+        .or(`id.eq.${id},order_number.eq.${id}`)
+        .single();
+      if (!error && data) {
+        return rowToOrder(data);
+      }
+    }
+  }
+  const orders = readOrdersLocal();
   return orders.find((o) => o.id === id || o.orderNumber === id);
 }
 
-export function insertOrder(order: Order): Order {
-  const orders = readOrders();
-  const products = readProducts();
-
-  // Deduct stock for ordered items
-  let productsModified = false;
-  const updatedProducts = products.map((p) => {
-    let pModified = false;
-    const variants = p.variants.map((v) => {
-      const match = order.items.find((item) => item.sku === v.sku);
-      if (match) {
-        pModified = true;
-        productsModified = true;
-        return { ...v, stock: Math.max(0, v.stock - match.quantity) };
-      }
-      return v;
-    });
-    return pModified ? { ...p, variants } : p;
-  });
-
-  if (productsModified) {
-    writeProducts(updatedProducts);
-  }
-
+export async function insertOrder(order: Order): Promise<Order> {
   const newOrder: Order = {
     ...order,
     id: order.id || `order-${Date.now()}`,
@@ -172,13 +322,51 @@ export function insertOrder(order: Order): Order {
     updatedAt: new Date().toISOString(),
   };
 
+  // Deduct stock for ordered items
+  for (const item of newOrder.items) {
+    const product = await getProductById(item.productId);
+    if (product) {
+      const variant = product.variants.find((v) => v.sku === item.sku);
+      if (variant) {
+        await updateStockInDb(product.id, item.sku, variant.stock - item.quantity);
+      }
+    }
+  }
+
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const row = orderToRow(newOrder);
+      const { data, error } = await supabase.from('orders').insert([row]).select().single();
+      if (!error && data) {
+        return rowToOrder(data);
+      }
+      console.error('Supabase order insert error:', error);
+    }
+  }
+
+  const orders = readOrdersLocal();
   const updatedOrders = [newOrder, ...orders];
-  writeOrders(updatedOrders);
+  writeOrdersLocal(updatedOrders);
   return newOrder;
 }
 
-export function updateOrderInDb(id: string, updates: Partial<Order>): Order | null {
-  const orders = readOrders();
+export async function updateOrderInDb(id: string, updates: Partial<Order>): Promise<Order | null> {
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const existing = await getOrderById(id);
+      if (!existing) return null;
+      const merged: Order = { ...existing, ...updates, updatedAt: new Date().toISOString() };
+      const row = orderToRow(merged);
+      const { data, error } = await supabase.from('orders').update(row).eq('id', id).select().single();
+      if (!error && data) {
+        return rowToOrder(data);
+      }
+    }
+  }
+
+  const orders = readOrdersLocal();
   const index = orders.findIndex((o) => o.id === id);
   if (index === -1) return null;
 
@@ -188,22 +376,46 @@ export function updateOrderInDb(id: string, updates: Partial<Order>): Order | nu
     updatedAt: new Date().toISOString(),
   };
   orders[index] = updatedOrder;
-  writeOrders(orders);
+  writeOrdersLocal(orders);
   return updatedOrder;
 }
 
-export function deleteOrderFromDb(id: string): boolean {
-  const orders = readOrders();
+export async function deleteOrderFromDb(id: string): Promise<boolean> {
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const { error } = await supabase.from('orders').delete().eq('id', id);
+      if (!error) return true;
+    }
+  }
+
+  const orders = readOrdersLocal();
   const filtered = orders.filter((o) => o.id !== id);
   if (filtered.length === orders.length) return false;
-  writeOrders(filtered);
+  writeOrdersLocal(filtered);
   return true;
 }
 
-export function resetDatabaseToSeed(): { success: boolean; productsCount: number; ordersCount: number } {
+export async function resetDatabaseToSeed(): Promise<{ success: boolean; productsCount: number; ordersCount: number }> {
+  if (isSupabaseConfigured()) {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      // Clear existing records
+      await supabase.from('products').delete().neq('id', '___');
+      await supabase.from('orders').delete().neq('id', '___');
+
+      // Insert initial seed catalog
+      const productRows = INITIAL_PRODUCTS.map(productToRow);
+      const orderRows = INITIAL_ORDERS.map(orderToRow);
+
+      await supabase.from('products').insert(productRows);
+      await supabase.from('orders').insert(orderRows);
+    }
+  }
+
   ensureDataDir();
-  writeProducts(INITIAL_PRODUCTS);
-  writeOrders(INITIAL_ORDERS);
+  writeProductsLocal(INITIAL_PRODUCTS);
+  writeOrdersLocal(INITIAL_ORDERS);
   return {
     success: true,
     productsCount: INITIAL_PRODUCTS.length,

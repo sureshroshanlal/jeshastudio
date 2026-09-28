@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export async function POST() {
   try {
-    const result = resetDatabaseToSeed();
+    const result = await resetDatabaseToSeed();
     return NextResponse.json({
       ...result,
       message: 'Database reset to initial curated atelier seed data successfully.',
