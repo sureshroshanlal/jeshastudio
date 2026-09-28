@@ -8,17 +8,14 @@ const PRODUCTS_STORAGE_KEY = 'jesha_studio_products_v2';
 const ORDERS_STORAGE_KEY = 'jesha_studio_orders_v2';
 
 export function getStoredProducts(): Product[] {
-  if (typeof window === 'undefined') return INITIAL_PRODUCTS;
+  if (typeof window === 'undefined') return [];
   try {
     const data = localStorage.getItem(PRODUCTS_STORAGE_KEY);
-    if (!data) {
-      localStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(INITIAL_PRODUCTS));
-      return INITIAL_PRODUCTS;
-    }
+    if (!data) return [];
     return JSON.parse(data);
   } catch (e) {
     console.error('Failed to load products from local cache:', e);
-    return INITIAL_PRODUCTS;
+    return [];
   }
 }
 
@@ -33,17 +30,14 @@ export function saveStoredProducts(products: Product[]) {
 }
 
 export function getStoredOrders(): Order[] {
-  if (typeof window === 'undefined') return INITIAL_ORDERS;
+  if (typeof window === 'undefined') return [];
   try {
     const data = localStorage.getItem(ORDERS_STORAGE_KEY);
-    if (!data) {
-      localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(INITIAL_ORDERS));
-      return INITIAL_ORDERS;
-    }
+    if (!data) return [];
     return JSON.parse(data);
   } catch (e) {
     console.error('Failed to load orders from local cache:', e);
-    return INITIAL_ORDERS;
+    return [];
   }
 }
 
@@ -58,8 +52,8 @@ export function saveStoredOrders(orders: Order[]) {
 }
 
 export function useJeshaStore() {
-  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
-  const [orders, setOrders] = useState<Order[]>(INITIAL_ORDERS);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
 
@@ -72,21 +66,23 @@ export function useJeshaStore() {
         fetch('/api/orders').then((r) => (r.ok ? r.json() : null)).catch(() => null),
       ]);
 
-      if (prodRes && prodRes.success && Array.isArray(prodRes.products) && prodRes.products.length > 0) {
+      if (prodRes && prodRes.success && Array.isArray(prodRes.products)) {
         setProducts(prodRes.products);
         saveStoredProducts(prodRes.products);
       } else {
-        setProducts(getStoredProducts());
+        const local = getStoredProducts();
+        setProducts(local);
       }
 
       if (orderRes && orderRes.success && Array.isArray(orderRes.orders)) {
         setOrders(orderRes.orders);
         saveStoredOrders(orderRes.orders);
       } else {
-        setOrders(getStoredOrders());
+        const local = getStoredOrders();
+        setOrders(local);
       }
     } catch (err) {
-      console.error('Error syncing with backend DB, using cached data:', err);
+      console.error('Error syncing with backend DB:', err);
       setProducts(getStoredProducts());
       setOrders(getStoredOrders());
     } finally {
@@ -96,12 +92,13 @@ export function useJeshaStore() {
   }, []);
 
   useEffect(() => {
-    // Immediate render from local cache
-    setProducts(getStoredProducts());
-    setOrders(getStoredOrders());
-    setIsLoaded(true);
+    // Initial cache check
+    const cachedProducts = getStoredProducts();
+    const cachedOrders = getStoredOrders();
+    if (cachedProducts.length > 0) setProducts(cachedProducts);
+    if (cachedOrders.length > 0) setOrders(cachedOrders);
 
-    // Then sync with server DB
+    // Fetch live from Database API
     fetchFromServer();
 
     const handleProductUpdate = () => {
@@ -206,7 +203,6 @@ export function useJeshaStore() {
 
   // Create Order: Optimistic + Server DB
   const addOrder = async (newOrder: Order) => {
-    // Also deduct stock locally
     const currentProducts = getStoredProducts();
     const updatedProducts = currentProducts.map((p) => {
       let productModified = false;
@@ -271,7 +267,7 @@ export function useJeshaStore() {
     }
   };
 
-  // Factory Reset
+  // Manual Reset to Seed Data (explicit admin action only)
   const resetToFactoryDefaults = async () => {
     try {
       await fetch('/api/seed', { method: 'POST' });

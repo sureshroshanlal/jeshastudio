@@ -164,13 +164,12 @@ export async function getAllProducts(): Promise<Product[]> {
     const supabase = getSupabaseAdmin();
     if (supabase) {
       const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         return data.map(rowToProduct);
       }
-      if (!error && data && data.length === 0) {
-        // Auto-seed Supabase if empty
-        await resetDatabaseToSeed();
-        return INITIAL_PRODUCTS;
+      if (error) {
+        console.error('Supabase query error:', error);
+        return [];
       }
     }
   }
