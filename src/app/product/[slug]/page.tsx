@@ -102,28 +102,28 @@ export default function ProductDetailsPage() {
       </div>
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           
-          {/* Left Column: Image Showcase Gallery */}
-          <div className="lg:col-span-7 flex flex-col-reverse sm:flex-row gap-4">
+          {/* Left Column: Image Showcase Gallery (Bounded Display Width) */}
+          <div className="lg:col-span-6 flex flex-col-reverse sm:flex-row gap-4 justify-center items-start w-full">
             {/* Thumbnails */}
             {product.images && product.images.length > 1 && (
-              <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-y-auto max-h-[600px] no-scrollbar">
+              <div className="flex sm:flex-col gap-2.5 overflow-x-auto sm:overflow-y-auto max-h-[540px] no-scrollbar py-1">
                 {product.images.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setActiveImageIndex(idx)}
-                    className={`relative w-20 h-24 rounded-2xl overflow-hidden flex-shrink-0 border-2 transition-all bg-amber-50/50 ${
+                    className={`relative w-16 h-20 sm:w-20 sm:h-24 rounded-2xl overflow-hidden flex-shrink-0 border-2 transition-all bg-gradient-to-b from-[#FFFDF9] to-[#FAF5EE] flex items-center justify-center p-1 ${
                       activeImageIndex === idx
                         ? 'border-rose-500 shadow-md scale-105 ring-2 ring-rose-200'
-                        : 'border-amber-200/80 opacity-70 hover:opacity-100'
+                        : 'border-amber-200/80 opacity-70 hover:opacity-100 hover:border-amber-400'
                     }`}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={img}
                       alt={`${product.name} thumbnail ${idx + 1}`}
-                      className="w-full h-full object-cover"
+                      className="max-w-full max-h-full w-auto h-auto object-contain rounded-lg"
                       loading="lazy"
                     />
                   </button>
@@ -131,8 +131,8 @@ export default function ProductDetailsPage() {
               </div>
             )}
 
-            {/* Main Stage Image */}
-            <div className="relative flex-1 aspect-[4/5] rounded-3xl overflow-hidden bg-amber-50/40 shadow-soft border border-amber-200/80">
+            {/* Main Stage Image: Fixed Display Width & Dynamic Auto-Fit */}
+            <div className="relative w-full max-w-[460px] h-[460px] sm:h-[540px] mx-auto rounded-3xl overflow-hidden bg-gradient-to-b from-[#FFFDF9] via-[#FAF6F0] to-[#F5ECE0]/50 shadow-soft border border-amber-200/80 flex items-center justify-center p-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={
@@ -141,24 +141,24 @@ export default function ProductDetailsPage() {
                   'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1200&q=85'
                 }
                 alt={product.name}
-                className="w-full h-full object-cover object-top transition-all duration-500"
+                className="max-w-full max-h-full w-auto h-auto object-contain rounded-2xl transition-all duration-300 drop-shadow-sm select-none"
               />
 
               {/* Badges */}
-              <div className="absolute top-4 left-4 flex flex-col gap-2">
+              <div className="absolute top-4 left-4 flex flex-col gap-2 pointer-events-none">
                 {product.isFestiveEdit && (
                   <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-rose-500 text-white text-[11px] font-bold tracking-wider uppercase shadow-md">
                     <Sparkles className="w-3.5 h-3.5 text-amber-200" /> Festive Sparkle
                   </span>
                 )}
-                <span className="inline-flex items-center px-3 py-1 rounded-full bg-stone-900/80 backdrop-blur-md text-[11px] font-bold tracking-wider text-white uppercase">
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-stone-900/85 backdrop-blur-md text-[11px] font-bold tracking-wider text-white uppercase shadow-sm">
                   {product.styleCategory}
                 </span>
               </div>
 
               <button
                 onClick={handleShare}
-                className="absolute top-4 right-4 p-2.5 rounded-full bg-white/90 hover:bg-white text-charcoal-800 shadow-md transition-colors"
+                className="absolute top-4 right-4 p-2.5 rounded-full bg-white/95 hover:bg-white text-stone-800 shadow-md hover:shadow-lg transition-all"
                 title="Share this design"
               >
                 {copiedLink ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
@@ -167,7 +167,7 @@ export default function ProductDetailsPage() {
           </div>
 
           {/* Right Column: Editorial Product Information & Order Desk */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-6 space-y-6">
             
             {/* Header Info */}
             <div className="space-y-2 border-b border-ivory-300 pb-5">

@@ -215,7 +215,7 @@ export default function ProductImageUploader({ images, onChange }: ProductImageU
           {images.map((img, idx) => (
             <div
               key={idx}
-              className={`group relative aspect-[3/4] rounded-2xl overflow-hidden border-2 bg-amber-50/50 transition-all ${
+              className={`group relative aspect-[3/4] rounded-2xl overflow-hidden border-2 bg-gradient-to-b from-[#FFFDF9] to-[#FAF5EE] flex items-center justify-center p-1.5 transition-all ${
                 idx === 0 ? 'border-rose-500 shadow-md ring-2 ring-rose-200' : 'border-stone-200 hover:border-stone-400'
               }`}
             >
@@ -223,7 +223,7 @@ export default function ProductImageUploader({ images, onChange }: ProductImageU
               <img
                 src={img}
                 alt={`Photo ${idx + 1}`}
-                className="w-full h-full object-cover"
+                className="max-w-full max-h-full w-auto h-auto object-contain rounded-xl"
               />
 
               {/* Cover badge */}

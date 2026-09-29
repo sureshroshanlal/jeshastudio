@@ -29,13 +29,13 @@ export default function ProductCard({ product, onOpenFitModal }: ProductCardProp
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Image Showcase Container */}
-      <Link href={`/product/${product.slug}`} className="relative aspect-[4/5] overflow-hidden bg-amber-50/40 block">
+      <Link href={`/product/${product.slug}`} className="relative aspect-[3/4] w-full overflow-hidden bg-gradient-to-b from-[#FFFDF9] via-[#FAF6F0] to-[#F5ECE0]/40 flex items-center justify-center p-3 block border-b border-amber-100">
         {/* Main Image */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={isHovered ? hoverImage : primaryImage}
           alt={product.name}
-          className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+          className="max-w-full max-h-full w-auto h-auto object-contain transition-transform duration-500 ease-out group-hover:scale-105 drop-shadow-xs"
         />
 
         {/* Floating Celebration Badges */}
