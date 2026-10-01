@@ -131,7 +131,7 @@ export default function HeroLookbook() {
 
             {/* Atelier hallmarks */}
             <div className="pt-4 border-t border-amber-200/60 flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-stone-700 font-medium">
-              <span className="inline-flex items-center gap-1">✨ Ages 0–14 Years</span>
+              <span className="inline-flex items-center gap-1">✨ Sizes 16 to 40</span>
               <span>•</span>
               <span className="inline-flex items-center gap-1 font-semibold text-rose-700">₹500–₹2,000 Accessible Luxury</span>
               <span>•</span>

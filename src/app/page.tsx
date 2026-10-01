@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ArrowRight, Sparkles, HeartHandshake, Ruler, Star } from 'lucide-react';
 import Header from '@/components/storefront/Header';
 import HeroLookbook from '@/components/storefront/HeroLookbook';
-import ShopByAge from '@/components/storefront/ShopByAge';
+import ShopBySize from '@/components/storefront/ShopBySize';
 import OccasionDiscovery from '@/components/storefront/OccasionDiscovery';
 import ProductCard from '@/components/storefront/ProductCard';
 import AtelierHallmarks from '@/components/storefront/AtelierHallmarks';
@@ -35,8 +35,8 @@ export default function HomePage() {
       <main className="flex-1">
         <HeroLookbook />
 
-        {/* Discovery Path 1: Shop by Age */}
-        <ShopByAge />
+        {/* Discovery Path 1: Shop by Size */}
+        <ShopBySize />
 
         {/* Curated Collection 1: The Festive Edit */}
         <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

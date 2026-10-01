@@ -61,7 +61,7 @@ export default function BrandStoryPage() {
                   As parents, we noticed a persistent divide in children’s occasionwear: either stiff, scratchy traditional ethnic wear that children despised wearing after 10 minutes, or generic mass-market clothing lacking aesthetic soul.
                 </p>
                 <p className="text-sm text-charcoal-700 leading-relaxed">
-                  We created <strong>Jesha Studio</strong> to offer an atelier experience that celebrates modern Indian aesthetics through pure organic cottons, soft mulmul linings, and effortless silhouettes (ages 0 to 14).
+                  We created <strong>Jesha Studio</strong> to offer an atelier experience that celebrates modern Indian aesthetics through pure organic cottons, soft mulmul linings, and effortless silhouettes (Sizes 16 to 40).
                 </p>
               </div>
 
@@ -86,7 +86,7 @@ export default function BrandStoryPage() {
                   <div>
                     <h3 className="font-serif font-semibold text-charcoal-900 text-base">Transparent &apos;See the Fit&apos;</h3>
                     <p className="text-xs text-charcoal-600 leading-relaxed mt-0.5">
-                      Every photoshoot documents the child model&apos;s exact age, height in centimeters, and size worn so parents can shop with certainty.
+                      Every photoshoot documents the child model&apos;s exact height in centimeters and size worn so parents can shop with certainty.
                     </p>
                   </div>
                 </div>

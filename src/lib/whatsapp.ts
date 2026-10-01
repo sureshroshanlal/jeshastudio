@@ -6,7 +6,7 @@ export interface WhatsAppOrderPayload {
   product: Product;
   selectedVariant: SizeVariant;
   quantity?: number;
-  childAge?: string;
+  childChestInches?: number | string;
   childHeightCm?: number;
   childBuild?: string;
   customerNote?: string;
@@ -16,7 +16,7 @@ export function generateProductOrderUrl({
   product,
   selectedVariant,
   quantity = 1,
-  childAge,
+  childChestInches,
   childHeightCm,
   childBuild,
   customerNote,
@@ -31,9 +31,9 @@ export function generateProductOrderUrl({
   message += `🔢 *Quantity:* ${quantity}\n`;
   message += `💰 *Price:* ₹${selectedVariant.price * quantity}\n`;
 
-  if (childAge || childHeightCm || childBuild) {
-    message += `\n👶 *Child Details for Fit Verification:*\n`;
-    if (childAge) message += `• Age: ${childAge}\n`;
+  if (childChestInches || childHeightCm || childBuild) {
+    message += `\n👶 *Child Measurements for Fit Verification:*\n`;
+    if (childChestInches) message += `• Chest: ${childChestInches} inches\n`;
     if (childHeightCm) message += `• Height: ${childHeightCm} cm\n`;
     if (childBuild) message += `• Build: ${childBuild}\n`;
   }
@@ -53,7 +53,7 @@ export function generateProductOrderUrl({
 
 export function generateFitAssistanceUrl(
   productName?: string,
-  age?: number | string,
+  chestInches?: number | string,
   heightCm?: number | string,
   build?: string
 ): string {
@@ -63,8 +63,8 @@ export function generateFitAssistanceUrl(
   if (productName) {
     message += `👗 *Product of Interest:* ${productName}\n`;
   }
-  if (age) {
-    message += `👶 *Child's Age:* ${age} years old\n`;
+  if (chestInches) {
+    message += `📐 *Child's Chest:* ${chestInches} inches\n`;
   }
   if (heightCm) {
     message += `📏 *Child's Height:* ${heightCm} cm\n`;
@@ -73,7 +73,7 @@ export function generateFitAssistanceUrl(
     message += `✨ *Approximate Build:* ${build}\n`;
   }
 
-  message += `\nCould you please suggest the most comfortable, flattering size? Thank you!`;
+  message += `\nCould you please suggest the most comfortable, flattering size (Sizes 16 to 40)? Thank you!`;
 
   return `https://wa.me/${JESHA_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }

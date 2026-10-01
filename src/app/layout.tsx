@@ -3,11 +3,11 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Jesha Studio — Playful Premium × Modern Indian Kids Fashion House',
-  description: 'An atelier-curated kids fashion house for ages 0–14. Combining soft luxury, pure breathable fabrics, and effortless WhatsApp-first bespoke shopping.',
-  keywords: ['kids fashion', 'modern indian kids wear', 'designer kids clothing', 'ethnic kids wear', 'organic cotton kids', 'atelier kids clothing'],
+  description: 'An atelier-curated kids fashion house in Sizes 16–40. Combining soft luxury, pure breathable fabrics, and effortless WhatsApp-first bespoke shopping.',
+  keywords: ['kids fashion', 'modern indian kids wear', 'designer kids clothing', 'ethnic kids wear', 'organic cotton kids', 'atelier kids clothing', 'sizes 16 to 40'],
   openGraph: {
     title: 'Jesha Studio — Modern Kids Fashion House',
-    description: 'Playful Premium × Modern Indian kids clothing for ages 0–14.',
+    description: 'Playful Premium × Modern Indian kids clothing in Sizes 16–40.',
     type: 'website',
     locale: 'en_IN',
   },

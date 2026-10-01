@@ -27,12 +27,7 @@ export default function Header({ onOpenFitModal }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const pathname = usePathname();
 
-  const ageGroups = [
-    { label: '0–2 Y', value: '0-2', color: 'hover:bg-amber-100 hover:text-amber-800' },
-    { label: '3–5 Y', value: '3-5', color: 'hover:bg-rose-100 hover:text-rose-700' },
-    { label: '6–9 Y', value: '6-9', color: 'hover:bg-emerald-100 hover:text-emerald-800' },
-    { label: '10–14 Y', value: '10-14', color: 'hover:bg-sky-100 hover:text-sky-800' },
-  ];
+  const sizes = ['16', '18', '20', '22', '24', '26', '28', '30', '32', '34', '36', '38', '40'];
 
   const occasions = [
     { name: '✨ Festive Twirls', href: '/collections?occasion=Festive' },
@@ -204,22 +199,22 @@ export default function Header({ onOpenFitModal }: HeaderProps) {
 
           </div>
 
-          {/* Sub-bar: Shop By Age Fast Chips */}
+          {/* Sub-bar: Shop By Size Fast Chips */}
           <div className="py-2.5 border-t border-amber-200/40 flex items-center justify-between overflow-x-auto no-scrollbar gap-2">
-            <div className="flex items-center gap-2 text-xs text-stone-600 font-medium whitespace-nowrap">
-              <span className="text-[11px] uppercase tracking-wider text-amber-800 font-semibold">Shop by Age:</span>
-              {ageGroups.map((group) => (
+            <div className="flex items-center gap-1.5 text-xs text-stone-600 font-medium whitespace-nowrap">
+              <span className="text-[11px] uppercase tracking-wider text-amber-800 font-bold mr-1">Shop by Size:</span>
+              {sizes.map((sz) => (
                 <Link
-                  key={group.value}
-                  href={`/collections?age=${group.value}`}
-                  className={`px-3 py-1 rounded-full bg-amber-50/90 text-stone-700 transition-colors text-xs font-semibold border border-amber-200/80 ${group.color}`}
+                  key={sz}
+                  href={`/collections?size=${sz}`}
+                  className="px-2.5 py-0.5 rounded-full bg-amber-50/90 text-stone-700 hover:bg-stone-900 hover:text-white transition-colors text-xs font-semibold border border-amber-200/80 hover:border-stone-900"
                 >
-                  {group.label}
+                  {sz}
                 </Link>
               ))}
             </div>
 
-            <div className="hidden sm:flex items-center gap-3 text-xs text-stone-600 font-medium">
+            <div className="hidden sm:flex items-center gap-3 text-xs text-stone-600 font-medium flex-shrink-0">
               <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700">
                 🌿 100% Pure Mulmul Linings
               </span>
@@ -248,14 +243,14 @@ export default function Header({ onOpenFitModal }: HeaderProps) {
               onClick={() => setMobileMenuOpen(false)}
               className="block text-base text-stone-800 hover:text-rose-600"
             >
-              Girls Collection (0–14 Y)
+              Girls Collection (Sizes 16–40)
             </Link>
             <Link 
               href="/collections?gender=Boys" 
               onClick={() => setMobileMenuOpen(false)}
               className="block text-base text-stone-800 hover:text-rose-600"
             >
-              Boys Atelier (0–14 Y)
+              Boys Atelier (Sizes 16–40)
             </Link>
             <Link 
               href="/brand-story" 

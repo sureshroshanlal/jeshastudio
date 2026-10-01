@@ -39,7 +39,7 @@ export default function ProductDetailsPage() {
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
-  const [childAgeInput, setChildAgeInput] = useState('');
+  const [childChestInput, setChildChestInput] = useState('');
   const [childHeightInput, setChildHeightInput] = useState('');
   const [childBuildInput, setChildBuildInput] = useState('Regular');
   const [fitModalOpen, setFitModalOpen] = useState(false);
@@ -172,7 +172,7 @@ export default function ProductDetailsPage() {
             {/* Header Info */}
             <div className="space-y-2 border-b border-ivory-300 pb-5">
               <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-charcoal-600">
-                <span>{product.gender} • Ages {product.ageGroups.join(', ')} Yrs</span>
+                <span>{product.gender} • Sizes {product.variants[0]?.size} to {product.variants[product.variants.length - 1]?.size}</span>
                 <span className="text-rose-500 font-medium">SKU: {selectedVariant.sku}</span>
               </div>
 
@@ -210,18 +210,18 @@ export default function ProductDetailsPage() {
                   <Ruler className="w-3.5 h-3.5" /> See the Fit — Model Stats
                 </span>
                 <span className="text-[11px] font-semibold text-charcoal-900 bg-white/90 px-2.5 py-0.5 rounded-full border border-ivory-300">
-                  Wearing: {product.modelFit.wearingSize}
+                  Wears Size: {product.modelFit.wearingSize}
                 </span>
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-xs pt-1">
                 <div className="bg-white/80 p-2.5 rounded-xl border border-ivory-200">
-                  <span className="text-[10px] text-charcoal-600 uppercase font-semibold block">Model Age</span>
-                  <span className="font-serif font-bold text-charcoal-900 text-sm">{product.modelFit.modelAge}</span>
-                </div>
-                <div className="bg-white/80 p-2.5 rounded-xl border border-ivory-200">
                   <span className="text-[10px] text-charcoal-600 uppercase font-semibold block">Model Height</span>
                   <span className="font-serif font-bold text-charcoal-900 text-sm">{product.modelFit.heightCm} cm</span>
+                </div>
+                <div className="bg-white/80 p-2.5 rounded-xl border border-ivory-200">
+                  <span className="text-[10px] text-charcoal-600 uppercase font-semibold block">Size Worn in Photos</span>
+                  <span className="font-serif font-bold text-rose-600 text-sm">Size {product.modelFit.wearingSize}</span>
                 </div>
               </div>
 
@@ -301,12 +301,12 @@ export default function ProductDetailsPage() {
 
               <div className="grid grid-cols-3 gap-2">
                 <div>
-                  <label className="block text-[10px] uppercase font-bold text-charcoal-600 mb-1">Age</label>
+                  <label className="block text-[10px] uppercase font-bold text-charcoal-600 mb-1">Chest (Inches)</label>
                   <input
-                    type="text"
-                    placeholder="e.g. 5 yrs"
-                    value={childAgeInput}
-                    onChange={(e) => setChildAgeInput(e.target.value)}
+                    type="number"
+                    placeholder="e.g. 24"
+                    value={childChestInput}
+                    onChange={(e) => setChildChestInput(e.target.value)}
                     className="w-full text-xs p-2 rounded-xl bg-ivory-50 border border-ivory-300 focus:outline-none focus:border-rose-400"
                   />
                 </div>
@@ -341,7 +341,7 @@ export default function ProductDetailsPage() {
                 href={generateProductOrderUrl({
                   product,
                   selectedVariant,
-                  childAge: childAgeInput || undefined,
+                  childChestInches: childChestInput || undefined,
                   childHeightCm: childHeightInput ? parseInt(childHeightInput) : undefined,
                   childBuild: childBuildInput || undefined,
                 })}

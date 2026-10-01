@@ -38,7 +38,7 @@ function OrdersManagementContent() {
   const [customerCity, setCustomerCity] = useState('');
   const [customerState, setCustomerState] = useState('');
   const [customerPincode, setCustomerPincode] = useState('');
-  const [childAge, setChildAge] = useState('');
+  const [childChest, setChildChest] = useState('');
   const [childHeight, setChildHeight] = useState('');
   const [specialNotes, setSpecialNotes] = useState('');
   const [orderSource, setOrderSource] = useState<'WhatsApp' | 'Walk-in' | 'Phone' | 'Direct Website'>('WhatsApp');
@@ -120,7 +120,7 @@ function OrdersManagementContent() {
         city: customerCity || 'Local',
         state: customerState || 'India',
         pincode: customerPincode || '000000',
-        childAge,
+        childChestInches: childChest ? parseFloat(childChest) : undefined,
         childHeightCm: childHeight ? parseInt(childHeight) : undefined,
         specialNotes,
       },

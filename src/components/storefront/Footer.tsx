@@ -57,36 +57,36 @@ export default function Footer() {
                 <Sparkles className="w-3.5 h-3.5" /> ₹500–₹2,000 Accessible Luxury
               </span>
               <span>•</span>
-              <span className="text-emerald-300">Ages 0–14 Y</span>
+              <span className="text-emerald-300">Sizes 16–40</span>
               <span>•</span>
               <span className="text-rose-300">100% Mulmul Lining</span>
             </div>
           </div>
 
-          {/* Shop by Age */}
+          {/* Shop by Size */}
           <div>
             <h4 className="font-serif text-base font-bold text-white tracking-wide mb-4 text-amber-200">
-              Shop by Milestone
+              Shop by Size
             </h4>
             <ul className="space-y-2.5 text-xs text-stone-300">
               <li>
-                <Link href="/collections?age=0-2" className="hover:text-amber-300 transition-colors">
-                  0–2 Years (Infants &amp; Toddlers)
+                <Link href="/collections?size=18" className="hover:text-amber-300 transition-colors">
+                  Sizes 16–20 (Toddler &amp; First Steps)
                 </Link>
               </li>
               <li>
-                <Link href="/collections?age=3-5" className="hover:text-rose-300 transition-colors">
-                  3–5 Years (Little Explorers)
+                <Link href="/collections?size=24" className="hover:text-rose-300 transition-colors">
+                  Sizes 22–26 (Little Explorers)
                 </Link>
               </li>
               <li>
-                <Link href="/collections?age=6-9" className="hover:text-emerald-300 transition-colors">
-                  6–9 Years (Modern Indian)
+                <Link href="/collections?size=28" className="hover:text-emerald-300 transition-colors">
+                  Sizes 28–32 (Modern Celebrations)
                 </Link>
               </li>
               <li>
-                <Link href="/collections?age=10-14" className="hover:text-sky-300 transition-colors">
-                  10–14 Years (Young Adults)
+                <Link href="/collections?size=36" className="hover:text-sky-300 transition-colors">
+                  Sizes 34–40 (Young Miss &amp; Master)
                 </Link>
               </li>
             </ul>

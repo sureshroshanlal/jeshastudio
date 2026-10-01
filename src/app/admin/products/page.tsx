@@ -17,7 +17,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { useJeshaStore } from '@/lib/store';
-import { Product, SizeVariant, AgeGroup, Gender, StyleCategory, Occasion } from '@/types';
+import { Product, SizeVariant, Gender, StyleCategory, Occasion } from '@/types';
 import ProductImageUploader from '@/components/admin/ProductImageUploader';
 
 function ProductsManagementContent() {
@@ -38,7 +38,6 @@ function ProductsManagementContent() {
     description: '',
     gender: 'Girls',
     styleCategory: 'Indian',
-    ageGroups: ['3-5', '6-9'],
     occasions: ['Festive'],
     price: 1290,
     mrp: 1690,
@@ -47,14 +46,13 @@ function ProductsManagementContent() {
     isFestiveEdit: false,
     images: ['https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1200&q=85'],
     variants: [
-      { size: '3-4Y', sku: 'JS-NEW-34', stock: 10, price: 1290, mrp: 1690, chestCm: 56, waistCm: 52, lengthCm: 58 },
-      { size: '5-6Y', sku: 'JS-NEW-56', stock: 10, price: 1290, mrp: 1690, chestCm: 60, waistCm: 56, lengthCm: 66 },
+      { size: '22', sku: 'JS-NEW-22', stock: 10, price: 1290, mrp: 1690, chestCm: 56, waistCm: 52, lengthCm: 58 },
+      { size: '24', sku: 'JS-NEW-24', stock: 10, price: 1290, mrp: 1690, chestCm: 61, waistCm: 56, lengthCm: 66 },
     ],
     modelFit: {
       modelName: 'Arya',
-      modelAge: '6 years',
       heightCm: 118,
-      wearingSize: '5-6Y',
+      wearingSize: '24',
       fitNote: 'Regular comfortable fit with room for movement.',
     },
     details: {
@@ -86,7 +84,6 @@ function ProductsManagementContent() {
       description: '',
       gender: 'Girls',
       styleCategory: 'Indian',
-      ageGroups: ['3-5', '6-9'],
       occasions: ['Festive'],
       price: 1290,
       mrp: 1690,
@@ -95,14 +92,13 @@ function ProductsManagementContent() {
       isFestiveEdit: false,
       images: ['https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1200&q=85'],
       variants: [
-        { size: '3-4Y', sku: `JS-${Date.now().toString().slice(-4)}-34`, stock: 8, price: 1290, mrp: 1690, chestCm: 56, waistCm: 52, lengthCm: 58 },
-        { size: '5-6Y', sku: `JS-${Date.now().toString().slice(-4)}-56`, stock: 10, price: 1290, mrp: 1690, chestCm: 60, waistCm: 56, lengthCm: 66 },
+        { size: '22', sku: `JS-${Date.now().toString().slice(-4)}-22`, stock: 8, price: 1290, mrp: 1690, chestCm: 56, waistCm: 52, lengthCm: 58 },
+        { size: '24', sku: `JS-${Date.now().toString().slice(-4)}-24`, stock: 10, price: 1290, mrp: 1690, chestCm: 61, waistCm: 56, lengthCm: 66 },
       ],
       modelFit: {
         modelName: 'Arya',
-        modelAge: '6 years',
         heightCm: 118,
-        wearingSize: '5-6Y',
+        wearingSize: '24',
         fitNote: 'Tailored with comfortable ease for all-day play.',
       },
       details: {
@@ -161,8 +157,8 @@ function ProductsManagementContent() {
 
   const handleAddVariant = () => {
     const newVariant: SizeVariant = {
-      size: '7-8Y',
-      sku: `JS-${Date.now().toString().slice(-4)}-78`,
+      size: '26',
+      sku: `JS-${Date.now().toString().slice(-4)}-26`,
       stock: 5,
       price: formData.price || 1290,
       mrp: formData.mrp || 1690,
@@ -303,7 +299,7 @@ function ProductsManagementContent() {
               <tr className="bg-ivory-50 border-b border-ivory-300 text-charcoal-600 font-semibold uppercase text-[10px]">
                 <th className="py-3 px-4">Design &amp; Imagery</th>
                 <th className="py-3 px-4">Category</th>
-                <th className="py-3 px-4">Ages</th>
+                <th className="py-3 px-4">Sizes</th>
                 <th className="py-3 px-4">Price</th>
                 <th className="py-3 px-4">Stock Variants</th>
                 <th className="py-3 px-4">Model Fit</th>
@@ -348,7 +344,7 @@ function ProductsManagementContent() {
                     </td>
 
                     <td className="py-3 px-4">
-                      <span className="text-charcoal-800">{p.ageGroups.join(', ')} Y</span>
+                      <span className="text-charcoal-800 font-medium">{p.variants.map((v) => v.size).join(', ')}</span>
                     </td>
 
                     <td className="py-3 px-4">
@@ -371,10 +367,10 @@ function ProductsManagementContent() {
 
                     <td className="py-3 px-4">
                       <span className="text-[11px] font-medium text-charcoal-800 block">
-                        {p.modelFit.modelName} ({p.modelFit.modelAge})
+                        {p.modelFit.modelName}
                       </span>
                       <span className="text-[10px] text-charcoal-600">
-                        {p.modelFit.heightCm}cm • Wears {p.modelFit.wearingSize}
+                        {p.modelFit.heightCm}cm • Size {p.modelFit.wearingSize}
                       </span>
                     </td>
 
@@ -614,7 +610,7 @@ function ProductsManagementContent() {
                   <span>4. &apos;See the Fit&apos; Model Photography Specifications</span>
                 </h4>
 
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="block text-charcoal-700 font-semibold mb-1">Model Name</label>
                     <input
@@ -624,19 +620,6 @@ function ProductsManagementContent() {
                       onChange={(e) => setFormData({
                         ...formData,
                         modelFit: { ...formData.modelFit!, modelName: e.target.value }
-                      })}
-                      className="w-full p-2 rounded-xl border border-ivory-300 bg-ivory-50"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-charcoal-700 font-semibold mb-1">Model Age</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. 8 years"
-                      value={formData.modelFit?.modelAge}
-                      onChange={(e) => setFormData({
-                        ...formData,
-                        modelFit: { ...formData.modelFit!, modelAge: e.target.value }
                       })}
                       className="w-full p-2 rounded-xl border border-ivory-300 bg-ivory-50"
                     />
@@ -658,7 +641,7 @@ function ProductsManagementContent() {
                     <label className="block text-charcoal-700 font-semibold mb-1">Wearing Size</label>
                     <input
                       type="text"
-                      placeholder="e.g. 7-8Y"
+                      placeholder="e.g. 26"
                       value={formData.modelFit?.wearingSize}
                       onChange={(e) => setFormData({
                         ...formData,

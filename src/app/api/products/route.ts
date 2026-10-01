@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const gender = searchParams.get('gender');
     const category = searchParams.get('category');
     const occasion = searchParams.get('occasion');
-    const age = searchParams.get('age');
+    const size = searchParams.get('size');
     const search = searchParams.get('search');
     const featured = searchParams.get('featured');
 
@@ -28,8 +28,8 @@ export async function GET(request: NextRequest) {
       products = products.filter((p) => p.occasions.includes(occasion as any));
     }
 
-    if (age && age !== 'All') {
-      products = products.filter((p) => p.ageGroups.includes(age as any));
+    if (size && size !== 'All') {
+      products = products.filter((p) => p.variants.some((v) => v.size === size));
     }
 
     if (featured === 'true') {

@@ -56,10 +56,10 @@ export default function ProductCard({ product, onOpenFitModal }: ProductCardProp
         <div className="absolute bottom-3 left-3 right-3 z-10 transition-opacity duration-300">
           <div className="px-3 py-1.5 rounded-xl bg-stone-900/80 backdrop-blur-md text-white text-[11px] flex items-center justify-between border border-white/10 shadow-md">
             <span className="text-amber-100 truncate">
-              Model {product.modelFit.modelName}: {product.modelFit.modelAge} ({product.modelFit.heightCm}cm)
+              Model {product.modelFit.modelName} ({product.modelFit.heightCm}cm)
             </span>
             <span className="text-rose-300 font-semibold ml-1 flex-shrink-0">
-              Wears {product.modelFit.wearingSize}
+              Wears Size {product.modelFit.wearingSize}
             </span>
           </div>
         </div>
@@ -74,7 +74,7 @@ export default function ProductCard({ product, onOpenFitModal }: ProductCardProp
               {product.gender} • {product.styleCategory}
             </span>
             <span className="text-[10px] bg-amber-50 text-amber-900 border border-amber-200 px-2.5 py-0.5 rounded-full font-semibold">
-              {product.ageGroups.join(', ')} Yrs
+              Sizes {product.variants[0]?.size}–{product.variants[product.variants.length - 1]?.size}
             </span>
           </div>
 

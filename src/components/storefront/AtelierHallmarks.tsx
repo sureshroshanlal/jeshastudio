@@ -8,7 +8,7 @@ export default function AtelierHallmarks() {
     {
       icon: Ruler,
       title: 'Transparent "See the Fit"',
-      description: 'We publish exact model age, height in cm, and size worn on every product page so you choose with 100% confidence.',
+      description: 'We publish exact model height in cm and size worn (Sizes 16 to 40) on every product page so you choose with 100% confidence.',
       accent: 'bg-rose-100 text-rose-600 border-rose-200',
     },
     {
@@ -26,7 +26,7 @@ export default function AtelierHallmarks() {
     {
       icon: HeartHandshake,
       title: 'WhatsApp-First Atelier',
-      description: 'Send us your child’s height and age. Our bespoke styling team will guide you to the perfect silhouette and handle fast dispatch.',
+      description: 'Send us your child’s height and measurements. Our bespoke styling team will guide you to the perfect size (Sizes 16 to 40) and handle fast dispatch.',
       accent: 'bg-sky-100 text-sky-700 border-sky-300',
     },
   ];

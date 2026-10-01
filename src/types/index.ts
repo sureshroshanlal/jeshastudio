@@ -1,4 +1,5 @@
-export type AgeGroup = '0-2' | '3-5' | '6-9' | '10-14';
+export type ClothSize = '16' | '18' | '20' | '22' | '24' | '26' | '28' | '30' | '32' | '34' | '36' | '38' | '40';
+export const ALL_SIZES: ClothSize[] = ['16', '18', '20', '22', '24', '26', '28', '30', '32', '34', '36', '38', '40'];
 
 export type Gender = 'Girls' | 'Boys' | 'Unisex';
 
@@ -7,7 +8,7 @@ export type StyleCategory = 'Western' | 'Indian' | 'Indo-western';
 export type Occasion = 'Festive' | 'Birthday' | 'Party' | 'Wedding' | 'Everyday' | 'Celebration' | 'Seasonal';
 
 export interface SizeVariant {
-  size: string; // e.g., '0-6M', '6-12M', '1-2Y', '3-4Y', '5-6Y', '7-8Y', '9-10Y', '11-12Y', '13-14Y'
+  size: string; // '16', '18', '20', '22', '24', '26', '28', '30', '32', '34', '36', '38', '40'
   sku: string;
   stock: number;
   price: number;
@@ -19,10 +20,9 @@ export interface SizeVariant {
 
 export interface ModelFitInfo {
   modelName: string;
-  modelAge: string; // e.g. "8 years"
   heightCm: number; // e.g. 128
-  wearingSize: string; // e.g. "8-9Y"
-  fitNote?: string; // e.g. " Arya has a regular build, wearing our 8-9Y for a relaxed, twirl-friendly drape."
+  wearingSize: string; // e.g. "26"
+  fitNote?: string; // e.g. " Arya has a regular build, wearing our Size 26 for a relaxed, twirl-friendly drape."
 }
 
 export interface ProductDetails {
@@ -44,7 +44,6 @@ export interface Product {
   description: string;
   gender: Gender;
   styleCategory: StyleCategory;
-  ageGroups: AgeGroup[];
   occasions: Occasion[];
   price: number;
   mrp: number;
@@ -81,8 +80,8 @@ export interface CustomerDetails {
   city: string;
   state: string;
   pincode: string;
-  childAge?: string;
   childHeightCm?: number;
+  childChestInches?: number;
   specialNotes?: string;
 }
 
@@ -107,8 +106,8 @@ export interface Order {
 }
 
 export interface SizeRecommendationInput {
-  childAgeYears: number;
   childHeightCm: number;
+  childChestInches?: number;
   build: 'Slim' | 'Regular' | 'Chubby/Broad';
   fitPreference: 'Snug Fit' | 'True to Size' | 'Room to Grow';
 }

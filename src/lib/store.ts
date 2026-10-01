@@ -4,8 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { Product, Order } from '@/types';
 import { INITIAL_PRODUCTS, INITIAL_ORDERS } from './initialData';
 
-const PRODUCTS_STORAGE_KEY = 'jesha_studio_products_v2';
-const ORDERS_STORAGE_KEY = 'jesha_studio_orders_v2';
+const PRODUCTS_STORAGE_KEY = 'jesha_studio_products_v3';
+const ORDERS_STORAGE_KEY = 'jesha_studio_orders_v3';
 
 export function getStoredProducts(): Product[] {
   if (typeof window === 'undefined') return [];
@@ -52,8 +52,8 @@ export function saveStoredOrders(orders: Order[]) {
 }
 
 export function useJeshaStore() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
+  const [orders, setOrders] = useState<Order[]>(INITIAL_ORDERS);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
 
@@ -71,7 +71,7 @@ export function useJeshaStore() {
         saveStoredProducts(prodRes.products);
       } else {
         const local = getStoredProducts();
-        setProducts(local);
+        if (local.length > 0) setProducts(local);
       }
 
       if (orderRes && orderRes.success && Array.isArray(orderRes.orders)) {
@@ -79,12 +79,14 @@ export function useJeshaStore() {
         saveStoredOrders(orderRes.orders);
       } else {
         const local = getStoredOrders();
-        setOrders(local);
+        if (local.length > 0) setOrders(local);
       }
     } catch (err) {
       console.error('Error syncing with backend DB:', err);
-      setProducts(getStoredProducts());
-      setOrders(getStoredOrders());
+      const localP = getStoredProducts();
+      if (localP.length > 0) setProducts(localP);
+      const localO = getStoredOrders();
+      if (localO.length > 0) setOrders(localO);
     } finally {
       setIsLoaded(true);
       setIsSyncing(false);
@@ -95,8 +97,18 @@ export function useJeshaStore() {
     // Initial cache check
     const cachedProducts = getStoredProducts();
     const cachedOrders = getStoredOrders();
-    if (cachedProducts.length > 0) setProducts(cachedProducts);
-    if (cachedOrders.length > 0) setOrders(cachedOrders);
+    if (cachedProducts.length > 0) {
+      setProducts(cachedProducts);
+    } else {
+      setProducts(INITIAL_PRODUCTS);
+      saveStoredProducts(INITIAL_PRODUCTS);
+    }
+    if (cachedOrders.length > 0) {
+      setOrders(cachedOrders);
+    } else {
+      setOrders(INITIAL_ORDERS);
+      saveStoredOrders(INITIAL_ORDERS);
+    }
 
     // Fetch live from Database API
     fetchFromServer();

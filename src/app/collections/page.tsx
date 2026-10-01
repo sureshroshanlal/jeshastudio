@@ -7,14 +7,14 @@ import Footer from '@/components/storefront/Footer';
 import ProductCard from '@/components/storefront/ProductCard';
 import FindTheirFitModal from '@/components/storefront/FindTheirFitModal';
 import { useJeshaStore } from '@/lib/store';
-import { AgeGroup, Gender, StyleCategory, Occasion } from '@/types';
+import { ClothSize, ALL_SIZES, Gender, StyleCategory, Occasion } from '@/types';
 import { Filter, X, SlidersHorizontal, Sparkles, RefreshCw } from 'lucide-react';
 
 function CollectionsContent() {
   const searchParams = useSearchParams();
   const { products } = useJeshaStore();
 
-  const [selectedAge, setSelectedAge] = useState<AgeGroup | 'All'>('All');
+  const [selectedSize, setSelectedSize] = useState<ClothSize | 'All'>('All');
   const [selectedGender, setSelectedGender] = useState<Gender | 'All'>('All');
   const [selectedStyle, setSelectedStyle] = useState<StyleCategory | 'All'>('All');
   const [selectedOccasion, setSelectedOccasion] = useState<Occasion | 'All'>('All');
@@ -26,14 +26,14 @@ function CollectionsContent() {
 
   // Read URL query params on load
   useEffect(() => {
-    const ageParam = searchParams.get('age') as AgeGroup;
+    const sizeParam = searchParams.get('size') as ClothSize;
     const genderParam = searchParams.get('gender') as Gender;
     const occasionParam = searchParams.get('occasion') as Occasion;
     const styleParam = searchParams.get('style') as StyleCategory;
     const searchParam = searchParams.get('search');
 
-    if (ageParam && ['0-2', '3-5', '6-9', '10-14'].includes(ageParam)) {
-      setSelectedAge(ageParam);
+    if (sizeParam && ALL_SIZES.includes(sizeParam)) {
+      setSelectedSize(sizeParam);
     }
     if (genderParam && ['Girls', 'Boys', 'Unisex'].includes(genderParam)) {
       setSelectedGender(genderParam);
@@ -51,7 +51,7 @@ function CollectionsContent() {
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
-      if (selectedAge !== 'All' && !p.ageGroups.includes(selectedAge)) return false;
+      if (selectedSize !== 'All' && !p.variants.some((v) => v.size === selectedSize)) return false;
       if (selectedGender !== 'All' && p.gender !== selectedGender && p.gender !== 'Unisex') return false;
       if (selectedStyle !== 'All' && p.styleCategory !== selectedStyle) return false;
       if (selectedOccasion !== 'All' && !p.occasions.includes(selectedOccasion)) return false;
@@ -70,17 +70,17 @@ function CollectionsContent() {
       if (sortBy === 'newest') return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
     });
-  }, [products, selectedAge, selectedGender, selectedStyle, selectedOccasion, searchQuery, sortBy]);
+  }, [products, selectedSize, selectedGender, selectedStyle, selectedOccasion, searchQuery, sortBy]);
 
   const clearAllFilters = () => {
-    setSelectedAge('All');
+    setSelectedSize('All');
     setSelectedGender('All');
     setSelectedStyle('All');
     setSelectedOccasion('All');
     setSearchQuery('');
   };
 
-  const hasActiveFilters = selectedAge !== 'All' || selectedGender !== 'All' || selectedStyle !== 'All' || selectedOccasion !== 'All' || searchQuery.trim().length > 0;
+  const hasActiveFilters = selectedSize !== 'All' || selectedGender !== 'All' || selectedStyle !== 'All' || selectedOccasion !== 'All' || searchQuery.trim().length > 0;
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#FFFDF9] via-[#FAF5EE] to-[#FFFDF9]">
@@ -99,7 +99,7 @@ function CollectionsContent() {
               Curated Kids Wardrobe
             </h1>
             <p className="text-xs sm:text-sm text-stone-600 mt-2 font-normal">
-              Explore timeless modern Indian, Western, and Indo-western pieces crafted from pure cottons, natural linens, and soft silks (Ages 0–14).
+              Explore timeless modern Indian, Western, and Indo-western pieces crafted from pure cottons, natural linens, and soft silks (Sizes 16–40).
             </p>
           </div>
         </div>
@@ -141,10 +141,10 @@ function CollectionsContent() {
         {hasActiveFilters && (
           <div className="flex flex-wrap items-center gap-2 mb-6 p-3 bg-white rounded-2xl border border-ivory-200">
             <span className="text-[11px] uppercase font-semibold text-charcoal-600 mr-1">Active:</span>
-            {selectedAge !== 'All' && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-100 text-rose-500 text-xs font-medium">
-                Age: {selectedAge} Y
-                <button onClick={() => setSelectedAge('All')}><X className="w-3 h-3" /></button>
+            {selectedSize !== 'All' && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-100 text-rose-600 text-xs font-bold">
+                Size: {selectedSize}
+                <button onClick={() => setSelectedSize('All')}><X className="w-3 h-3" /></button>
               </span>
             )}
             {selectedGender !== 'All' && (
@@ -198,24 +198,42 @@ function CollectionsContent() {
                 )}
               </div>
 
-              {/* Age Filter */}
+              {/* Size Filter */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal-700 mb-2">
-                  Child&apos;s Age
-                </label>
-                <div className="grid grid-cols-2 gap-1.5">
-                  {(['All', '0-2', '3-5', '6-9', '10-14'] as const).map((age) => (
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-charcoal-700">
+                    Garment Size
+                  </label>
+                  {selectedSize !== 'All' && (
+                    <button onClick={() => setSelectedSize('All')} className="text-[10px] text-rose-500 hover:underline">
+                      Reset
+                    </button>
+                  )}
+                </div>
+                <div className="grid grid-cols-4 gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedSize('All')}
+                    className={`py-1.5 px-2 text-xs rounded-xl font-bold border text-center transition-all col-span-2 ${
+                      selectedSize === 'All'
+                        ? 'bg-stone-900 text-white border-stone-900 shadow-sm'
+                        : 'bg-ivory-50 text-charcoal-700 border-ivory-200 hover:border-charcoal-400'
+                    }`}
+                  >
+                    All Sizes
+                  </button>
+                  {ALL_SIZES.map((sz) => (
                     <button
-                      key={age}
+                      key={sz}
                       type="button"
-                      onClick={() => setSelectedAge(age)}
-                      className={`py-1.5 px-3 text-xs rounded-xl font-medium border text-center transition-all ${
-                        selectedAge === age
-                          ? 'bg-charcoal-900 text-white border-charcoal-900 shadow-sm'
-                          : 'bg-ivory-50 text-charcoal-700 border-ivory-200 hover:border-charcoal-300'
+                      onClick={() => setSelectedSize(sz)}
+                      className={`py-1.5 px-2 text-xs rounded-xl font-bold border text-center transition-all ${
+                        selectedSize === sz
+                          ? 'bg-stone-900 text-white border-stone-900 shadow-sm'
+                          : 'bg-ivory-50 text-charcoal-700 border-ivory-200 hover:border-charcoal-400'
                       }`}
                     >
-                      {age === 'All' ? 'All Ages' : `${age} Yrs`}
+                      {sz}
                     </button>
                   ))}
                 </div>
@@ -347,17 +365,23 @@ function CollectionsContent() {
                 </button>
               </div>
 
-              {/* Age Filter Mobile */}
+              {/* Size Filter Mobile */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal-700 mb-2">Age</label>
-                <div className="grid grid-cols-2 gap-1.5">
-                  {(['All', '0-2', '3-5', '6-9', '10-14'] as const).map((age) => (
+                <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal-700 mb-2">Size</label>
+                <div className="grid grid-cols-4 gap-1.5">
+                  <button
+                    onClick={() => setSelectedSize('All')}
+                    className={`py-1.5 px-2 text-xs rounded-xl font-bold border text-center col-span-2 ${selectedSize === 'All' ? 'bg-charcoal-900 text-white' : 'bg-ivory-50'}`}
+                  >
+                    All
+                  </button>
+                  {ALL_SIZES.map((sz) => (
                     <button
-                      key={age}
-                      onClick={() => setSelectedAge(age)}
-                      className={`py-1.5 px-3 text-xs rounded-xl font-medium border ${selectedAge === age ? 'bg-charcoal-900 text-white' : 'bg-ivory-50'}`}
+                      key={sz}
+                      onClick={() => setSelectedSize(sz)}
+                      className={`py-1.5 px-2 text-xs rounded-xl font-bold border text-center ${selectedSize === sz ? 'bg-stone-900 text-white' : 'bg-ivory-50 text-stone-700'}`}
                     >
-                      {age === 'All' ? 'All' : `${age} Y`}
+                      {sz}
                     </button>
                   ))}
                 </div>
