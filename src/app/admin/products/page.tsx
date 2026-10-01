@@ -19,6 +19,7 @@ import {
 import { useJeshaStore } from '@/lib/store';
 import { Product, SizeVariant, Gender, StyleCategory, Occasion } from '@/types';
 import ProductImageUploader from '@/components/admin/ProductImageUploader';
+import InstagramImportModal from '@/components/admin/InstagramImportModal';
 
 function ProductsManagementContent() {
   const searchParams = useSearchParams();
@@ -29,6 +30,7 @@ function ProductsManagementContent() {
   const [filterCategory, setFilterCategory] = useState<string>('All');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isIgModalOpen, setIsIgModalOpen] = useState(false);
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
 
   // Form State
@@ -138,6 +140,15 @@ function ProductsManagementContent() {
     }
   };
 
+  const handleImportFromInstagram = (importedProduct: Partial<Product>) => {
+    setEditingProductId(null);
+    setFormData((prev) => ({
+      ...prev,
+      ...importedProduct,
+    }));
+    setIsModalOpen(true);
+  };
+
   const handleAddImage = () => {
     if (imageUrlInput.trim()) {
       setFormData((prev) => ({
@@ -240,13 +251,23 @@ function ProductsManagementContent() {
           </p>
         </div>
 
-        <button
-          onClick={handleOpenNewModal}
-          className="px-4 py-2.5 rounded-xl bg-charcoal-900 hover:bg-charcoal-800 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-transform active:scale-95"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add New Design</span>
-        </button>
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={() => setIsIgModalOpen(true)}
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-amber-500 hover:opacity-95 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-transform active:scale-95"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>Import from Instagram</span>
+          </button>
+
+          <button
+            onClick={handleOpenNewModal}
+            className="px-4 py-2.5 rounded-xl bg-charcoal-900 hover:bg-charcoal-800 text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-transform active:scale-95"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add New Design</span>
+          </button>
+        </div>
       </div>
 
       {/* Filter Bar */}
@@ -549,10 +570,10 @@ function ProductsManagementContent() {
                     <div key={idx} className="flex flex-wrap items-center gap-2 p-2.5 bg-ivory-50 rounded-xl border border-ivory-200">
                       <input
                         type="text"
-                        placeholder="Size (e.g. 5-6Y)"
+                        placeholder="Size (16-40)"
                         value={v.size}
                         onChange={(e) => handleVariantChange(idx, 'size', e.target.value)}
-                        className="w-20 p-1.5 rounded-lg border border-ivory-300 bg-white font-semibold text-center"
+                        className="w-24 p-1.5 rounded-lg border border-ivory-300 bg-white font-semibold text-center"
                       />
                       <input
                         type="text"
@@ -723,6 +744,13 @@ function ProductsManagementContent() {
           </div>
         </div>
       )}
+
+      {/* Instagram Import Modal */}
+      <InstagramImportModal
+        isOpen={isIgModalOpen}
+        onClose={() => setIsIgModalOpen(false)}
+        onImportProduct={handleImportFromInstagram}
+      />
 
     </div>
   );
