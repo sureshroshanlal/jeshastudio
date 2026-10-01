@@ -75,47 +75,74 @@ export function parseInstagramCaption(caption: string): ExtractedInstagramProduc
   }
 
   // 2. Extract Sizes (numeric 16 to 40)
-  const detectedSizes: string[] = [];
+  const detectedSizesSet = new Set<string>();
 
-  // Check for range patterns: "Sizes: 20 to 32" or "20-32" or "Sizes 20-30"
-  const rangeMatch = caption.match(/sizes?[\s:/-]*(\d{2})\s*(?:to|-)\s*(\d{2})/i);
-  if (rangeMatch) {
-    const start = parseInt(rangeMatch[1], 10);
-    const end = parseInt(rangeMatch[2], 10);
-    if (!isNaN(start) && !isNaN(end) && start < end) {
-      for (let s = start; s <= end; s += 2) {
-        const sStr = s.toString();
-        if (VALID_JESHA_SIZES.includes(sStr) && !detectedSizes.includes(sStr)) {
-          detectedSizes.push(sStr);
+  // Normalize all unicode dashes and separators (en-dash, em-dash, minus sign, etc.)
+  const normalizedCaption = caption
+    .replace(/[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]/g, '-')
+    .replace(/\s+/g, ' ');
+
+  // (a) Look for explicit range patterns e.g. "sizes 24-34", "size: 24 to 34", "sizes from 24 to 34", "24-34", "24 to 34"
+  const rangeRegexes = [
+    /(?:sizes?|available|in\s*sizes?|size\s*chart|sizes?\s*available|order\s*sizes?|from)?[\s:/-]*(\d{2})\s*(?:-|to|till|until|through|thru)\s*(\d{2})/gi,
+    /\b(\d{2})\s*(?:-|to|till|until|through|thru)\s*(\d{2})\b/gi,
+  ];
+
+  let rangeFound = false;
+
+  for (const regex of rangeRegexes) {
+    let match;
+    while ((match = regex.exec(normalizedCaption)) !== null) {
+      const num1 = parseInt(match[1], 10);
+      const num2 = parseInt(match[2], 10);
+      const start = Math.min(num1, num2);
+      const end = Math.max(num1, num2);
+
+      // Check if both numbers are plausibly within the standard numeric size spectrum (16 to 40)
+      if (start >= 16 && end <= 40 && start < end) {
+        // Expand the range in steps of 2 (e.g. 24, 26, 28, 30, 32, 34)
+        const firstEven = start % 2 === 0 ? start : start + 1;
+        for (let s = firstEven; s <= end; s += 2) {
+          const sStr = s.toString();
+          if (VALID_JESHA_SIZES.includes(sStr)) {
+            detectedSizesSet.add(sStr);
+          }
+        }
+        rangeFound = true;
+        break;
+      }
+    }
+    if (rangeFound) break;
+  }
+
+  // (b) If no range found, check for comma/space separated sizes: "Sizes: 18, 20, 22, 24" or "Size : 22 24 26"
+  if (!rangeFound) {
+    const listMatch = normalizedCaption.match(/sizes?[\s:/-]*([0-9\s,]+)/i);
+    if (listMatch) {
+      const rawTokens = listMatch[1].split(/[\s,]+/);
+      for (const token of rawTokens) {
+        const cleanToken = token.trim();
+        if (VALID_JESHA_SIZES.includes(cleanToken)) {
+          detectedSizesSet.add(cleanToken);
         }
       }
     }
   }
 
-  // Check for comma/space separated sizes: "Sizes: 18, 20, 22, 24" or "Size : 22 24 26"
-  const listMatch = caption.match(/sizes?[\s:/-]*([0-9\s,]+)/i);
-  if (listMatch) {
-    const rawTokens = listMatch[1].split(/[\s,]+/);
-    for (const token of rawTokens) {
-      const cleanToken = token.trim();
-      if (VALID_JESHA_SIZES.includes(cleanToken) && !detectedSizes.includes(cleanToken)) {
-        detectedSizes.push(cleanToken);
-      }
-    }
-  }
-
-  // General scan across entire text for valid numbers if list didn't hit
-  if (detectedSizes.length === 0) {
+  // (c) General scan across entire text for valid numeric sizes if still empty
+  if (detectedSizesSet.size === 0) {
     for (const validSize of VALID_JESHA_SIZES) {
-      const regex = new RegExp(`\\b${validSize}\\b`);
-      if (regex.test(caption) && !detectedSizes.includes(validSize)) {
-        detectedSizes.push(validSize);
+      const boundaryRegex = new RegExp(`(?:^|[^0-9])${validSize}(?:[^0-9]|$)`);
+      if (boundaryRegex.test(normalizedCaption)) {
+        detectedSizesSet.add(validSize);
       }
     }
   }
 
   // Default sizes if none specified in post
-  const finalSizes = detectedSizes.length > 0 ? detectedSizes.sort((a, b) => parseInt(a) - parseInt(b)) : ['22', '24', '26', '28'];
+  const finalSizes = detectedSizesSet.size > 0 
+    ? Array.from(detectedSizesSet).sort((a, b) => parseInt(a, 10) - parseInt(b, 10)) 
+    : ['22', '24', '26', '28'];
 
   // 3. Extract Title / Name
   // Typically the first or second line, stripped of decorative emojis and hashtag signs
