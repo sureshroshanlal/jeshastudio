@@ -1,6 +1,12 @@
 import { Product, SizeVariant } from '@/types';
 
-export const JESHA_WHATSAPP_NUMBER = '919876543210'; // Jesha Studio official concierge number
+export const JESHA_WHATSAPP_NUMBER = '919985531519'; // Jesha Studio primary WhatsApp
+export const JESHA_WHATSAPP_NUMBER_2 = '918522091817'; // Jesha Studio secondary WhatsApp
+
+export const JESHA_PHONE_1_DISPLAY = '+91 99855 31519';
+export const JESHA_PHONE_2_DISPLAY = '+91 85220 91817';
+export const JESHA_STUDIO_ADDRESS = 'Jesha Studio, Hyderabad, Telangana';
+export const JESHA_STUDIO_EMAIL = 'contact@jeshastudio.com';
 
 export interface WhatsAppOrderPayload {
   product: Product;
@@ -79,6 +85,6 @@ export function generateFitAssistanceUrl(
 }
 
 export function generateGeneralConciergeUrl(): string {
-  const message = `🌿 *Hello Jesha Studio!* 🌿\n\nI am browsing your collection and would love to ask a quick question regarding designs and custom styling recommendations.`;
+  const message = `🌸 *Hello Jesha Studio!* 🌸\n\nI am browsing your kids collection and would love to ask a question regarding sizing, availability, and placing an order.`;
   return `https://wa.me/${JESHA_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }

@@ -172,18 +172,25 @@ function BillingShippingContent() {
             
             {/* Invoice Top Header */}
             <div className="flex justify-between items-start pb-6 border-b-2 border-charcoal-900">
-              <div>
-                <span className="font-serif text-3xl font-bold tracking-[0.16em] uppercase text-charcoal-900 block">
-                  Jesha Studio
-                </span>
-                <span className="text-[10px] tracking-[0.25em] text-charcoal-600 uppercase block font-sans font-semibold">
-                  Modern Kids Fashion House
-                </span>
-                <p className="text-[11px] text-charcoal-600 mt-2 leading-relaxed">
-                  Bespoke Kids Studio &bull; GSTIN: 29AABCS1429M1ZQ<br />
-                  Indiranagar, Bengaluru, KA 560038<br />
-                  WhatsApp: +91 98765 43210 &bull; concierge@jeshastudio.com
-                </p>
+              <div className="flex items-start gap-3.5">
+                <img
+                  src="/jesha-logo.jpg"
+                  alt="Jesha Studio"
+                  className="w-14 h-14 rounded-full object-cover border border-charcoal-300"
+                />
+                <div>
+                  <span className="font-serif text-3xl font-bold tracking-[0.16em] uppercase text-charcoal-900 block leading-none">
+                    Jesha Studio
+                  </span>
+                  <span className="text-[10px] tracking-[0.22em] text-rose-600 uppercase block font-sans font-semibold mt-1">
+                    Kids Fashion &bull; Little Style. Big Smiles.
+                  </span>
+                  <p className="text-[11px] text-charcoal-600 mt-1.5 leading-relaxed">
+                    Jesha Studio, Hyderabad, Telangana<br />
+                    Tel: +91 99855 31519, +91 85220 91817<br />
+                    contact@jeshastudio.com
+                  </p>
+                </div>
               </div>
 
               <div className="text-right">
@@ -400,7 +407,7 @@ function BillingShippingContent() {
 
             {/* From Address */}
             <div className="pt-2 border-t border-charcoal-900 text-[10px] text-charcoal-600 leading-snug">
-              <strong>From:</strong> Jesha Studio, 104 Indiranagar, Bengaluru, KA 560038 | Tel: +91 98765 43210
+              <strong>From:</strong> Jesha Studio, Hyderabad, Telangana | Tel: +91 99855 31519, +91 85220 91817
             </div>
 
           </div>

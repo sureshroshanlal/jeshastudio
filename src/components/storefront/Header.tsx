@@ -122,15 +122,22 @@ export default function Header({ onOpenFitModal }: HeaderProps) {
               </nav>
             </div>
 
-            {/* Center: Brand Wordmark with Golden Sparkle */}
+            {/* Center: Brand Logo & Wordmark */}
             <div className="flex-1 flex justify-center text-center">
-              <Link href="/" className="group inline-flex flex-col items-center">
-                <span className="font-serif text-2xl sm:text-3xl tracking-[0.2em] font-bold text-stone-900 group-hover:text-rose-600 transition-colors uppercase">
-                  Jesha Studio
-                </span>
-                <span className="text-[10px] tracking-[0.35em] text-amber-700 font-sans -mt-0.5 font-semibold uppercase">
-                  Joyful Luxury &bull; Kids Wear
-                </span>
+              <Link href="/" className="group inline-flex items-center gap-2.5 sm:gap-3">
+                <img
+                  src="/jesha-logo.jpg"
+                  alt="Jesha Studio - Kids Fashion"
+                  className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover shadow-sm border border-rose-200 group-hover:scale-105 transition-transform"
+                />
+                <div className="flex flex-col text-left">
+                  <span className="font-serif text-xl sm:text-2xl tracking-[0.16em] font-bold text-stone-900 group-hover:text-rose-600 transition-colors uppercase leading-tight">
+                    Jesha Studio
+                  </span>
+                  <span className="text-[9px] sm:text-[10px] tracking-[0.22em] text-rose-600 font-sans font-bold uppercase">
+                    Kids Fashion &bull; Little Style. Big Smiles.
+                  </span>
+                </div>
               </Link>
             </div>
 
