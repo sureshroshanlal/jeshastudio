@@ -24,6 +24,7 @@ import Header from '@/components/storefront/Header';
 import Footer from '@/components/storefront/Footer';
 import FindTheirFitModal from '@/components/storefront/FindTheirFitModal';
 import ProductCard from '@/components/storefront/ProductCard';
+import ProductImageZoom from '@/components/storefront/ProductImageZoom';
 import { useJeshaStore } from '@/lib/store';
 import { generateProductOrderUrl, generateFitAssistanceUrl } from '@/lib/whatsapp';
 import { SizeVariant } from '@/types';
@@ -131,39 +132,17 @@ export default function ProductDetailsPage() {
               </div>
             )}
 
-            {/* Main Stage Image: Fixed Display Width & Dynamic Auto-Fit */}
-            <div className="relative w-full max-w-[460px] h-[460px] sm:h-[540px] mx-auto rounded-3xl overflow-hidden bg-gradient-to-b from-[#FFFDF9] via-[#FAF6F0] to-[#F5ECE0]/50 shadow-soft border border-amber-200/80 flex items-center justify-center p-4">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={
-                  (product.images && product.images[activeImageIndex]) ||
-                  (product.images && product.images[0]) ||
-                  'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1200&q=85'
-                }
-                alt={product.name}
-                className="max-w-full max-h-full w-auto h-auto object-contain rounded-2xl transition-all duration-300 drop-shadow-sm select-none"
-              />
-
-              {/* Badges */}
-              <div className="absolute top-4 left-4 flex flex-col gap-2 pointer-events-none">
-                {product.isFestiveEdit && (
-                  <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-rose-500 text-white text-[11px] font-bold tracking-wider uppercase shadow-md">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-200" /> Festive Sparkle
-                  </span>
-                )}
-                <span className="inline-flex items-center px-3 py-1 rounded-full bg-stone-900/85 backdrop-blur-md text-[11px] font-bold tracking-wider text-white uppercase shadow-sm">
-                  {product.styleCategory}
-                </span>
-              </div>
-
-              <button
-                onClick={handleShare}
-                className="absolute top-4 right-4 p-2.5 rounded-full bg-white/95 hover:bg-white text-stone-800 shadow-md hover:shadow-lg transition-all"
-                title="Share this design"
-              >
-                {copiedLink ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
-              </button>
-            </div>
+            {/* Main Stage Image: Interactive Luxury Pan-Zoom & Lightbox */}
+            <ProductImageZoom
+              images={product.images || []}
+              activeImageIndex={activeImageIndex}
+              onImageChange={(idx) => setActiveImageIndex(idx)}
+              productName={product.name}
+              isFestiveEdit={product.isFestiveEdit}
+              styleCategory={product.styleCategory}
+              onShare={handleShare}
+              copiedLink={copiedLink}
+            />
           </div>
 
           {/* Right Column: Editorial Product Information & Order Desk */}
