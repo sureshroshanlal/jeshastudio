@@ -2,14 +2,20 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Jesha Studio — Playful Premium × Modern Indian Kids Fashion House',
-  description: 'A boutique-curated kids fashion studio in Sizes 16–40. Combining soft luxury, pure breathable fabrics, and effortless WhatsApp-first personal shopping.',
-  keywords: ['kids fashion', 'modern indian kids wear', 'designer kids clothing', 'ethnic kids wear', 'organic cotton kids', 'boutique kids clothing', 'sizes 16 to 40'],
+  metadataBase: new URL('https://jeshastudio.com'),
+  title: 'Jesha Studio — Kids Fashion | Little Style. Big Smiles.',
+  description: 'Festive and everyday kids clothing in Sizes 16–40 with butter-soft mulmul linings. Based in Hyderabad, Telangana. Direct WhatsApp ordering & assistance.',
+  keywords: ['Jesha Studio', 'kids fashion Hyderabad', 'kids wear Hyderabad', 'festive kids wear', 'boys kurta', 'girls anarkali', 'mulmul lining', 'sizes 16 to 40'],
+  icons: {
+    icon: '/jesha-logo.jpg',
+    apple: '/jesha-logo.jpg',
+  },
   openGraph: {
-    title: 'Jesha Studio — Modern Kids Fashion House',
-    description: 'Playful Premium × Modern Indian kids clothing in Sizes 16–40.',
+    title: 'Jesha Studio — Kids Fashion | Little Style. Big Smiles.',
+    description: 'Festive and everyday kids clothing in Sizes 16–40 with butter-soft mulmul linings. Jesha Studio, Hyderabad, Telangana.',
     type: 'website',
     locale: 'en_IN',
+    images: [{ url: '/jesha-logo.jpg' }],
   },
 };
 

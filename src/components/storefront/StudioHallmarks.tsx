@@ -25,8 +25,8 @@ export default function StudioHallmarks() {
     },
     {
       icon: HeartHandshake,
-      title: 'WhatsApp-First Studio',
-      description: 'Send us your child’s height and measurements. Our bespoke styling team will guide you to the perfect size (Sizes 16 to 40) and handle fast dispatch.',
+      title: 'Direct WhatsApp Support',
+      description: 'Send us your child’s height and measurements. Our team in Hyderabad will help you choose the best size (Sizes 16 to 40) and arrange fast delivery.',
       accent: 'bg-sky-100 text-sky-700 border-sky-300',
     },
   ];
@@ -41,13 +41,13 @@ export default function StudioHallmarks() {
 
         <div className="text-center max-w-2xl mx-auto mb-12 relative z-10">
           <span className="text-[11px] uppercase tracking-[0.25em] text-rose-600 font-bold font-sans flex items-center justify-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-rose-500" /> The Jesha Philosophy
+            <Sparkles className="w-3.5 h-3.5 text-rose-500" /> The Jesha Promise
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-stone-900 mt-1">
-            Fashion Boutique Elegance × Playful Childhood Comfort
+            Little Style. Big Smiles.
           </h2>
           <p className="text-xs sm:text-sm text-stone-600 mt-3 leading-relaxed">
-            We bridge the gap between elevated occasion aesthetics and the pure, fuss-free practicality that parents and children need.
+            Beautiful festive and everyday designs made with pure cotton linings, easy movement, and zero scratchiness.
           </p>
         </div>
 

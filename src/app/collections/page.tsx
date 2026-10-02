@@ -322,7 +322,7 @@ function CollectionsContent() {
                   No Exact Matches in This Filter
                 </h3>
                 <p className="text-xs text-charcoal-600 mt-2 max-w-md mx-auto">
-                  Try clearing some filter criteria, or message our styling team on WhatsApp for custom sizing and bespoke creations.
+                  Try clearing some filter criteria, or message our team on WhatsApp for size assistance and matching sets.
                 </p>
                 <button
                   onClick={clearAllFilters}

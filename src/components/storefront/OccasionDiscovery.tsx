@@ -21,7 +21,7 @@ const OCCASIONS: OccasionCard[] = [
     name: 'Festive Twirls',
     queryValue: 'Festive',
     tagline: 'Diwali, Eid & Family Pujas',
-    description: 'Bespoke organza anarkalis, handloom linen bundis, and pure gold-thread gota borders designed with itch-free inner mulmul cotton.',
+    description: 'Gorgeous organza anarkalis, handloom linen bundis, and festive gota borders designed with itch-free inner mulmul cotton.',
     icon: Sparkles,
     image: 'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=800&q=80',
     accentGradient: 'from-amber-500/30 to-rose-600/40',

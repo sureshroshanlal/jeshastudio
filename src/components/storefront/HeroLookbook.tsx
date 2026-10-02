@@ -39,7 +39,7 @@ const LOOKBOOK_SLIDES: Slide[] = [
     badge: '👑 Little Royal Collection',
     badgeColor: 'bg-amber-100/95 text-amber-800 border-amber-300',
     title: 'Linen Bundis & Warm Saffron Kurtas',
-    subtitle: 'Tailored Ease for Boys (0–14 Y)',
+    subtitle: 'Tailored Comfort for Boys (Sizes 16–40)',
     description: 'Vibrant marigold and pistachio hues crafted in breathable organic fibres. Easy wrap-around angrakhas and comfort-elasticated dhoti pants.',
     image: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1400&q=90',
     accentBg: 'from-emerald-50/70 via-amber-50/80 to-rose-50/70',

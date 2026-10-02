@@ -71,7 +71,7 @@ export default function HomePage() {
           ) : (
             <div className="text-center py-12 px-4 rounded-3xl bg-white/70 border border-amber-200/60">
               <p className="font-serif text-lg text-stone-800 font-semibold">Festive collection drops arriving soon!</p>
-              <p className="text-xs text-stone-500 mt-1">Upload bespoke festive pieces from the Admin Portal to feature them here.</p>
+              <p className="text-xs text-stone-500 mt-1">Add new products from the Admin Portal to feature them here.</p>
               <Link href="/collections" className="inline-block mt-4 px-5 py-2 rounded-full bg-stone-900 text-white text-xs font-semibold">
                 Explore All Pieces
               </Link>

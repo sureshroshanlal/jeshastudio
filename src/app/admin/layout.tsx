@@ -50,10 +50,12 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
       <header className="bg-charcoal-900 text-ivory-100 border-b border-charcoal-800 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/admin" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-lg bg-rose-500/20 border border-rose-400/40 flex items-center justify-center text-rose-300">
-                <ShieldCheck className="w-4 h-4" />
-              </div>
+            <Link href="/admin" className="flex items-center gap-2.5 group">
+              <img
+                src="/jesha-logo.jpg"
+                alt="Jesha Studio"
+                className="w-9 h-9 rounded-full object-cover border border-amber-300/40"
+              />
               <div>
                 <span className="font-serif font-bold text-lg tracking-wider text-white uppercase group-hover:text-rose-300 transition-colors">
                   Jesha Studio

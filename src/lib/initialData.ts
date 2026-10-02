@@ -394,7 +394,7 @@ export const INITIAL_ORDERS: Order[] = [
     source: 'WhatsApp',
     customer: {
       name: 'Pooja Sharma',
-      phone: '+91 98765 43210',
+      phone: '+91 99855 31519',
       email: 'pooja.sharma@gmail.com',
       address: 'Flat 402, Lotus Towers, Indiranagar',
       city: 'Bengaluru',

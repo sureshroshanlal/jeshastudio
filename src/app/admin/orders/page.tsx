@@ -403,7 +403,7 @@ function OrdersManagementContent() {
                     <input
                       type="text"
                       required
-                      placeholder="e.g. +91 98765 43210"
+                      placeholder="e.g. +91 99855 31519"
                       value={customerPhone}
                       onChange={(e) => setCustomerPhone(e.target.value)}
                       className="w-full p-2.5 rounded-xl border border-ivory-300 bg-ivory-50 focus:outline-none font-medium"
@@ -426,7 +426,7 @@ function OrdersManagementContent() {
                     <label className="block text-charcoal-700 font-semibold mb-1">City</label>
                     <input
                       type="text"
-                      placeholder="e.g. Bengaluru"
+                      placeholder="e.g. Hyderabad"
                       value={customerCity}
                       onChange={(e) => setCustomerCity(e.target.value)}
                       className="w-full p-2.5 rounded-xl border border-ivory-300 bg-ivory-50 focus:outline-none"

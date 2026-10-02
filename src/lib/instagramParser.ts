@@ -280,7 +280,7 @@ function getDefaultProduct(caption: string): ExtractedInstagramProduct {
   return {
     name: 'Handcrafted Festive Ensemble',
     tagline: 'Pure natural fabrics tailored for gentle celebrations',
-    description: 'Bespoke childrenswear crafted with breathable fabrics and seamless interior lining.',
+    description: 'Premium childrenswear crafted with breathable fabrics and soft inner mulmul lining.',
     gender: 'Girls',
     styleCategory: 'Indian',
     occasions: ['Festive'],

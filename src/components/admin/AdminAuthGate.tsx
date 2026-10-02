@@ -71,15 +71,17 @@ export default function AdminAuthGate() {
           <div className="absolute bottom-0 left-0 w-36 h-36 bg-rose-500/20 rounded-full blur-2xl" />
           
           <div className="relative z-10 flex flex-col items-center">
-            <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center text-amber-300 mb-4 shadow-inner ring-4 ring-amber-400/10">
-              <Lock className="w-7 h-7" />
-            </div>
+            <img
+              src="/jesha-logo.jpg"
+              alt="Jesha Studio"
+              className="w-16 h-16 rounded-full object-cover mb-3 shadow-lg border-2 border-amber-300/40"
+            />
             
             <span className="font-serif text-2xl sm:text-3xl font-bold tracking-widest uppercase text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-rose-100 to-amber-100">
               Jesha Studio
             </span>
-            <span className="text-[11px] tracking-[0.3em] text-amber-200/70 uppercase block font-sans mt-1">
-              Studio Management Portal
+            <span className="text-[10px] tracking-[0.22em] text-rose-300 uppercase block font-sans font-semibold mt-0.5">
+              Kids Fashion &bull; Little Style. Big Smiles.
             </span>
             
             <div className="mt-3.5 inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-stone-800/80 text-[11px] text-emerald-300 border border-emerald-500/30 shadow-sm">
