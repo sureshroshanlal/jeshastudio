@@ -57,7 +57,7 @@ export function generateFitAssistanceUrl(
   heightCm?: number | string,
   build?: string
 ): string {
-  let message = `🌸 *Hello Jesha Studio Atelier!* 🌸\n\n`;
+  let message = `🌸 *Hello Jesha Studio!* 🌸\n\n`;
   message += `I need personalized help choosing the perfect size for my child.\n\n`;
 
   if (productName) {

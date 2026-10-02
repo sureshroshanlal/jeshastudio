@@ -135,7 +135,7 @@ function ProductsManagementContent() {
   };
 
   const handleDelete = (id: string, name: string) => {
-    if (confirm(`Are you sure you want to delete "${name}" from the atelier catalog?`)) {
+    if (confirm(`Are you sure you want to delete "${name}" from the product catalog?`)) {
       deleteProduct(id);
     }
   };
@@ -437,7 +437,7 @@ function ProductsManagementContent() {
             <div className="p-6 bg-ivory-50 border-b border-ivory-300 flex items-center justify-between">
               <div>
                 <h3 className="font-serif text-xl font-bold text-charcoal-900">
-                  {editingProductId ? 'Edit Atelier Design' : 'Create New Atelier Design'}
+                  {editingProductId ? 'Edit Design' : 'Create New Design'}
                 </h3>
                 <p className="text-xs text-charcoal-600">Enter full specifications, images, and model fit measurements.</p>
               </div>

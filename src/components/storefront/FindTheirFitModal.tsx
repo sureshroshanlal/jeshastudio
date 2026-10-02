@@ -43,7 +43,7 @@ export default function FindTheirFitModal({
     }
 
     const chestCm = Math.round(chestInches * 2.54);
-    let advice = `For a height of ${height} cm and chest circumference of ${chestInches} inches (${chestCm} cm) with a ${build.toLowerCase()} build, our atelier recommends Size ${recommended}.`;
+    let advice = `For a height of ${height} cm and chest circumference of ${chestInches} inches (${chestCm} cm) with a ${build.toLowerCase()} build, our studio recommends Size ${recommended}.`;
     
     if (recommended > base) {
       advice += ` We selected Size ${recommended} to accommodate ${preference === 'Room to Grow' ? 'room to grow' : 'a broader silhouette'} with comfortable ease and room for twirling.`;
@@ -72,7 +72,7 @@ export default function FindTheirFitModal({
           </button>
           
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 text-rose-500 text-xs font-semibold uppercase tracking-wider mb-2 border border-rose-200 shadow-sm">
-            <Ruler className="w-3.5 h-3.5" /> Jesha Atelier Size Assistant
+            <Ruler className="w-3.5 h-3.5" /> Jesha Fit &amp; Size Assistant
           </div>
           <h3 className="font-serif text-2xl font-semibold text-charcoal-900">
             Find Their Perfect Size (16–40)

@@ -20,7 +20,7 @@ export default function BrandStoryPage() {
         {/* Hero Section */}
         <section className="relative py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
           <span className="text-xs uppercase tracking-[0.3em] text-rose-500 font-semibold font-sans mb-3 inline-block">
-            Our Atelier Story
+            Our Story
           </span>
           <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-semibold text-charcoal-900 leading-tight">
             Playful Premium × Modern Indian
@@ -37,7 +37,7 @@ export default function BrandStoryPage() {
             <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white">
               <Image
                 src="https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1200&q=85"
-                alt="Jesha Studio Atelier Craft"
+                alt="Jesha Studio Craft"
                 fill
                 className="object-cover"
               />
@@ -61,7 +61,7 @@ export default function BrandStoryPage() {
                   As parents, we noticed a persistent divide in children’s occasionwear: either stiff, scratchy traditional ethnic wear that children despised wearing after 10 minutes, or generic mass-market clothing lacking aesthetic soul.
                 </p>
                 <p className="text-sm text-charcoal-700 leading-relaxed">
-                  We created <strong>Jesha Studio</strong> to offer an atelier experience that celebrates modern Indian aesthetics through pure organic cottons, soft mulmul linings, and effortless silhouettes (Sizes 16 to 40).
+                  We created <strong>Jesha Studio</strong> to offer a boutique design studio experience that celebrates modern Indian aesthetics through pure organic cottons, soft mulmul linings, and effortless silhouettes (Sizes 16 to 40).
                 </p>
               </div>
 
@@ -109,7 +109,7 @@ export default function BrandStoryPage() {
                   href="/collections"
                   className="px-6 py-3.5 rounded-full bg-charcoal-900 text-white text-xs font-semibold uppercase tracking-wider hover:bg-charcoal-800 transition-colors shadow-md flex items-center gap-2"
                 >
-                  <span>Explore The Atelier</span>
+                  <span>Explore The Collection</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
 

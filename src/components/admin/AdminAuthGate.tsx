@@ -79,7 +79,7 @@ export default function AdminAuthGate() {
               Jesha Studio
             </span>
             <span className="text-[11px] tracking-[0.3em] text-amber-200/70 uppercase block font-sans mt-1">
-              Atelier Management Portal
+              Studio Management Portal
             </span>
             
             <div className="mt-3.5 inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-stone-800/80 text-[11px] text-emerald-300 border border-emerald-500/30 shadow-sm">
@@ -197,7 +197,7 @@ export default function AdminAuthGate() {
                 <span>Verifying Credentials...</span>
               ) : (
                 <>
-                  <span>Sign In to Atelier Studio</span>
+                  <span>Sign In to Admin Portal</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}

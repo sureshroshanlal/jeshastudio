@@ -104,7 +104,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     slug: 'powder-blue-smocked-cotton-dress',
     name: 'Powder Blue Heritage Smocked Dress',
     tagline: 'Hand-smocked Peter Pan collar dress in whisper-soft woven cotton',
-    description: 'Timeless vintage atelier charm meets contemporary playfulness. Hand-smocked across the bodice with pastel flora embroidery, crafted in feather-light woven cotton with gentle puff sleeves and a back sash bow.',
+    description: 'Timeless vintage boutique charm meets contemporary playfulness. Hand-smocked across the bodice with pastel flora embroidery, crafted in feather-light woven cotton with gentle puff sleeves and a back sash bow.',
     gender: 'Girls',
     styleCategory: 'Western',
     occasions: ['Birthday', 'Everyday', 'Party', 'Seasonal'],

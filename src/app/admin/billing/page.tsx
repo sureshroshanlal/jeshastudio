@@ -82,7 +82,7 @@ function BillingShippingContent() {
             Billing, Invoicing &amp; Shipping Desk
           </h1>
           <p className="text-xs text-charcoal-600 mt-1">
-            Generate branded atelier GST-ready invoices and courier dispatch labels in printable PDF formats.
+            Generate branded GST-ready invoices and courier dispatch labels in printable PDF formats.
           </p>
         </div>
 
@@ -180,7 +180,7 @@ function BillingShippingContent() {
                   Modern Kids Fashion House
                 </span>
                 <p className="text-[11px] text-charcoal-600 mt-2 leading-relaxed">
-                  Bespoke Kids Atelier &bull; GSTIN: 29AABCS1429M1ZQ<br />
+                  Bespoke Kids Studio &bull; GSTIN: 29AABCS1429M1ZQ<br />
                   Indiranagar, Bengaluru, KA 560038<br />
                   WhatsApp: +91 98765 43210 &bull; concierge@jeshastudio.com
                 </p>
@@ -255,7 +255,7 @@ function BillingShippingContent() {
                       <td className="py-3 px-3 text-charcoal-500">{idx + 1}</td>
                       <td className="py-3 px-3">
                         <strong className="text-charcoal-900 font-serif block">{item.productName}</strong>
-                        <span className="text-[10px] text-charcoal-500">100% Mulmul Cotton Lined Atelier Wear</span>
+                        <span className="text-[10px] text-charcoal-500">100% Mulmul Cotton Lined Designer Wear</span>
                       </td>
                       <td className="py-3 px-3 font-mono text-[11px] text-charcoal-700">{item.sku}</td>
                       <td className="py-3 px-3 font-bold text-charcoal-800">{item.size}</td>
@@ -277,7 +277,7 @@ function BillingShippingContent() {
                 </div>
                 {selectedOrder.discount > 0 && (
                   <div className="flex justify-between text-rose-600 font-medium">
-                    <span>Atelier Promo Discount:</span>
+                    <span>Promo Discount:</span>
                     <span>-₹{selectedOrder.discount}</span>
                   </div>
                 )}
@@ -383,7 +383,7 @@ function BillingShippingContent() {
               </div>
               <div>
                 <span className="text-charcoal-500 block text-[9px] uppercase font-bold">Contents:</span>
-                <span className="font-medium text-charcoal-900">Kids Atelier Apparels</span>
+                <span className="font-medium text-charcoal-900">Kids Designer Apparels</span>
               </div>
             </div>
 
@@ -400,7 +400,7 @@ function BillingShippingContent() {
 
             {/* From Address */}
             <div className="pt-2 border-t border-charcoal-900 text-[10px] text-charcoal-600 leading-snug">
-              <strong>From:</strong> Jesha Studio Atelier, 104 Indiranagar, Bengaluru, KA 560038 | Tel: +91 98765 43210
+              <strong>From:</strong> Jesha Studio, 104 Indiranagar, Bengaluru, KA 560038 | Tel: +91 98765 43210
             </div>
 
           </div>

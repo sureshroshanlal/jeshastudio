@@ -49,7 +49,7 @@ export default function AdminDashboardPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 sm:p-8 rounded-3xl border border-ivory-300 shadow-soft">
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 text-rose-500 text-xs font-semibold uppercase tracking-wider mb-2 border border-rose-200">
-            <Sparkles className="w-3.5 h-3.5" /> Jesha Studio Atelier Desk
+            <Sparkles className="w-3.5 h-3.5" /> Jesha Studio Operations Desk
           </div>
           <h1 className="font-serif text-2xl sm:text-3xl font-bold text-charcoal-900">
             Studio Operations &amp; Commerce Desk

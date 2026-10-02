@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Ruler, Sparkles, Feather, HeartHandshake, ShieldCheck, Smile } from 'lucide-react';
+import { Ruler, Sparkles, Feather, HeartHandshake, Smile } from 'lucide-react';
 
-export default function AtelierHallmarks() {
+export default function StudioHallmarks() {
   const hallmarks = [
     {
       icon: Ruler,
@@ -25,7 +25,7 @@ export default function AtelierHallmarks() {
     },
     {
       icon: HeartHandshake,
-      title: 'WhatsApp-First Atelier',
+      title: 'WhatsApp-First Studio',
       description: 'Send us your child’s height and measurements. Our bespoke styling team will guide you to the perfect size (Sizes 16 to 40) and handle fast dispatch.',
       accent: 'bg-sky-100 text-sky-700 border-sky-300',
     },

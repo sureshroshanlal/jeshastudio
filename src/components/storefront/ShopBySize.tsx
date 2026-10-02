@@ -21,7 +21,7 @@ const SIZE_BRACKETS: SizeBracket[] = [
   {
     range: 'Sizes 16–20',
     sizeParam: '18',
-    title: 'First Steps & Toddler Atelier',
+    title: 'First Steps & Toddler Outfits',
     subtitle: 'Ultra-soft wrap angrakhas, romper sets & butter-soft smocked frocks',
     chestNote: 'Chest ~16–20 inches (41–51 cm)',
     image: 'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=800&q=80',

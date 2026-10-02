@@ -53,7 +53,7 @@ export default function ProductDetailsPage() {
         <Header />
         <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
           <h2 className="font-serif text-3xl font-bold text-charcoal-900 mb-2">Piece Not Found</h2>
-          <p className="text-xs text-charcoal-600 mb-6">This atelier piece might have rotated or been renamed.</p>
+          <p className="text-xs text-charcoal-600 mb-6">This design might have rotated or been renamed.</p>
           <Link href="/collections" className="px-6 py-3 rounded-full bg-charcoal-900 text-white text-xs font-semibold uppercase tracking-wider">
             Explore Full Collection
           </Link>
@@ -66,7 +66,7 @@ export default function ProductDetailsPage() {
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-ivory-100 font-serif text-lg">
-        Loading Atelier Piece...
+        Loading Design...
       </div>
     );
   }
@@ -414,7 +414,7 @@ export default function ProductDetailsPage() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <span className="text-[11px] uppercase tracking-[0.25em] text-rose-500 font-semibold font-sans">
-                  Atelier Styling
+                  Stylist Recommendations
                 </span>
                 <h2 className="font-serif text-2xl font-semibold text-charcoal-900 mt-0.5">
                   Complete the Look &amp; Sibling Sets

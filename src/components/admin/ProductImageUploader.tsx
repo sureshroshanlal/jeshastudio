@@ -180,7 +180,7 @@ export default function ProductImageUploader({ images, onChange }: ProductImageU
             </div>
             <div>
               <p className="text-xs font-semibold text-charcoal-900">
-                {isProcessing ? 'Saving & Optimizing Photos to Atelier Database...' : 'Click to Browse or Drag & Drop Photos'}
+                {isProcessing ? 'Saving & Optimizing Photos to Database...' : 'Click to Browse or Drag & Drop Photos'}
               </p>
               <p className="text-[11px] text-charcoal-600 mt-0.5">
                 PNG, JPG, WEBP • Saves permanently to backend storage &amp; generates instant responsive web previews

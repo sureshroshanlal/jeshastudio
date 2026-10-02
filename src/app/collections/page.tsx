@@ -129,7 +129,7 @@ function CollectionsContent() {
               onChange={(e) => setSortBy(e.target.value as any)}
               className="px-3 py-1.5 text-xs bg-white border border-ivory-300 rounded-xl text-charcoal-800 focus:outline-none focus:border-rose-400 font-medium cursor-pointer shadow-sm"
             >
-              <option value="featured">Atelier Curated (Featured)</option>
+              <option value="featured">Featured Designs</option>
               <option value="price-low">Price: Low to High</option>
               <option value="price-high">Price: High to Low</option>
               <option value="newest">Newest Additions</option>
@@ -189,7 +189,7 @@ function CollectionsContent() {
               <div className="flex items-center justify-between pb-3 border-b border-ivory-200">
                 <h3 className="font-serif text-base font-semibold text-charcoal-900 flex items-center gap-2">
                   <Filter className="w-4 h-4 text-rose-500" />
-                  <span>Refine Atelier</span>
+                  <span>Filter Designs</span>
                 </h3>
                 {hasActiveFilters && (
                   <button onClick={clearAllFilters} className="text-[11px] text-rose-500 hover:underline">
@@ -322,7 +322,7 @@ function CollectionsContent() {
                   No Exact Matches in This Filter
                 </h3>
                 <p className="text-xs text-charcoal-600 mt-2 max-w-md mx-auto">
-                  Try clearing some filter criteria, or message our styling atelier on WhatsApp for custom sizing and bespoke creations.
+                  Try clearing some filter criteria, or message our styling team on WhatsApp for custom sizing and bespoke creations.
                 </p>
                 <button
                   onClick={clearAllFilters}

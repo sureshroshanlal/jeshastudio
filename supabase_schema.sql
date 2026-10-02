@@ -1,5 +1,5 @@
 -- ==============================================================================
--- JESHA STUDIO ATELIER - SUPABASE POSTGRESQL DATABASE SCHEMA
+-- JESHA STUDIO - SUPABASE POSTGRESQL DATABASE SCHEMA
 -- ==============================================================================
 -- Run this script in your Supabase SQL Editor: Dashboard -> SQL Editor -> New Query
 

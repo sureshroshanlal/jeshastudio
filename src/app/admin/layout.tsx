@@ -27,7 +27,7 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#F7F5F0] flex items-center justify-center font-serif text-lg text-charcoal-800">
-        Verifying Atelier Access...
+        Verifying Admin Access...
       </div>
     );
   }
@@ -59,7 +59,7 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
                   Jesha Studio
                 </span>
                 <span className="text-[10px] tracking-widest text-ivory-400 uppercase block -mt-1 font-sans">
-                  Atelier Admin Portal
+                  Studio Admin Portal
                 </span>
               </div>
             </Link>
@@ -161,7 +161,7 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
 
       <footer className="py-4 border-t border-ivory-300 text-center text-xs text-charcoal-600 flex items-center justify-center gap-2">
         <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-        <span>Authorized Session Active &bull; Jesha Studio Atelier Suite</span>
+        <span>Authorized Session Active &bull; Jesha Studio Admin Suite</span>
       </footer>
     </div>
   );

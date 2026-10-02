@@ -117,7 +117,7 @@ export interface AdminUser {
   email: string;
   username: string;
   name: string;
-  role: 'Master Atelier Admin' | 'Store Manager' | 'Inventory Curator';
+  role: 'Studio Admin' | 'Store Manager' | 'Inventory Curator';
   avatar?: string;
   lastLogin?: string;
 }

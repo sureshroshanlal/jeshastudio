@@ -91,6 +91,7 @@ module.exports = {
         'soft-lg': '0 10px 30px -4px rgba(41, 37, 36, 0.08)',
         'soft-xl': '0 20px 40px -6px rgba(41, 37, 36, 0.12)',
         'joy': '0 10px 25px -5px rgba(245, 158, 11, 0.2), 0 8px 10px -6px rgba(244, 63, 94, 0.15)',
+        'studio': '0 4px 20px rgba(0, 0, 0, 0.04), 0 16px 36px rgba(41, 37, 36, 0.08)',
         'atelier': '0 4px 20px rgba(0, 0, 0, 0.04), 0 16px 36px rgba(41, 37, 36, 0.08)',
       },
       animation: {

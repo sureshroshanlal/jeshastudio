@@ -8,7 +8,7 @@ export async function POST() {
     const result = await resetDatabaseToSeed();
     return NextResponse.json({
       ...result,
-      message: 'Database reset to initial curated atelier seed data successfully.',
+      message: 'Database reset to initial curated seed data successfully.',
     });
   } catch (error) {
     return NextResponse.json(

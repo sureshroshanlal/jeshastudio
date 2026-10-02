@@ -41,7 +41,7 @@ export default function Header({ onOpenFitModal }: HeaderProps) {
       {/* Top Brand Announcement Bar with Joyful Gradient & Gold Accents */}
       <div className="bg-gradient-to-r from-stone-900 via-stone-850 to-stone-900 text-ivory-100 text-xs py-2.5 px-4 tracking-wider text-center flex items-center justify-center gap-3 border-b border-amber-500/20">
         <span className="inline-flex items-center gap-1.5 text-amber-300 font-semibold uppercase tracking-wider text-[11px]">
-          <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" /> Handcrafted Atelier Kids Wear
+          <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" /> Handcrafted Designer Kids Wear
         </span>
         <span className="hidden sm:inline text-stone-600">•</span>
         <span className="hidden sm:inline text-ivory-200 text-xs font-normal">
@@ -117,7 +117,7 @@ export default function Header({ onOpenFitModal }: HeaderProps) {
                   href="/brand-story" 
                   className={`transition-colors hover:text-rose-600 ${pathname === '/brand-story' ? 'text-rose-600 font-semibold' : 'text-stone-700'}`}
                 >
-                  Atelier Story
+                  Our Story
                 </Link>
               </nav>
             </div>
@@ -129,7 +129,7 @@ export default function Header({ onOpenFitModal }: HeaderProps) {
                   Jesha Studio
                 </span>
                 <span className="text-[10px] tracking-[0.35em] text-amber-700 font-sans -mt-0.5 font-semibold uppercase">
-                  Joyful Luxury &bull; Atelier Kids
+                  Joyful Luxury &bull; Kids Wear
                 </span>
               </Link>
             </div>
@@ -250,14 +250,14 @@ export default function Header({ onOpenFitModal }: HeaderProps) {
               onClick={() => setMobileMenuOpen(false)}
               className="block text-base text-stone-800 hover:text-rose-600"
             >
-              Boys Atelier (Sizes 16–40)
+              Boys Collection (Sizes 16–40)
             </Link>
             <Link 
               href="/brand-story" 
               onClick={() => setMobileMenuOpen(false)}
               className="block text-base text-stone-800 hover:text-rose-600"
             >
-              Our Atelier Philosophy
+              Our Craft Story
             </Link>
           </div>
 

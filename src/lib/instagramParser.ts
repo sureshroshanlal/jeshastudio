@@ -159,7 +159,7 @@ export function parseInstagramCaption(caption: string): ExtractedInstagramProduc
     }
   }
   if (!name) {
-    name = 'Atelier Handcrafted Ensemble';
+    name = 'Handcrafted Festive Ensemble';
   }
 
   // Capitalize title properly
@@ -278,7 +278,7 @@ export function parseInstagramCaption(caption: string): ExtractedInstagramProduc
 
 function getDefaultProduct(caption: string): ExtractedInstagramProduct {
   return {
-    name: 'Atelier Handcrafted Ensemble',
+    name: 'Handcrafted Festive Ensemble',
     tagline: 'Pure natural fabrics tailored for gentle celebrations',
     description: 'Bespoke childrenswear crafted with breathable fabrics and seamless interior lining.',
     gender: 'Girls',

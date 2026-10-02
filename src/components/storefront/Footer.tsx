@@ -13,7 +13,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
           <div>
             <span className="text-xs uppercase tracking-[0.25em] text-amber-300 font-bold font-sans flex items-center justify-center md:justify-start gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" /> Personalized Atelier Styling
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" /> Personalized Styling Support
             </span>
             <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white mt-1">
               Need assistance with custom sizing, matching sets or fast dispatch?
@@ -46,11 +46,11 @@ export default function Footer() {
                 Jesha Studio
               </span>
               <span className="block text-[11px] tracking-[0.3em] text-amber-300/80 uppercase font-sans font-semibold mt-0.5">
-                Joyful Luxury Kids Atelier
+                Joyful Luxury Kids Studio
               </span>
             </Link>
             <p className="text-xs text-stone-300 leading-relaxed max-w-sm">
-              An atelier-like, curated children’s fashion house combining soft, fresh, and playful aesthetics with modern Indian craftsmanship.
+              A boutique, curated children’s fashion studio combining soft, fresh, and playful aesthetics with modern Indian craftsmanship.
             </p>
             <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-stone-400 font-medium">
               <span className="inline-flex items-center gap-1 text-amber-300">
@@ -115,12 +115,12 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/collections?gender=Boys" className="hover:text-amber-300 transition-colors">
-                  Boys Atelier
+                  Boys Collection
                 </Link>
               </li>
               <li>
                 <Link href="/brand-story" className="hover:text-emerald-300 transition-colors">
-                  Our Atelier Story
+                  Our Story
                 </Link>
               </li>
             </ul>
@@ -129,12 +129,12 @@ export default function Footer() {
           {/* Studio Concierge & Admin */}
           <div>
             <h4 className="font-serif text-base font-bold text-white tracking-wide mb-4 text-amber-200">
-              Studio Atelier
+              Jesha Studio
             </h4>
             <ul className="space-y-2.5 text-xs text-stone-300">
               <li className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 text-rose-400 flex-shrink-0 mt-0.5" />
-                <span>Bespoke Kids Atelier, India</span>
+                <span>Bespoke Kids Clothing Studio, India</span>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
@@ -160,7 +160,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-12 mt-12 border-t border-stone-800 flex flex-col sm:flex-row items-center justify-between text-[11px] text-stone-400 gap-4">
-          <p>© {new Date().getFullYear()} Jesha Studio. Joyful Luxury × Modern Indian Children&apos;s Atelier. All Rights Reserved.</p>
+          <p>© {new Date().getFullYear()} Jesha Studio. Joyful Luxury × Modern Indian Children&apos;s Fashion. All Rights Reserved.</p>
           <div className="flex items-center gap-4">
             <span className="text-emerald-400">WhatsApp-First Direct Commerce</span>
             <span>•</span>

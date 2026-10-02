@@ -8,7 +8,7 @@ import HeroLookbook from '@/components/storefront/HeroLookbook';
 import ShopBySize from '@/components/storefront/ShopBySize';
 import OccasionDiscovery from '@/components/storefront/OccasionDiscovery';
 import ProductCard from '@/components/storefront/ProductCard';
-import AtelierHallmarks from '@/components/storefront/AtelierHallmarks';
+import StudioHallmarks from '@/components/storefront/StudioHallmarks';
 import FindTheirFitModal from '@/components/storefront/FindTheirFitModal';
 import Footer from '@/components/storefront/Footer';
 import { useJeshaStore } from '@/lib/store';
@@ -87,7 +87,7 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-amber-200/60">
             <div>
               <span className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.25em] text-emerald-700 font-bold font-sans">
-                <Star className="w-3.5 h-3.5 fill-emerald-600 text-emerald-600" /> Just Arrived at the Atelier
+                <Star className="w-3.5 h-3.5 fill-emerald-600 text-emerald-600" /> Just Arrived at the Studio
               </span>
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
                 Fresh Off the Loom
@@ -115,7 +115,7 @@ export default function HomePage() {
           ) : (
             <div className="text-center py-12 px-4 rounded-3xl bg-white/70 border border-amber-200/60">
               <p className="font-serif text-lg text-stone-800 font-semibold">New arrivals being prepared at the loom.</p>
-              <p className="text-xs text-stone-500 mt-1">Add newly launched inventory via the Admin Atelier Portal.</p>
+              <p className="text-xs text-stone-500 mt-1">Add newly launched inventory via the Admin Portal.</p>
               <Link href="/admin/products" className="inline-block mt-4 px-5 py-2 rounded-full bg-stone-900 text-white text-xs font-semibold">
                 Go to Admin Portal
               </Link>
@@ -124,7 +124,7 @@ export default function HomePage() {
         </section>
 
         {/* Brand Philosophy & Hallmarks */}
-        <AtelierHallmarks />
+        <StudioHallmarks />
       </main>
 
       {/* Interactive Sizing Modal */}

@@ -56,6 +56,7 @@ body {
 }
 
 /* Editorial badge & Joyful Sparkles */
+.studio-badge,
 .atelier-badge {
   font-family: var(--font-serif);
   letter-spacing: 0.14em;

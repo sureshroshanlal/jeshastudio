@@ -36,14 +36,14 @@ const LOOKBOOK_SLIDES: Slide[] = [
   },
   {
     id: 2,
-    badge: '👑 Little Royal Atelier',
+    badge: '👑 Little Royal Collection',
     badgeColor: 'bg-amber-100/95 text-amber-800 border-amber-300',
     title: 'Linen Bundis & Warm Saffron Kurtas',
     subtitle: 'Tailored Ease for Boys (0–14 Y)',
     description: 'Vibrant marigold and pistachio hues crafted in breathable organic fibres. Easy wrap-around angrakhas and comfort-elasticated dhoti pants.',
     image: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1400&q=90',
     accentBg: 'from-emerald-50/70 via-amber-50/80 to-rose-50/70',
-    linkText: 'Explore Boys Atelier',
+    linkText: 'Explore Boys Collection',
     linkHref: '/collections?gender=Boys',
     highlightPill: '🌿 Breathable Organic Handloom',
   },
@@ -129,7 +129,7 @@ export default function HeroLookbook() {
               </a>
             </div>
 
-            {/* Atelier hallmarks */}
+            {/* Craft hallmarks */}
             <div className="pt-4 border-t border-amber-200/60 flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-stone-700 font-medium">
               <span className="inline-flex items-center gap-1">✨ Sizes 16 to 40</span>
               <span>•</span>
