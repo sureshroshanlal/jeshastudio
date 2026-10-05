@@ -2,10 +2,9 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, HeartHandshake, Ruler, Star } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import Header from '@/components/storefront/Header';
 import HeroLookbook from '@/components/storefront/HeroLookbook';
-import ShopBySize from '@/components/storefront/ShopBySize';
 import OccasionDiscovery from '@/components/storefront/OccasionDiscovery';
 import ProductCard from '@/components/storefront/ProductCard';
 import StudioHallmarks from '@/components/storefront/StudioHallmarks';
@@ -13,8 +12,11 @@ import FindTheirFitModal from '@/components/storefront/FindTheirFitModal';
 import Footer from '@/components/storefront/Footer';
 import { useJeshaStore } from '@/lib/store';
 
+type FilterTab = 'all' | 'festive' | 'girls' | 'boys' | 'new';
+
 export default function HomePage() {
   const { products, isLoaded } = useJeshaStore();
+  const [activeTab, setActiveTab] = useState<FilterTab>('all');
   const [fitModalOpen, setFitModalOpen] = useState(false);
   const [selectedProductForFit, setSelectedProductForFit] = useState<string | undefined>(undefined);
 
@@ -23,88 +25,71 @@ export default function HomePage() {
     setFitModalOpen(true);
   };
 
-  const festiveProducts = products.filter((p) => p.isFestiveEdit).slice(0, 4);
-  const newArrivals = products.filter((p) => p.isNewArrival).slice(0, 4);
+  const filteredProducts = products.filter((p) => {
+    if (activeTab === 'festive') return p.isFestiveEdit;
+    if (activeTab === 'girls') return p.gender === 'Girls' || p.gender === 'Unisex';
+    if (activeTab === 'boys') return p.gender === 'Boys' || p.gender === 'Unisex';
+    if (activeTab === 'new') return p.isNewArrival;
+    return true;
+  });
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#FFFDF9] via-[#FAF5EE] to-[#FFFDF9] text-stone-900">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#FFFDF9] via-[#FAF5EE] to-[#FFFDF9] text-stone-900 selection:bg-rose-100 selection:text-rose-900">
+      
       {/* Header */}
       <Header onOpenFitModal={() => handleOpenFitModal()} />
 
-      {/* Hero Lookbook Editorial Carousel */}
       <main className="flex-1">
+        
+        {/* 1. Hero Lookbook */}
         <HeroLookbook />
 
-        {/* Discovery Path 1: Shop by Size */}
-        <ShopBySize />
-
-        {/* Curated Collection 1: The Festive Edit */}
-        <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-amber-200/60">
-            <div>
-              <div className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.25em] text-rose-600 font-bold font-sans mb-1">
-                <Sparkles className="w-3.5 h-3.5 text-rose-500" /> Curated Seasonal Capsule
-              </div>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900">
-                The Festive Twirl Edit
-              </h2>
-            </div>
-            <Link
-              href="/collections?occasion=Festive"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-stone-800 hover:text-rose-600 transition-colors mt-2 sm:mt-0 group"
-            >
-              <span>View All Festive Pieces ({products.filter((p) => p.isFestiveEdit).length})</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-rose-500" />
-            </Link>
-          </div>
-
-          {festiveProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {festiveProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onOpenFitModal={(name) => handleOpenFitModal(name)}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12 px-4 rounded-3xl bg-white/70 border border-amber-200/60">
-              <p className="font-serif text-lg text-stone-800 font-semibold">Festive collection drops arriving soon!</p>
-              <p className="text-xs text-stone-500 mt-1">Add new products from the Admin Portal to feature them here.</p>
-              <Link href="/collections" className="inline-block mt-4 px-5 py-2 rounded-full bg-stone-900 text-white text-xs font-semibold">
-                Explore All Pieces
-              </Link>
-            </div>
-          )}
-        </section>
-
-        {/* Discovery Path 2: Made for the Moment Occasion Grid */}
+        {/* 2. Visual Categories Navigation */}
         <OccasionDiscovery />
 
-        {/* Curated Collection 2: New Season Arrivals */}
-        <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-amber-200/60">
+        {/* 3. Functional Product Showcase with Quick Filter Tabs */}
+        <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          
+          {/* Section Header with Category Tabs */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-amber-200/60 gap-4">
             <div>
-              <span className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.25em] text-emerald-700 font-bold font-sans">
-                <Star className="w-3.5 h-3.5 fill-emerald-600 text-emerald-600" /> Just Arrived at the Studio
-              </span>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
-                Fresh Off the Loom
+              <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] text-rose-700 font-bold font-sans mb-1">
+                <Sparkles className="w-3.5 h-3.5 text-rose-600" />
+                <span>Handcrafted Atelier Collection</span>
+              </div>
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900">
+                Explore the Collection
               </h2>
             </div>
-            <Link
-              href="/collections?newArrival=true"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-stone-800 hover:text-rose-600 transition-colors mt-2 sm:mt-0 group"
-            >
-              <span>Explore All New Arrivals</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-emerald-600" />
-            </Link>
+
+            {/* Quick Filter Tabs */}
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+              {[
+                { id: 'all', label: `All (${products.length})` },
+                { id: 'festive', label: `Festive (${products.filter((p) => p.isFestiveEdit).length})` },
+                { id: 'girls', label: 'Girls' },
+                { id: 'boys', label: 'Boys' },
+                { id: 'new', label: 'New In' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as FilterTab)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap ${
+                    activeTab === tab.id
+                      ? 'bg-stone-900 text-white shadow-xs'
+                      : 'bg-white hover:bg-stone-100 text-stone-700 border border-amber-200/80'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {newArrivals.length > 0 ? (
+          {/* Product Grid */}
+          {filteredProducts.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {newArrivals.map((product) => (
+              {filteredProducts.map((product) => (
                 <ProductCard
                   key={product.id}
                   product={product}
@@ -113,21 +98,35 @@ export default function HomePage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 px-4 rounded-3xl bg-white/70 border border-amber-200/60">
-              <p className="font-serif text-lg text-stone-800 font-semibold">New arrivals being prepared at the loom.</p>
-              <p className="text-xs text-stone-500 mt-1">Add newly launched inventory via the Admin Portal.</p>
-              <Link href="/admin/products" className="inline-block mt-4 px-5 py-2 rounded-full bg-stone-900 text-white text-xs font-semibold">
-                Go to Admin Portal
-              </Link>
+            <div className="text-center py-16 px-4 rounded-3xl bg-white border border-amber-200 shadow-soft">
+              <p className="font-serif text-lg text-stone-800 font-semibold">No pieces in this filter yet.</p>
+              <button
+                onClick={() => setActiveTab('all')}
+                className="inline-block mt-3 px-5 py-2 rounded-full bg-stone-900 text-white text-xs font-bold uppercase tracking-wider"
+              >
+                View All Pieces
+              </button>
             </div>
           )}
+
+          {/* Catalog Link */}
+          <div className="mt-10 text-center">
+            <Link
+              href="/collections"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-stone-900 hover:bg-rose-700 text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm"
+            >
+              <span>View Full Catalog with All Filters</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </section>
 
-        {/* Brand Philosophy & Hallmarks */}
+        {/* 4. Compact Trust Hallmarks */}
         <StudioHallmarks />
+
       </main>
 
-      {/* Interactive Sizing Modal */}
+      {/* Sizing Guidance Modal */}
       <FindTheirFitModal
         isOpen={fitModalOpen}
         onClose={() => setFitModalOpen(false)}

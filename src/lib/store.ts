@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Product, Order } from '@/types';
 import { INITIAL_PRODUCTS, INITIAL_ORDERS } from './initialData';
 
-const PRODUCTS_STORAGE_KEY = 'jesha_studio_products_v3';
+const PRODUCTS_STORAGE_KEY = 'jesha_studio_products_v4';
 const ORDERS_STORAGE_KEY = 'jesha_studio_orders_v3';
 
 export function getStoredProducts(): Product[] {

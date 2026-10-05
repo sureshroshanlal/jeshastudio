@@ -1,93 +1,123 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowUpRight, Sparkles, Ruler } from 'lucide-react';
+import { ArrowUpRight, Sparkles, Ruler, ShieldCheck, Heart, ArrowRight } from 'lucide-react';
 import { ALL_SIZES } from '@/types';
 
-interface SizeBracket {
-  range: string;
-  sizeParam: string;
-  title: string;
-  subtitle: string;
-  image: string;
-  badgeBg: string;
-  borderAccent: string;
+interface GrowthStage {
+  id: string;
+  stageName: string;
+  sizes: string[];
+  ageApprox: string;
   chestNote: string;
+  heightNote: string;
+  title: string;
+  description: string;
+  image: string;
+  tagColor: string;
+  accentBorder: string;
+  craftHighlight: string;
+  popularPieces: string[];
 }
 
-const SIZE_BRACKETS: SizeBracket[] = [
+const GROWTH_STAGES: GrowthStage[] = [
   {
-    range: 'Sizes 16–20',
-    sizeParam: '18',
+    id: 'stage-1',
+    stageName: 'Stage 1 · Tiny Twirlers',
+    sizes: ['16', '18', '20'],
+    ageApprox: '6 months – 2.5 yrs',
+    chestNote: 'Chest 16–20" (41–51 cm)',
+    heightNote: 'Height ~75–95 cm',
     title: 'First Steps & Toddler Outfits',
-    subtitle: 'Ultra-soft wrap angrakhas, romper sets & butter-soft smocked frocks',
-    chestNote: 'Chest ~16–20 inches (41–51 cm)',
-    image: 'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=800&q=80',
-    badgeBg: 'bg-rose-500 text-white',
-    borderAccent: 'group-hover:border-rose-300',
+    description: 'Ultra-soft wrap angrakhas, romper sets, and butter-soft smocked frocks designed with cotton tie-ups rather than harsh metal zippers.',
+    image: '/images/saffron_angrakha_toddler.jpg',
+    tagColor: 'bg-amber-100 text-amber-900 border-amber-300',
+    accentBorder: 'hover:border-amber-400',
+    craftHighlight: 'No metallic zippers · Gentle tie-ups · Diaper ease',
+    popularPieces: ['Saffron Angrakha Dhoti', 'First Birthday Romper', 'Butter Cotton Smocks'],
   },
   {
-    range: 'Sizes 22–26',
-    sizeParam: '24',
-    title: 'Little Explorers Collection',
-    subtitle: 'Twirl-ready tiered frocks, linen bundis & breezy botanical co-ords',
-    chestNote: 'Chest ~22–26 inches (56–66 cm)',
-    image: 'https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?auto=format&fit=crop&w=800&q=80',
-    badgeBg: 'bg-amber-500 text-stone-900 font-bold',
-    borderAccent: 'group-hover:border-amber-300',
+    id: 'stage-2',
+    stageName: 'Stage 2 · Joyful Explorers',
+    sizes: ['22', '24', '26'],
+    ageApprox: '3 – 6.5 yrs',
+    chestNote: 'Chest 22–26" (56–66 cm)',
+    heightNote: 'Height ~98–122 cm',
+    title: 'Twirl Anarkalis & Linen Bundis',
+    description: 'Designed for active running, dancing, and twirling. Ankle-clearing hem lengths prevent tripping, with deep secret pockets for treats.',
+    image: '/images/hero_twirl_organza.jpg',
+    tagColor: 'bg-rose-100 text-rose-900 border-rose-300',
+    accentBorder: 'hover:border-rose-400',
+    craftHighlight: 'Ankle-clearing hem · 100% Mulmul lining · Deep pockets',
+    popularPieces: ['Gulabi Organza Anarkali', 'Pistachio Linen Bundi', 'Botanical Resort Set'],
   },
   {
-    range: 'Sizes 28–32',
-    sizeParam: '28',
-    title: 'Modern Indian Celebrations',
-    subtitle: 'Organza anarkalis, peplum shararas & tailored linen bundis',
-    chestNote: 'Chest ~28–32 inches (71–81 cm)',
-    image: 'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=800&q=80',
-    badgeBg: 'bg-emerald-600 text-white',
-    borderAccent: 'group-hover:border-emerald-300',
+    id: 'stage-3',
+    stageName: 'Stage 3 · Celebration Stars',
+    sizes: ['28', '30', '32'],
+    ageApprox: '7 – 10 yrs',
+    chestNote: 'Chest 28–32" (71–81 cm)',
+    heightNote: 'Height ~125–140 cm',
+    title: 'Peplum Shararas & Royal Kurtas',
+    description: 'Modern Indo-western silhouettes tailored with comfort-elasticated waistbands, lightweight dupattas, and generous 2-inch alteration margins.',
+    image: '/images/mint_peplum_sharara.jpg',
+    tagColor: 'bg-emerald-100 text-emerald-900 border-emerald-300',
+    accentBorder: 'hover:border-emerald-400',
+    craftHighlight: 'Non-pinching waists · Concealed YKK zip · +2in Margin',
+    popularPieces: ['Dusty Mint Peplum Sharara', 'Heritage Bundi Sets', 'Pastel Kurta Pyjama'],
   },
   {
-    range: 'Sizes 34–40',
-    sizeParam: '36',
-    title: 'Juniors & Young Miss/Master',
-    subtitle: 'Sophisticated festive silhouettes, handloom kurtas & elevated sets',
-    chestNote: 'Chest ~34–40 inches (86–102 cm)',
-    image: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=800&q=80',
-    badgeBg: 'bg-sky-600 text-white',
-    borderAccent: 'group-hover:border-sky-300',
+    id: 'stage-4',
+    stageName: 'Stage 4 · Young Miss & Master',
+    sizes: ['34', '36', '38', '40'],
+    ageApprox: '11 – 15 yrs',
+    chestNote: 'Chest 34–40" (86–102 cm)',
+    heightNote: 'Height ~142–168 cm',
+    title: 'Junior Ensembles & Classic Kurtas',
+    description: 'Sophisticated festive styles tailored with adult-grade craftsmanship, yet preserving pure cotton breathability and effortless movement.',
+    image: '/images/festive_celebration_banner.jpg',
+    tagColor: 'bg-sky-100 text-sky-900 border-sky-300',
+    accentBorder: 'hover:border-sky-400',
+    craftHighlight: 'Tailored drape · Breathable cottons · Heirloom grace',
+    popularPieces: ['Classic Mustard Kurta', 'Celebration Sherwani Bundi', 'Tiered Festive Sets'],
   },
 ];
 
 export default function ShopBySize() {
+  const [activeStageId, setActiveStageId] = useState<string>('stage-2');
+
+  const activeStage = GROWTH_STAGES.find((s) => s.id === activeStageId) || GROWTH_STAGES[1];
+
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 pb-4 border-b border-amber-200/60">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      
+      {/* Section Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 pb-6 border-b border-amber-200/80 gap-4">
         <div>
-          <span className="text-[11px] uppercase tracking-[0.25em] text-rose-600 font-bold font-sans flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5" /> Tailored by True Proportions
-          </span>
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mt-1">
+          <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] text-rose-700 font-bold font-sans mb-1.5">
+            <Ruler className="w-3.5 h-3.5 text-rose-600" />
+            <span>True Proportions Studio</span>
+          </div>
+          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-stone-900">
             Shop by Size (16 to 40)
           </h2>
+          <p className="text-xs sm:text-sm text-stone-600 mt-2 max-w-xl font-normal leading-relaxed">
+            Two kids of the exact same age often have completely different builds. We craft by standardized garment measurements with built-in growth margins—so you never have to guess.
+          </p>
         </div>
-        <p className="text-xs sm:text-sm text-stone-600 max-w-md mt-2 sm:mt-0 font-normal">
-          Kids of the same age have uniquely different heights and builds. We craft in true numeric garment sizes with generous alteration margins.
-        </p>
-      </div>
 
-      {/* Quick Access Size Strip */}
-      <div className="mb-8 p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/80 flex items-center gap-2 overflow-x-auto no-scrollbar shadow-xs">
-        <span className="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1 flex-shrink-0 mr-1">
-          <Ruler className="w-3.5 h-3.5 text-rose-500" /> Jump to Size:
-        </span>
-        <div className="flex items-center gap-1.5 flex-nowrap">
+        {/* Quick Size Jump Pills */}
+        <div className="flex flex-wrap items-center gap-1.5 max-w-md">
+          <span className="text-[11px] font-bold text-amber-900 uppercase tracking-wider mr-1">
+            Jump to Size:
+          </span>
           {ALL_SIZES.map((sz) => (
             <Link
               key={sz}
               href={`/collections?size=${sz}`}
-              className="px-3 py-1.5 rounded-xl bg-white hover:bg-stone-900 text-stone-800 hover:text-white text-xs font-bold border border-amber-200 hover:border-stone-900 transition-all shadow-xs flex-shrink-0 text-center min-w-[2.5rem]"
+              className="px-2.5 py-1 rounded-xl bg-white hover:bg-stone-900 text-stone-800 hover:text-white text-xs font-bold border border-amber-200 hover:border-stone-900 transition-all shadow-2xs text-center"
             >
               {sz}
             </Link>
@@ -95,63 +125,126 @@ export default function ShopBySize() {
         </div>
       </div>
 
-      {/* 4 Major Size Curations */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {SIZE_BRACKETS.map((bracket) => (
-          <Link
-            key={bracket.range}
-            href={`/collections?size=${bracket.sizeParam}`}
-            className={`group relative rounded-3xl overflow-hidden bg-white border border-amber-200/70 shadow-soft hover:shadow-joy transition-all duration-500 hover:-translate-y-1.5 flex flex-col ${bracket.borderAccent}`}
+      {/* Stage Selector Tabs */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+        {GROWTH_STAGES.map((stg) => (
+          <button
+            key={stg.id}
+            onClick={() => setActiveStageId(stg.id)}
+            className={`p-4 rounded-2xl text-left border transition-all ${
+              activeStageId === stg.id
+                ? 'bg-white border-rose-500 shadow-soft-lg scale-[1.02] ring-2 ring-rose-200/50'
+                : 'bg-white/70 hover:bg-white border-amber-200/80 text-stone-700'
+            }`}
           >
-            {/* Image Container */}
-            <div className="relative aspect-[4/5] overflow-hidden bg-amber-50/50">
-              <Image
-                src={bracket.image}
-                alt={bracket.title}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-stone-900/75 via-transparent to-transparent" />
-              
-              {/* Floating Size Tag */}
-              <div className="absolute top-4 left-4 z-10">
-                <span className={`px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-md ${bracket.badgeBg}`}>
-                  {bracket.range}
-                </span>
-              </div>
-
-              {/* Chest Note Pill */}
-              <div className="absolute bottom-4 left-4 z-10">
-                <span className="text-[10px] text-ivory-100 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-full font-medium">
-                  {bracket.chestNote}
-                </span>
-              </div>
-
-              {/* Arrow Icon */}
-              <div className="absolute bottom-4 right-4 z-10 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md flex items-center justify-center text-stone-900 group-hover:bg-rose-600 group-hover:text-white transition-all shadow-md">
-                <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </div>
-            </div>
-
-            {/* Card Content */}
-            <div className="p-5 flex-1 flex flex-col justify-between">
-              <div>
-                <h3 className="font-serif text-lg font-bold text-stone-900 group-hover:text-rose-600 transition-colors">
-                  {bracket.title}
-                </h3>
-                <p className="text-xs text-stone-600 mt-1 leading-relaxed line-clamp-2">
-                  {bracket.subtitle}
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-amber-100 text-[11px] font-bold text-stone-700 flex items-center gap-1 group-hover:text-rose-600 transition-colors">
-                <span>Explore {bracket.range}</span>
-                <span className="text-rose-500 font-bold">→</span>
-              </div>
-            </div>
-          </Link>
+            <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase mb-1.5 ${stg.tagColor}`}>
+              Sizes {stg.sizes.join(', ')}
+            </span>
+            <h3 className="font-serif text-sm sm:text-base font-bold text-stone-900 block truncate">
+              {stg.title}
+            </h3>
+            <span className="text-[11px] text-stone-500 block mt-1">
+              Approx. {stg.ageApprox}
+            </span>
+          </button>
         ))}
       </div>
+
+      {/* Active Stage Interactive Showcase */}
+      <div className="relative rounded-[2.5rem] overflow-hidden bg-white border border-amber-200/90 shadow-soft-lg p-6 sm:p-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          {/* Left: Authentic Stage Photography */}
+          <div className="lg:col-span-5 relative">
+            <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden shadow-xl border-4 border-white ring-4 ring-amber-200/60">
+              <Image
+                src={activeStage.image}
+                alt={activeStage.title}
+                fill
+                sizes="(max-width: 1024px) 100vw, 400px"
+                className="object-cover object-top"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent pointer-events-none" />
+
+              {/* Floating Size Tag */}
+              <div className="absolute top-4 left-4 z-10">
+                <span className="px-3.5 py-1.5 rounded-full bg-stone-900/90 backdrop-blur-md text-amber-200 text-xs font-bold uppercase tracking-wider border border-white/20 shadow-md">
+                  Sizes {activeStage.sizes.join(', ')}
+                </span>
+              </div>
+
+              {/* Proportions Pill */}
+              <div className="absolute bottom-4 left-4 right-4 z-10">
+                <div className="p-3 rounded-2xl bg-stone-900/85 backdrop-blur-md text-white text-xs border border-white/20 shadow-lg flex items-center justify-between">
+                  <span className="text-amber-100 font-medium">{activeStage.chestNote}</span>
+                  <span className="text-stone-300 text-[11px]">{activeStage.heightNote}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Stage Guidance & Curated Collections */}
+          <div className="lg:col-span-7 space-y-6">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold uppercase tracking-wider mb-2">
+                <span>{activeStage.stageName}</span>
+              </div>
+              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900">
+                {activeStage.title}
+              </h3>
+              <p className="text-sm text-stone-600 mt-2 leading-relaxed">
+                {activeStage.description}
+              </p>
+            </div>
+
+            {/* Craft Hallmarks for this stage */}
+            <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 space-y-2">
+              <span className="text-[11px] font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                Tailoring Considerations for this Stage:
+              </span>
+              <p className="text-xs text-stone-700 font-medium">
+                {activeStage.craftHighlight}
+              </p>
+            </div>
+
+            {/* Popular Curations in this bracket */}
+            <div>
+              <span className="text-xs font-bold text-stone-700 uppercase tracking-wider block mb-2">
+                Signature Silhouettes in Sizes {activeStage.sizes.join(', ')}:
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {activeStage.popularPieces.map((p, idx) => (
+                  <span
+                    key={idx}
+                    className="px-3 py-1 rounded-xl bg-white border border-amber-200 text-xs font-semibold text-stone-800 shadow-2xs"
+                  >
+                    ✨ {p}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* CTAs */}
+            <div className="pt-2 flex flex-wrap items-center gap-4 border-t border-amber-100">
+              <Link
+                href={`/collections?size=${activeStage.sizes[0]}`}
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-stone-900 hover:bg-rose-700 text-white text-xs font-bold uppercase tracking-wider shadow-md hover:shadow-lg transition-all group"
+              >
+                <span>Explore Sizes {activeStage.sizes.join(', ')}</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+
+              <span className="text-xs text-stone-500">
+                Need custom sizing? Our team can tailor specific chest or length alterations.
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
     </section>
   );
 }

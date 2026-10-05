@@ -16,9 +16,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     isNewArrival: true,
     isFestiveEdit: true,
     images: [
-      'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1200&q=85',
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=85',
-      'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=1200&q=85',
+      '/images/hero_twirl_organza.jpg',
+      '/images/festive_celebration_banner.jpg',
     ],
     variants: [
       { size: '20', sku: 'JS-GUL-20', stock: 8, price: 1490, mrp: 1890, chestCm: 52, waistCm: 48, lengthCm: 60 },
@@ -66,8 +65,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     isNewArrival: true,
     isFestiveEdit: true,
     images: [
-      'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1200&q=85',
-      'https://images.unsplash.com/photo-1543332164-6e82f355badc?auto=format&fit=crop&w=1200&q=85',
+      '/images/hero_bundi_boy.jpg',
+      '/images/festive_celebration_banner.jpg',
     ],
     variants: [
       { size: '20', sku: 'JS-PST-20', stock: 5, price: 1290, mrp: 1650, chestCm: 52, waistCm: 48, lengthCm: 44 },
@@ -114,8 +113,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     isNewArrival: false,
     isFestiveEdit: false,
     images: [
-      'https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?auto=format&fit=crop&w=1200&q=85',
-      'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1200&q=85',
+      '/images/hero_smock_girl.jpg',
     ],
     variants: [
       { size: '18', sku: 'JS-PBD-18', stock: 6, price: 1090, mrp: 1390, chestCm: 46, waistCm: 46, lengthCm: 46 },
@@ -161,8 +159,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     isNewArrival: true,
     isFestiveEdit: true,
     images: [
-      'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=1200&q=85',
-      'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1200&q=85',
+      '/images/saffron_angrakha_toddler.jpg',
     ],
     variants: [
       { size: '16', sku: 'JS-ANG-16', stock: 6, price: 890, mrp: 1190, chestCm: 42, waistCm: 40, lengthCm: 32 },
@@ -207,8 +204,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     isNewArrival: true,
     isFestiveEdit: false,
     images: [
-      'https://images.unsplash.com/photo-1543332164-6e82f355badc?auto=format&fit=crop&w=1200&q=85',
-      'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1200&q=85',
+      '/images/botanical_resort_coord.jpg',
     ],
     variants: [
       { size: '22', sku: 'JS-BOT-22', stock: 10, price: 890, mrp: 1190, chestCm: 56, waistCm: 52, lengthCm: 42 },
@@ -255,8 +251,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     isNewArrival: false,
     isFestiveEdit: true,
     images: [
-      'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1200&q=85',
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=85',
+      '/images/mint_peplum_sharara.jpg',
     ],
     variants: [
       { size: '22', sku: 'JS-SHR-22', stock: 4, price: 1490, mrp: 1890, chestCm: 56, waistCm: 52, lengthCm: 40 },
@@ -304,8 +299,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     isNewArrival: true,
     isFestiveEdit: false,
     images: [
-      'https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?auto=format&fit=crop&w=1200&q=85',
-      'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1200&q=85',
+      '/images/birthday_tulle_frock.jpg',
     ],
     variants: [
       { size: '18', sku: 'JS-BLF-18', stock: 7, price: 1290, mrp: 1690, chestCm: 46, waistCm: 44, lengthCm: 50 },
@@ -351,8 +345,8 @@ export const INITIAL_PRODUCTS: Product[] = [
     isNewArrival: false,
     isFestiveEdit: true,
     images: [
-      'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1200&q=85',
-      'https://images.unsplash.com/photo-1543332164-6e82f355badc?auto=format&fit=crop&w=1200&q=85',
+      '/images/festive_celebration_banner.jpg',
+      '/images/hero_bundi_boy.jpg',
     ],
     variants: [
       { size: '28', sku: 'JS-MST-28', stock: 15, price: 790, mrp: 990, chestCm: 71, waistCm: 64, lengthCm: 68 },

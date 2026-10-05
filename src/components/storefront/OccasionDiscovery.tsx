@@ -3,123 +3,102 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Sparkles, Heart, Cake, Gift, Sun, PartyPopper, Crown } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 
-interface OccasionCard {
-  name: string;
-  queryValue: string;
-  tagline: string;
-  description: string;
-  icon: any;
+interface CategoryCard {
+  title: string;
+  subtitle: string;
+  href: string;
   image: string;
-  accentGradient: string;
-  badgeBg: string;
+  badge: string;
 }
 
-const OCCASIONS: OccasionCard[] = [
+const CATEGORIES: CategoryCard[] = [
   {
-    name: 'Festive Twirls',
-    queryValue: 'Festive',
-    tagline: 'Diwali, Eid & Family Pujas',
-    description: 'Gorgeous organza anarkalis, handloom linen bundis, and festive gota borders designed with itch-free inner mulmul cotton.',
-    icon: Sparkles,
-    image: 'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=800&q=80',
-    accentGradient: 'from-amber-500/30 to-rose-600/40',
-    badgeBg: 'bg-gradient-to-r from-amber-500 to-rose-500 text-white',
+    title: 'Girls Festive Twirls',
+    subtitle: 'Organza Anarkalis & Peplum Shararas',
+    href: '/collections?gender=Girls',
+    image: '/images/hero_twirl_organza.jpg',
+    badge: 'Girls',
   },
   {
-    name: 'Birthday Moments',
-    queryValue: 'Birthday',
-    tagline: 'Twirls, Candle Blows & Cake',
-    description: 'Cloud-soft layered birthday frocks and dapper resort shirts tailored for maximum comfort from candle-lighting to playtime.',
-    icon: Cake,
-    image: 'https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?auto=format&fit=crop&w=800&q=80',
-    accentGradient: 'from-pink-500/30 to-purple-600/40',
-    badgeBg: 'bg-gradient-to-r from-pink-500 to-rose-500 text-white',
+    title: 'Boys Little Royals',
+    subtitle: 'Linen Bundis & Comfort Dhoti Sets',
+    href: '/collections?gender=Boys',
+    image: '/images/hero_bundi_boy.jpg',
+    badge: 'Boys',
   },
   {
-    name: 'Wedding Celebrations',
-    queryValue: 'Wedding',
-    tagline: 'Miniature Royal Elegance',
-    description: 'Tiered peplum shararas, traditional dhoti angrakhas, and festive jacket sets for charming little wedding guests.',
-    icon: Crown,
-    image: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=800&q=80',
-    accentGradient: 'from-emerald-500/30 to-amber-600/40',
-    badgeBg: 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white',
+    title: 'Birthday & Western',
+    subtitle: 'Tiered Party Frocks & Smocked Dresses',
+    href: '/collections?style=Western',
+    image: '/images/birthday_tulle_frock.jpg',
+    badge: 'Celebrations',
   },
   {
-    name: 'Everyday Sunshine',
-    queryValue: 'Everyday',
-    tagline: 'Playground to Sunday Brunches',
-    description: 'Breathable combed cotton smocked tops, linen shorts, and breezy co-ords built to withstand everyday childhood adventures.',
-    icon: Sun,
-    image: 'https://images.unsplash.com/photo-1543332164-6e82f355badc?auto=format&fit=crop&w=800&q=80',
-    accentGradient: 'from-sky-500/30 to-emerald-600/40',
-    badgeBg: 'bg-gradient-to-r from-sky-500 to-blue-600 text-white',
+    title: 'Toddlers & First Steps',
+    subtitle: 'Pure Cotton Wrap Angrakhas & Sets',
+    href: '/collections?size=18',
+    image: '/images/saffron_angrakha_toddler.jpg',
+    badge: 'Sizes 16–22',
   },
 ];
 
 export default function OccasionDiscovery() {
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="text-center max-w-2xl mx-auto mb-10">
-        <span className="text-[11px] uppercase tracking-[0.25em] text-amber-700 font-bold font-sans flex items-center justify-center gap-1.5">
-          <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Made for the Moment
-        </span>
-        <h2 className="font-serif text-3xl sm:text-4xl font-bold text-stone-900 mt-1">
-          Curated by Celebration
-        </h2>
-        <p className="text-xs sm:text-sm text-stone-600 mt-2 font-normal">
-          Every childhood memory deserves clothing that feels festive yet supremely soft and comfortable.
-        </p>
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="flex items-center justify-between mb-6 pb-2 border-b border-amber-200/60">
+        <div>
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900">
+            Shop by Category
+          </h2>
+          <p className="text-xs sm:text-sm text-stone-600 mt-0.5">
+            Handcrafted with 100% mulmul linings and zero scratchiness.
+          </p>
+        </div>
+        <Link
+          href="/collections"
+          className="text-xs font-bold text-stone-800 hover:text-rose-600 flex items-center gap-1 transition-colors"
+        >
+          <span>View All</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {OCCASIONS.map((occ) => {
-          const Icon = occ.icon;
-          return (
-            <Link
-              key={occ.name}
-              href={`/collections?occasion=${occ.queryValue}`}
-              className="group relative rounded-3xl overflow-hidden bg-white border border-amber-200/70 shadow-soft hover:shadow-joy transition-all duration-500 hover:-translate-y-1.5 flex flex-col"
-            >
-              <div className="relative aspect-[3/4] overflow-hidden bg-amber-50/50">
-                <Image
-                  src={occ.image}
-                  alt={occ.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className={`absolute inset-0 bg-gradient-to-t ${occ.accentGradient} mix-blend-multiply opacity-50 group-hover:opacity-30 transition-opacity`} />
-                <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/20 to-transparent" />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {CATEGORIES.map((cat) => (
+          <Link
+            key={cat.title}
+            href={cat.href}
+            className="group relative rounded-2xl overflow-hidden bg-white border border-amber-200/80 shadow-soft hover:shadow-md transition-all duration-300 hover:-translate-y-1 flex flex-col"
+          >
+            <div className="relative aspect-[4/5] overflow-hidden bg-amber-50">
+              <Image
+                src={cat.image}
+                alt={cat.title}
+                fill
+                sizes="(max-width: 640px) 50vw, 25vw"
+                className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent pointer-events-none" />
 
-                <div className="absolute top-4 left-4 w-10 h-10 rounded-2xl bg-white/95 backdrop-blur-md flex items-center justify-center text-rose-600 shadow-md">
-                  <Icon className="w-5 h-5" />
-                </div>
-
-                <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <p className="text-[10px] uppercase tracking-wider text-amber-200 font-bold font-sans">
-                    {occ.tagline}
-                  </p>
-                  <h3 className="font-serif text-xl font-bold mt-0.5 text-white">
-                    {occ.name}
-                  </h3>
-                </div>
+              <div className="absolute top-2.5 left-2.5 z-10">
+                <span className="px-2.5 py-0.5 rounded-full bg-white/95 text-stone-800 text-[10px] font-bold uppercase tracking-wider shadow-xs">
+                  {cat.badge}
+                </span>
               </div>
 
-              <div className="p-4 flex-1 flex flex-col justify-between bg-white">
-                <p className="text-xs text-stone-600 line-clamp-2">
-                  {occ.description}
+              <div className="absolute bottom-2.5 left-2.5 right-2.5 z-10 text-white">
+                <h3 className="font-serif text-sm sm:text-base font-bold leading-snug">
+                  {cat.title}
+                </h3>
+                <p className="text-[11px] text-amber-200 truncate mt-0.5 font-normal">
+                  {cat.subtitle}
                 </p>
-                <div className="mt-3 pt-3 border-t border-amber-100 text-[11px] font-bold text-stone-800 flex items-center justify-between group-hover:text-rose-600 transition-colors">
-                  <span>Explore Edit</span>
-                  <span className="text-rose-500">→</span>
-                </div>
               </div>
-            </Link>
-          );
-        })}
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   );

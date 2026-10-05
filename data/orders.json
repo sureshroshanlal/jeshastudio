@@ -1,0 +1,130 @@
+[
+  {
+    "id": "ord-101",
+    "orderNumber": "JS-2026-101",
+    "source": "WhatsApp",
+    "customer": {
+      "name": "Pooja Sharma",
+      "phone": "+91 99855 31519",
+      "email": "pooja.sharma@gmail.com",
+      "address": "Flat 402, Lotus Towers, Indiranagar",
+      "city": "Bengaluru",
+      "state": "Karnataka",
+      "pincode": "560038",
+      "childHeightCm": 126,
+      "childChestInches": 26,
+      "specialNotes": "For Arya’s upcoming cousin wedding on Sunday. Please pack gently!"
+    },
+    "items": [
+      {
+        "productId": "prod-1",
+        "productName": "Gulabi Organza Twirl Anarkali Set",
+        "productImage": "https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=400&q=80",
+        "size": "26",
+        "sku": "JS-GUL-26",
+        "quantity": 1,
+        "unitPrice": 1590,
+        "totalPrice": 1590
+      }
+    ],
+    "subtotal": 1590,
+    "discount": 0,
+    "shippingFee": 0,
+    "grandTotal": 1590,
+    "orderStatus": "Packed",
+    "paymentStatus": "Paid",
+    "paymentMethod": "UPI",
+    "awbNumber": "DTDC8829104",
+    "courierPartner": "DTDC Express",
+    "createdAt": "2026-09-20T14:30:00Z",
+    "updatedAt": "2026-09-21T11:00:00Z"
+  },
+  {
+    "id": "ord-102",
+    "orderNumber": "JS-2026-102",
+    "source": "WhatsApp",
+    "customer": {
+      "name": "Rohan Mehra",
+      "phone": "+91 98234 56789",
+      "email": "rohan.mehra@outlook.com",
+      "address": "B-12, Sector 44, Near Golf Course",
+      "city": "Noida",
+      "state": "Uttar Pradesh",
+      "pincode": "201303",
+      "childHeightCm": 108,
+      "childChestInches": 24,
+      "specialNotes": "Need gift wrapping with personalized handwritten note: Happy Birthday Kabir!"
+    },
+    "items": [
+      {
+        "productId": "prod-2",
+        "productName": "Pistachio Linen Bundi & Kurta Set",
+        "productImage": "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=400&q=80",
+        "size": "24",
+        "sku": "JS-PST-24",
+        "quantity": 1,
+        "unitPrice": 1390,
+        "totalPrice": 1390
+      }
+    ],
+    "subtotal": 1390,
+    "discount": 100,
+    "shippingFee": 0,
+    "grandTotal": 1290,
+    "orderStatus": "Confirmed",
+    "paymentStatus": "Paid",
+    "paymentMethod": "UPI",
+    "createdAt": "2026-09-22T09:15:00Z",
+    "updatedAt": "2026-09-22T10:00:00Z"
+  },
+  {
+    "id": "ord-103",
+    "orderNumber": "JS-2026-103",
+    "source": "WhatsApp",
+    "customer": {
+      "name": "Ananya Deshmukh",
+      "phone": "+91 97654 32109",
+      "email": "ananya.d@yahoo.com",
+      "address": "701, Sea Breeze Apartments, Bandra West",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "pincode": "400050",
+      "childHeightCm": 96,
+      "childChestInches": 22,
+      "specialNotes": "Chatted on WhatsApp regarding sizing. Opted for Size 22."
+    },
+    "items": [
+      {
+        "productId": "prod-3",
+        "productName": "Powder Blue Heritage Smocked Dress",
+        "productImage": "https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?auto=format&fit=crop&w=400&q=80",
+        "size": "22",
+        "sku": "JS-PBD-22",
+        "quantity": 1,
+        "unitPrice": 1190,
+        "totalPrice": 1190
+      },
+      {
+        "productId": "prod-7",
+        "productName": "Blush & Ochre Layered Birthday Frock",
+        "productImage": "https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?auto=format&fit=crop&w=400&q=80",
+        "size": "22",
+        "sku": "JS-BLF-22",
+        "quantity": 1,
+        "unitPrice": 1390,
+        "totalPrice": 1390
+      }
+    ],
+    "subtotal": 2580,
+    "discount": 200,
+    "shippingFee": 0,
+    "grandTotal": 2380,
+    "orderStatus": "Dispatched",
+    "paymentStatus": "Paid",
+    "paymentMethod": "UPI",
+    "awbNumber": "BLUEDART665421",
+    "courierPartner": "BlueDart Air",
+    "createdAt": "2026-09-21T18:20:00Z",
+    "updatedAt": "2026-09-22T14:40:00Z"
+  }
+]
