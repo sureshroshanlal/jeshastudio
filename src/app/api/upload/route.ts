@@ -72,8 +72,27 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 2. Resilient Fallback: Return optimized inline data URL
-    // (This guarantees the image renders on Vercel without 404s and persists permanently in PostgreSQL)
+    // 2. Try saving to public/uploads directory for fast same-origin serving
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      const localFilePath = path.join(uploadDir, safeName);
+      fs.writeFileSync(localFilePath, buffer);
+      return NextResponse.json({
+        success: true,
+        url: `/uploads/${safeName}`,
+        storageProvider: 'local-file',
+        filename: safeName,
+      });
+    } catch (localWriteErr) {
+      console.warn('Local file write error, falling back to base64 data URL:', localWriteErr);
+    }
+
+    // 3. Resilient Fallback: Return optimized inline data URL
     return NextResponse.json({
       success: true,
       url: fallbackBase64Url,

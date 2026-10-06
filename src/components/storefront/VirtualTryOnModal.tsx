@@ -103,21 +103,43 @@ export default function VirtualTryOnModal({
   const bgImageRef = useRef<HTMLImageElement | null>(null);
   const garmentImageRef = useRef<HTMLImageElement | null>(null);
 
-  // Sync initialProduct when opened or changed
+  // Helper to safely apply crossOrigin ONLY to cross-origin http/https URLs
+  // (NEVER set crossOrigin on data: or blob: URIs or local /... paths, as browsers reject them)
+  const applySafeCrossOrigin = (img: HTMLImageElement, src: string) => {
+    if (!src || src.startsWith('data:') || src.startsWith('blob:') || src.startsWith('/')) {
+      return;
+    }
+    if (src.startsWith('http://') || src.startsWith('https://')) {
+      try {
+        if (typeof window !== 'undefined') {
+          const url = new URL(src);
+          if (url.origin !== window.location.origin) {
+            img.crossOrigin = 'anonymous';
+          }
+        }
+      } catch {
+        // ignore
+      }
+    }
+  };
+
+  // Sync initialProduct when opened or changed, always picking the freshest product data
   useEffect(() => {
-    if (isOpen) {
-      setActiveProduct(initialProduct);
-      setSelectedVariant(initialVariant || initialProduct.variants[0]);
+    if (isOpen && initialProduct) {
+      const freshProduct = allProducts.find((p) => p.id === initialProduct.id) || initialProduct;
+      setActiveProduct(freshProduct);
+      setSelectedVariant(initialVariant || freshProduct.variants[0]);
+
       // Set appropriate sample muse if custom photo not loaded
       if (!customPhotoUrl) {
-        if (initialProduct.gender === 'Boys') {
+        if (freshProduct.gender === 'Boys') {
           setActiveMuseId('kabir');
         } else {
           setActiveMuseId('arya');
         }
       }
     }
-  }, [isOpen, initialProduct, initialVariant, customPhotoUrl]);
+  }, [isOpen, initialProduct, allProducts, initialVariant, customPhotoUrl]);
 
   // Clean up object URLs on unmount
   useEffect(() => {
@@ -132,11 +154,6 @@ export default function VirtualTryOnModal({
   const currentBgSrc = photoSourceType === 'custom' && customPhotoUrl
     ? customPhotoUrl
     : SAMPLE_MUSES.find((m) => m.id === activeMuseId)?.src || SAMPLE_MUSES[0].src;
-
-  // Determine garment cutout URL
-  const currentGarmentSrc = activeProduct.tryOnCutout 
-    || `/images/cutouts/${activeProduct.slug}.png`
-    || activeProduct.images[0];
 
   // Draw on Canvas
   const drawCanvas = useCallback(() => {
@@ -229,41 +246,75 @@ export default function VirtualTryOnModal({
     }
   }, [garmentPos, garmentScale, garmentRotation, isFlipped, garmentOpacity]);
 
-  // Load Background Image
+  // Load Background Image with safe crossOrigin
   useEffect(() => {
     if (!isOpen) return;
+    let isMounted = true;
     const img = new window.Image();
-    img.crossOrigin = 'anonymous';
-    img.src = currentBgSrc;
+    applySafeCrossOrigin(img, currentBgSrc);
     img.onload = () => {
+      if (!isMounted) return;
       bgImageRef.current = img;
       drawCanvas();
     };
+    img.src = currentBgSrc;
+    return () => {
+      isMounted = false;
+    };
   }, [currentBgSrc, isOpen, drawCanvas]);
 
-  // Load Garment Cutout Image
+  // Load Garment Cutout Image with Strict Priority Hierarchy:
+  // 1. Highest Priority: Uploaded Custom Cutout (product.tryOnCutout)
+  // 2. Second Priority: Static File Convention (/images/cutouts/${slug}.png)
+  // 3. Fallback: First catalog photo (product.images[0])
   useEffect(() => {
     if (!isOpen) return;
-    const img = new window.Image();
-    img.crossOrigin = 'anonymous';
-    img.src = currentGarmentSrc;
-    img.onload = () => {
-      garmentImageRef.current = img;
-      drawCanvas();
+
+    let isMounted = true;
+    const uploadedCutout = activeProduct.tryOnCutout?.trim();
+    const slugCutout = activeProduct.slug ? `/images/cutouts/${activeProduct.slug}.png` : '';
+    const catalogImage = (activeProduct.images && activeProduct.images.length > 0) ? activeProduct.images[0] : '';
+
+    // Build ordered list of candidates to try sequentially
+    const candidateSources: { src: string; label: string }[] = [];
+    if (uploadedCutout) {
+      candidateSources.push({ src: uploadedCutout, label: 'Custom Uploaded Cutout' });
+    }
+    if (slugCutout && !candidateSources.some((c) => c.src === slugCutout)) {
+      candidateSources.push({ src: slugCutout, label: 'Slug Cutout (/images/cutouts/...)' });
+    }
+    if (catalogImage && !candidateSources.some((c) => c.src === catalogImage)) {
+      candidateSources.push({ src: catalogImage, label: 'Catalog Primary Photo' });
+    }
+
+    const tryLoadCandidate = (index: number) => {
+      if (!isMounted || index >= candidateSources.length) return;
+      const { src, label } = candidateSources[index];
+
+      const img = new window.Image();
+      applySafeCrossOrigin(img, src);
+
+      img.onload = () => {
+        if (!isMounted) return;
+        garmentImageRef.current = img;
+        drawCanvas();
+      };
+
+      img.onerror = (e) => {
+        if (!isMounted) return;
+        console.warn(`[VirtualTryOn] Could not load ${label} (candidate ${index + 1}/${candidateSources.length}). Trying fallback...`, e);
+        tryLoadCandidate(index + 1);
+      };
+
+      img.src = src;
     };
-    img.onerror = () => {
-      // If cutout fails, fallback to primary product image
-      if (currentGarmentSrc !== activeProduct.images[0]) {
-        const fallbackImg = new window.Image();
-        fallbackImg.crossOrigin = 'anonymous';
-        fallbackImg.src = activeProduct.images[0];
-        fallbackImg.onload = () => {
-          garmentImageRef.current = fallbackImg;
-          drawCanvas();
-        };
-      }
+
+    tryLoadCandidate(0);
+
+    return () => {
+      isMounted = false;
     };
-  }, [currentGarmentSrc, activeProduct, isOpen, drawCanvas]);
+  }, [activeProduct.tryOnCutout, activeProduct.slug, activeProduct.images, isOpen, drawCanvas]);
 
   // Re-draw when transforms change
   useEffect(() => {

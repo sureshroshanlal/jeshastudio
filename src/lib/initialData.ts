@@ -19,6 +19,7 @@ export const INITIAL_PRODUCTS: Product[] = [
       '/images/hero_twirl_organza.jpg',
       '/images/festive_celebration_banner.jpg',
     ],
+    tryOnCutout: '/images/cutouts/gulabi-organza-anarkali-set.png',
     variants: [
       { size: '20', sku: 'JS-GUL-20', stock: 8, price: 1490, mrp: 1890, chestCm: 52, waistCm: 48, lengthCm: 60 },
       { size: '22', sku: 'JS-GUL-22', stock: 12, price: 1490, mrp: 1890, chestCm: 56, waistCm: 52, lengthCm: 68 },
@@ -68,6 +69,7 @@ export const INITIAL_PRODUCTS: Product[] = [
       '/images/hero_bundi_boy.jpg',
       '/images/festive_celebration_banner.jpg',
     ],
+    tryOnCutout: '/images/cutouts/pistachio-linen-nehru-jacket-set.png',
     variants: [
       { size: '20', sku: 'JS-PST-20', stock: 5, price: 1290, mrp: 1650, chestCm: 52, waistCm: 48, lengthCm: 44 },
       { size: '22', sku: 'JS-PST-22', stock: 9, price: 1390, mrp: 1750, chestCm: 56, waistCm: 52, lengthCm: 48 },
@@ -115,6 +117,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     images: [
       '/images/hero_smock_girl.jpg',
     ],
+    tryOnCutout: '/images/cutouts/powder-blue-smocked-cotton-dress.png',
     variants: [
       { size: '18', sku: 'JS-PBD-18', stock: 6, price: 1090, mrp: 1390, chestCm: 46, waistCm: 46, lengthCm: 46 },
       { size: '20', sku: 'JS-PBD-20', stock: 8, price: 1190, mrp: 1490, chestCm: 51, waistCm: 50, lengthCm: 52 },
@@ -161,6 +164,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     images: [
       '/images/saffron_angrakha_toddler.jpg',
     ],
+    tryOnCutout: '/images/cutouts/saffron-marigold-angrakha-dhoti-set.png',
     variants: [
       { size: '16', sku: 'JS-ANG-16', stock: 6, price: 890, mrp: 1190, chestCm: 42, waistCm: 40, lengthCm: 32 },
       { size: '18', sku: 'JS-ANG-18', stock: 8, price: 990, mrp: 1290, chestCm: 46, waistCm: 44, lengthCm: 36 },
@@ -206,6 +210,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     images: [
       '/images/botanical_resort_coord.jpg',
     ],
+    tryOnCutout: '/images/cutouts/ivory-botanical-co-ord-set.png',
     variants: [
       { size: '22', sku: 'JS-BOT-22', stock: 10, price: 890, mrp: 1190, chestCm: 56, waistCm: 52, lengthCm: 42 },
       { size: '24', sku: 'JS-BOT-24', stock: 14, price: 890, mrp: 1190, chestCm: 61, waistCm: 56, lengthCm: 46 },
@@ -253,6 +258,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     images: [
       '/images/mint_peplum_sharara.jpg',
     ],
+    tryOnCutout: '/images/cutouts/dusty-mint-peplum-sharara-set.png',
     variants: [
       { size: '22', sku: 'JS-SHR-22', stock: 4, price: 1490, mrp: 1890, chestCm: 56, waistCm: 52, lengthCm: 40 },
       { size: '24', sku: 'JS-SHR-24', stock: 8, price: 1590, mrp: 1990, chestCm: 61, waistCm: 56, lengthCm: 44 },
@@ -301,6 +307,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     images: [
       '/images/birthday_tulle_frock.jpg',
     ],
+    tryOnCutout: '/images/cutouts/blush-terracotta-tiered-tulle-frock.png',
     variants: [
       { size: '18', sku: 'JS-BLF-18', stock: 7, price: 1290, mrp: 1690, chestCm: 46, waistCm: 44, lengthCm: 50 },
       { size: '20', sku: 'JS-BLF-20', stock: 12, price: 1390, mrp: 1790, chestCm: 51, waistCm: 48, lengthCm: 58 },

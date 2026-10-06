@@ -106,7 +106,8 @@
         "Warm iron on reverse side"
       ]
     },
-    "createdAt": "2026-09-01T10:00:00Z"
+    "createdAt": "2026-09-01T10:00:00Z",
+    "tryOnCutout": "/images/cutouts/gulabi-organza-anarkali-set.png"
   },
   {
     "id": "prod-2",
@@ -213,7 +214,8 @@
         "Steam iron on medium heat"
       ]
     },
-    "createdAt": "2026-09-02T10:00:00Z"
+    "createdAt": "2026-09-02T10:00:00Z",
+    "tryOnCutout": "/images/cutouts/pistachio-linen-nehru-jacket-set.png"
   },
   {
     "id": "prod-3",
@@ -310,7 +312,8 @@
         "Cool iron avoided on smocking embroidery"
       ]
     },
-    "createdAt": "2026-09-03T10:00:00Z"
+    "createdAt": "2026-09-03T10:00:00Z",
+    "tryOnCutout": "/images/cutouts/powder-blue-smocked-cotton-dress.png"
   },
   {
     "id": "prod-4",
@@ -396,7 +399,8 @@
         "Flat dry in shade"
       ]
     },
-    "createdAt": "2026-09-04T10:00:00Z"
+    "createdAt": "2026-09-04T10:00:00Z",
+    "tryOnCutout": "/images/cutouts/saffron-marigold-angrakha-dhoti-set.png"
   },
   {
     "id": "prod-5",
@@ -503,7 +507,8 @@
         "Warm iron if desired"
       ]
     },
-    "createdAt": "2026-09-05T10:00:00Z"
+    "createdAt": "2026-09-05T10:00:00Z",
+    "tryOnCutout": "/images/cutouts/ivory-botanical-co-ord-set.png"
   },
   {
     "id": "prod-6",
@@ -620,7 +625,8 @@
         "Do not iron directly over mirror accents"
       ]
     },
-    "createdAt": "2026-09-06T10:00:00Z"
+    "createdAt": "2026-09-06T10:00:00Z",
+    "tryOnCutout": "/images/cutouts/dusty-mint-peplum-sharara-set.png"
   },
   {
     "id": "prod-7",
@@ -716,7 +722,8 @@
         "Hang to air fluff, steam lightly"
       ]
     },
-    "createdAt": "2026-09-07T10:00:00Z"
+    "createdAt": "2026-09-07T10:00:00Z",
+    "tryOnCutout": "/images/cutouts/blush-terracotta-tiered-tulle-frock.png"
   },
   {
     "id": "prod-8",
@@ -832,6 +839,7 @@
         "Medium hot iron"
       ]
     },
-    "createdAt": "2026-09-08T10:00:00Z"
+    "createdAt": "2026-09-08T10:00:00Z",
+    "tryOnCutout": "/images/cutouts/mustard-indigo-cotton-kurta-pyjama.png"
   }
 ]

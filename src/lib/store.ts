@@ -121,12 +121,24 @@ export function useJeshaStore() {
       setOrders(getStoredOrders());
     };
 
+    const handleStorageEvent = (e: StorageEvent) => {
+      if (e.key === PRODUCTS_STORAGE_KEY) {
+        setProducts(getStoredProducts());
+      } else if (e.key === ORDERS_STORAGE_KEY) {
+        setOrders(getStoredOrders());
+      }
+    };
+
     window.addEventListener('jesha_products_updated', handleProductUpdate);
     window.addEventListener('jesha_orders_updated', handleOrderUpdate);
+    window.addEventListener('storage', handleStorageEvent);
+    window.addEventListener('focus', handleProductUpdate);
 
     return () => {
       window.removeEventListener('jesha_products_updated', handleProductUpdate);
       window.removeEventListener('jesha_orders_updated', handleOrderUpdate);
+      window.removeEventListener('storage', handleStorageEvent);
+      window.removeEventListener('focus', handleProductUpdate);
     };
   }, [fetchFromServer]);
 

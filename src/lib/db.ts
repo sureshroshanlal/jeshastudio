@@ -40,6 +40,7 @@ function rowToProduct(row: any): Product {
     isNewArrival: Boolean(row.is_new_arrival),
     isFestiveEdit: Boolean(row.is_festive_edit),
     images: Array.isArray(row.images) ? row.images : JSON.parse(row.images || '[]'),
+    tryOnCutout: row.try_on_cutout || row.tryOnCutout || undefined,
     variants: Array.isArray(row.variants) ? row.variants : JSON.parse(row.variants || '[]'),
     modelFit: typeof row.model_fit === 'object' && row.model_fit !== null ? row.model_fit : JSON.parse(row.model_fit || '{}'),
     details: typeof row.details === 'object' && row.details !== null ? row.details : JSON.parse(row.details || '{}'),
@@ -64,6 +65,7 @@ function productToRow(product: Product): any {
     is_new_arrival: product.isNewArrival,
     is_festive_edit: product.isFestiveEdit,
     images: product.images,
+    try_on_cutout: product.tryOnCutout || null,
     variants: product.variants,
     model_fit: product.modelFit,
     details: product.details,
@@ -236,7 +238,7 @@ export async function updateProductInDb(id: string, updates: Partial<Product>): 
   }
 
   const products = readProductsLocal();
-  const index = products.findIndex((p) => p.id === id);
+  const index = products.findIndex((p) => p.id === id || p.slug === id);
   if (index === -1) return null;
 
   const updatedProduct = { ...products[index], ...updates };
