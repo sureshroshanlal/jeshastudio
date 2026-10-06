@@ -18,7 +18,8 @@ import {
   Eye, 
   Layers, 
   RefreshCw,
-  HelpCircle
+  HelpCircle,
+  User
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { Product, SizeVariant } from '@/types';
@@ -81,6 +82,11 @@ export default function VirtualTryOnModal({
   const [photoSourceType, setPhotoSourceType] = useState<'sample' | 'custom'>('sample');
   const [activeMuseId, setActiveMuseId] = useState<string>('arya');
   const [customPhotoUrl, setCustomPhotoUrl] = useState<string | null>(null);
+  const [photoScale, setPhotoScale] = useState<number>(1.0);
+  const [photoPos, setPhotoPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+
+  // Active Drag Layer: 'garment' (outfit cutout) or 'photo' (child photo background)
+  const [activeDragLayer, setActiveDragLayer] = useState<'garment' | 'photo'>('garment');
 
   // Garment Transform State
   const [garmentPos, setGarmentPos] = useState<{ x: number; y: number }>({ x: 0, y: 40 });
@@ -171,26 +177,25 @@ export default function VirtualTryOnModal({
     // 1. Draw Background (Child photo or sample muse)
     const bgImg = bgImageRef.current;
     if (bgImg && bgImg.complete && bgImg.naturalWidth > 0) {
-      // Draw background covering the canvas (aspect cover)
+      // Draw background covering the canvas (aspect cover) with custom scale & position
       const imgRatio = bgImg.naturalWidth / bgImg.naturalHeight;
       const canvasRatio = width / height;
 
-      let drawW: number;
-      let drawH: number;
-      let drawX: number;
-      let drawY: number;
+      let baseW: number;
+      let baseH: number;
 
       if (imgRatio > canvasRatio) {
-        drawH = height;
-        drawW = height * imgRatio;
-        drawX = (width - drawW) / 2;
-        drawY = 0;
+        baseH = height;
+        baseW = height * imgRatio;
       } else {
-        drawW = width;
-        drawH = width / imgRatio;
-        drawX = 0;
-        drawY = (height - drawH) / 2;
+        baseW = width;
+        baseH = width / imgRatio;
       }
+
+      const drawW = baseW * photoScale;
+      const drawH = baseH * photoScale;
+      const drawX = (width - drawW) / 2 + photoPos.x;
+      const drawY = (height - drawH) / 2 + photoPos.y;
 
       ctx.save();
       ctx.drawImage(bgImg, drawX, drawY, drawW, drawH);
@@ -244,7 +249,7 @@ export default function VirtualTryOnModal({
 
       ctx.restore();
     }
-  }, [garmentPos, garmentScale, garmentRotation, isFlipped, garmentOpacity]);
+  }, [garmentPos, garmentScale, garmentRotation, isFlipped, garmentOpacity, photoScale, photoPos]);
 
   // Load Background Image with safe crossOrigin
   useEffect(() => {
@@ -328,7 +333,11 @@ export default function VirtualTryOnModal({
     canvas.setPointerCapture(e.pointerId);
     setIsDragging(true);
     setDragStart({ x: e.clientX, y: e.clientY });
-    setPosStart({ x: garmentPos.x, y: garmentPos.y });
+    if (activeDragLayer === 'garment') {
+      setPosStart({ x: garmentPos.x, y: garmentPos.y });
+    } else {
+      setPosStart({ x: photoPos.x, y: photoPos.y });
+    }
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -341,10 +350,17 @@ export default function VirtualTryOnModal({
     const clientRect = canvas?.getBoundingClientRect();
     const scaleFactor = clientRect ? 800 / clientRect.width : 1;
 
-    setGarmentPos({
-      x: Math.round(posStart.x + dx * scaleFactor),
-      y: Math.round(posStart.y + dy * scaleFactor),
-    });
+    if (activeDragLayer === 'garment') {
+      setGarmentPos({
+        x: Math.round(posStart.x + dx * scaleFactor),
+        y: Math.round(posStart.y + dy * scaleFactor),
+      });
+    } else {
+      setPhotoPos({
+        x: Math.round(posStart.x + dx * scaleFactor),
+        y: Math.round(posStart.y + dy * scaleFactor),
+      });
+    }
   };
 
   const handlePointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -367,6 +383,18 @@ export default function VirtualTryOnModal({
     setGarmentOpacity(1.0);
   };
 
+  // Reset Child Photo Position & Scale
+  const handleResetPhoto = () => {
+    setPhotoScale(1.0);
+    setPhotoPos({ x: 0, y: 0 });
+  };
+
+  // Reset Both
+  const handleResetAll = () => {
+    handleResetTransforms();
+    handleResetPhoto();
+  };
+
   // Handle Photo Upload
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -380,6 +408,9 @@ export default function VirtualTryOnModal({
     const newUrl = URL.createObjectURL(file);
     setCustomPhotoUrl(newUrl);
     setPhotoSourceType('custom');
+    setPhotoScale(1.0);
+    setPhotoPos({ x: 0, y: 0 });
+    setActiveDragLayer('photo'); // Activate photo dragging so parent can immediately frame their child
   };
 
   // Clear Custom Photo
@@ -389,6 +420,9 @@ export default function VirtualTryOnModal({
     }
     setCustomPhotoUrl(null);
     setPhotoSourceType('sample');
+    setPhotoScale(1.0);
+    setPhotoPos({ x: 0, y: 0 });
+    setActiveDragLayer('garment');
   };
 
   // Save Snapshot / Web Share
@@ -567,9 +601,9 @@ export default function VirtualTryOnModal({
             <div className="flex-1 space-y-1">
               <p className="font-semibold text-charcoal-900">How to get the perfect try-on in seconds:</p>
               <ol className="list-decimal list-inside space-y-0.5 text-charcoal-700 text-[11px]">
-                <li><strong>Child Photo:</strong> Upload a photo of your child standing straight facing the camera, or choose a sample muse.</li>
-                <li><strong>Drag to Place:</strong> Click/touch and drag directly on the canvas to place the outfit over the shoulders.</li>
-                <li><strong>Fine-Tune:</strong> Use the Scale and Tilt sliders to match shoulder width and pose.</li>
+                <li><strong>Child Photo:</strong> Upload your child&apos;s photo or choose a sample muse, then scale and position to frame them naturally.</li>
+                <li><strong>Dress &amp; Fit:</strong> Use the 👗 Move Dress toggle or scale slider to fit the garment over the shoulders.</li>
+                <li><strong>Fine-Tune:</strong> Adjust tilt, flip, or collar alignment mode for the perfect realistic drape.</li>
                 <li><strong>Save &amp; Share:</strong> Save a beautiful snapshot with watermark or order on WhatsApp!</li>
               </ol>
             </div>
@@ -665,20 +699,47 @@ export default function VirtualTryOnModal({
                 }`}
               />
 
-              {/* Floating Canvas Badges */}
-              <div className="absolute top-3 left-3 bg-charcoal-900/75 backdrop-blur-md text-white text-[10px] font-medium px-2.5 py-1 rounded-full flex items-center gap-1.5 pointer-events-none">
-                <Move className="w-3 h-3 text-rose-300" />
-                <span>Drag outfit to reposition</span>
+              {/* Active Drag Layer Switcher in Top Left */}
+              <div className="absolute top-3 left-3 flex items-center bg-charcoal-900/85 backdrop-blur-md p-1 rounded-full border border-white/10 shadow-lg z-10">
+                <button
+                  type="button"
+                  onClick={() => setActiveDragLayer('garment')}
+                  className={`px-2.5 py-1 rounded-full text-[11px] font-semibold flex items-center gap-1.5 transition-all ${
+                    activeDragLayer === 'garment'
+                      ? 'bg-rose-500 text-white shadow-xs'
+                      : 'text-ivory-200 hover:text-white'
+                  }`}
+                >
+                  <span>👗 Move Dress</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveDragLayer('photo')}
+                  className={`px-2.5 py-1 rounded-full text-[11px] font-semibold flex items-center gap-1.5 transition-all ${
+                    activeDragLayer === 'photo'
+                      ? 'bg-amber-500 text-white shadow-xs'
+                      : 'text-ivory-200 hover:text-white'
+                  }`}
+                >
+                  <span>👶 Move Child</span>
+                </button>
               </div>
 
               {/* Quick Canvas Reset in Top Right */}
               <button
-                onClick={handleResetTransforms}
-                className="absolute top-3 right-3 bg-white/90 hover:bg-white text-charcoal-700 p-2 rounded-full shadow-md transition-all hover:scale-105 active:scale-95"
-                title="Reset outfit placement"
+                type="button"
+                onClick={activeDragLayer === 'garment' ? handleResetTransforms : handleResetPhoto}
+                className="absolute top-3 right-3 bg-white/90 hover:bg-white text-charcoal-700 p-2 rounded-full shadow-md transition-all hover:scale-105 active:scale-95 z-10"
+                title={activeDragLayer === 'garment' ? "Reset dress placement" : "Reset child photo position & scale"}
               >
                 <RotateCcw className="w-3.5 h-3.5" />
               </button>
+
+              {/* Floating Layer Status Indicator */}
+              <div className="absolute top-13 left-3 bg-charcoal-900/70 backdrop-blur-md text-white text-[10px] font-medium px-2.5 py-0.5 rounded-full flex items-center gap-1.5 pointer-events-none transition-all">
+                <Move className="w-2.5 h-2.5 text-rose-300" />
+                <span>{activeDragLayer === 'garment' ? 'Canvas Drag: Dress' : 'Canvas Drag: Child Photo'}</span>
+              </div>
 
               {/* Bottom Watermark Overlay for Live View */}
               <div className="absolute bottom-3 left-3 right-3 bg-charcoal-900/60 backdrop-blur-md rounded-2xl px-3 py-1.5 text-white flex items-center justify-between text-[11px] pointer-events-none">
@@ -693,7 +754,7 @@ export default function VirtualTryOnModal({
 
             {/* Mobile / Tablet Quick Hint */}
             <p className="text-[11px] text-charcoal-600 mt-2 text-center">
-              💡 Touch and drag the dress directly on the image to align it with your child&apos;s shoulders.
+              💡 Drag directly on the image to align. Use the top toggle to switch between moving the dress or child photo.
             </p>
           </div>
 
@@ -781,109 +842,200 @@ export default function VirtualTryOnModal({
 
             {/* Tab 1: Fit & Scale Manual Controls */}
             {activeTab === 'controls' && (
-              <div className="space-y-4 p-4 rounded-2xl bg-white border border-ivory-300 shadow-soft animate-fade-in">
+              <div className="space-y-3.5 p-4 rounded-2xl bg-white border border-ivory-300 shadow-soft animate-fade-in">
                 
-                {/* Scale Slider */}
-                <div className="space-y-1.5">
+                {/* 1. Child Photo Scale & Framing */}
+                <div className="p-3.5 rounded-2xl bg-amber-50/60 border border-amber-200/80 space-y-2.5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-semibold text-charcoal-800 flex items-center gap-1.5">
-                      <ZoomIn className="w-3.5 h-3.5 text-rose-500" /> Garment Scale
+                    <span className="font-semibold text-charcoal-900 flex items-center gap-1.5">
+                      <User className="w-3.5 h-3.5 text-amber-600" />
+                      <span>Child Photo Scale</span>
                     </span>
-                    <span className="font-mono text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md">
-                      {Math.round(garmentScale * 100)}%
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-mono text-[11px] font-bold text-amber-700 bg-amber-100/80 px-2 py-0.5 rounded-md">
+                        {Math.round(photoScale * 100)}%
+                      </span>
+                      {(photoScale !== 1.0 || photoPos.x !== 0 || photoPos.y !== 0) && (
+                        <button
+                          type="button"
+                          onClick={handleResetPhoto}
+                          className="text-[10px] text-amber-800 hover:text-amber-900 underline font-medium"
+                        >
+                          Reset Photo
+                        </button>
+                      )}
+                    </div>
                   </div>
+
+                  {/* Child Photo Zoom Slider */}
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => setGarmentScale((s) => Math.max(0.4, Number((s - 0.05).toFixed(2))))}
-                      className="p-1.5 rounded-lg bg-ivory-100 hover:bg-ivory-200 text-charcoal-700"
-                      title="Decrease size"
+                      type="button"
+                      onClick={() => setPhotoScale((s) => Math.max(0.5, Number((s - 0.05).toFixed(2))))}
+                      className="p-1.5 rounded-lg bg-white hover:bg-amber-100 text-charcoal-700 border border-amber-200 shadow-2xs"
+                      title="Zoom out child photo"
                     >
                       <ZoomOut className="w-3.5 h-3.5" />
                     </button>
                     <input
                       type="range"
-                      min={0.4}
-                      max={2.0}
+                      min={0.5}
+                      max={2.5}
                       step={0.02}
-                      value={garmentScale}
-                      onChange={(e) => setGarmentScale(parseFloat(e.target.value))}
-                      className="w-full accent-rose-500 h-2 bg-ivory-200 rounded-lg cursor-pointer"
+                      value={photoScale}
+                      onChange={(e) => setPhotoScale(parseFloat(e.target.value))}
+                      className="w-full accent-amber-500 h-2 bg-amber-200/60 rounded-lg cursor-pointer"
                     />
                     <button
-                      onClick={() => setGarmentScale((s) => Math.min(2.0, Number((s + 0.05).toFixed(2))))}
-                      className="p-1.5 rounded-lg bg-ivory-100 hover:bg-ivory-200 text-charcoal-700"
-                      title="Increase size"
+                      type="button"
+                      onClick={() => setPhotoScale((s) => Math.min(2.5, Number((s + 0.05).toFixed(2))))}
+                      className="p-1.5 rounded-lg bg-white hover:bg-amber-100 text-charcoal-700 border border-amber-200 shadow-2xs"
+                      title="Zoom in child photo"
                     >
                       <ZoomIn className="w-3.5 h-3.5" />
                     </button>
                   </div>
-                </div>
 
-                {/* Rotation Slider */}
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-semibold text-charcoal-800 flex items-center gap-1.5">
-                      <RefreshCw className="w-3.5 h-3.5 text-amber-500" /> Tilt &amp; Angle
-                    </span>
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-mono text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">
-                        {garmentRotation}°
-                      </span>
-                      {garmentRotation !== 0 && (
-                        <button
-                          onClick={() => setGarmentRotation(0)}
-                          className="text-[10px] text-charcoal-600 hover:text-charcoal-900 underline"
-                        >
-                          Reset
-                        </button>
-                      )}
+                  {/* Direct Canvas Drag Target Toggle */}
+                  <div className="flex items-center justify-between text-[11px] text-charcoal-600 pt-0.5">
+                    <span>Active Canvas Drag:</span>
+                    <div className="inline-flex rounded-lg border border-amber-200/80 bg-white p-0.5 shadow-2xs">
+                      <button
+                        type="button"
+                        onClick={() => setActiveDragLayer('photo')}
+                        className={`px-2 py-0.5 rounded-md font-semibold text-[10px] transition-all ${
+                          activeDragLayer === 'photo'
+                            ? 'bg-amber-500 text-white shadow-2xs'
+                            : 'text-charcoal-600 hover:text-charcoal-900'
+                        }`}
+                      >
+                        👶 Move Photo
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setActiveDragLayer('garment')}
+                        className={`px-2 py-0.5 rounded-md font-semibold text-[10px] transition-all ${
+                          activeDragLayer === 'garment'
+                            ? 'bg-rose-500 text-white shadow-2xs'
+                            : 'text-charcoal-600 hover:text-charcoal-900'
+                        }`}
+                      >
+                        👗 Move Dress
+                      </button>
                     </div>
                   </div>
-                  <input
-                    type="range"
-                    min={-40}
-                    max={40}
-                    step={1}
-                    value={garmentRotation}
-                    onChange={(e) => setGarmentRotation(parseInt(e.target.value))}
-                    className="w-full accent-amber-500 h-2 bg-ivory-200 rounded-lg cursor-pointer"
-                  />
                 </div>
 
-                {/* Quick Toggle Buttons: Flip Horizontal & Alignment Opacity */}
-                <div className="grid grid-cols-2 gap-2 pt-1">
-                  <button
-                    onClick={() => setIsFlipped(!isFlipped)}
-                    className={`py-2 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
-                      isFlipped
-                        ? 'bg-rose-50 border-rose-300 text-rose-600 shadow-sm'
-                        : 'bg-ivory-100 border-ivory-300 text-charcoal-700 hover:bg-ivory-200'
-                    }`}
-                  >
-                    <FlipHorizontal className="w-3.5 h-3.5" />
-                    <span>Flip Horizontal</span>
-                  </button>
+                {/* 2. Garment Scale & Silhouette */}
+                <div className="p-3.5 rounded-2xl bg-rose-50/40 border border-rose-200/70 space-y-3">
+                  {/* Garment Scale */}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-semibold text-charcoal-800 flex items-center gap-1.5">
+                        <ZoomIn className="w-3.5 h-3.5 text-rose-500" /> Garment Scale
+                      </span>
+                      <span className="font-mono text-[11px] font-bold text-rose-600 bg-rose-100/70 px-2 py-0.5 rounded-md">
+                        {Math.round(garmentScale * 100)}%
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setGarmentScale((s) => Math.max(0.4, Number((s - 0.05).toFixed(2))))}
+                        className="p-1.5 rounded-lg bg-white hover:bg-rose-100 text-charcoal-700 border border-rose-200 shadow-2xs"
+                        title="Decrease size"
+                      >
+                        <ZoomOut className="w-3.5 h-3.5" />
+                      </button>
+                      <input
+                        type="range"
+                        min={0.4}
+                        max={2.0}
+                        step={0.02}
+                        value={garmentScale}
+                        onChange={(e) => setGarmentScale(parseFloat(e.target.value))}
+                        className="w-full accent-rose-500 h-2 bg-rose-200/60 rounded-lg cursor-pointer"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setGarmentScale((s) => Math.min(2.0, Number((s + 0.05).toFixed(2))))}
+                        className="p-1.5 rounded-lg bg-white hover:bg-rose-100 text-charcoal-700 border border-rose-200 shadow-2xs"
+                        title="Increase size"
+                      >
+                        <ZoomIn className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
 
-                  <button
-                    onClick={() => setGarmentOpacity((o) => (o < 1 ? 1.0 : 0.65))}
-                    className={`py-2 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
-                      garmentOpacity < 1
-                        ? 'bg-pistachio-50 border-pistachio-300 text-pistachio-700 shadow-sm'
-                        : 'bg-ivory-100 border-ivory-300 text-charcoal-700 hover:bg-ivory-200'
-                    }`}
-                  >
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>{garmentOpacity < 1 ? 'Solid Mode' : 'Collar Align Mode'}</span>
-                  </button>
+                  {/* Rotation Slider */}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-semibold text-charcoal-800 flex items-center gap-1.5">
+                        <RefreshCw className="w-3.5 h-3.5 text-amber-500" /> Tilt &amp; Angle
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-mono text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">
+                          {garmentRotation}°
+                        </span>
+                        {garmentRotation !== 0 && (
+                          <button
+                            type="button"
+                            onClick={() => setGarmentRotation(0)}
+                            className="text-[10px] text-charcoal-600 hover:text-charcoal-900 underline"
+                          >
+                            Reset
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    <input
+                      type="range"
+                      min={-40}
+                      max={40}
+                      step={1}
+                      value={garmentRotation}
+                      onChange={(e) => setGarmentRotation(parseInt(e.target.value))}
+                      className="w-full accent-amber-500 h-2 bg-ivory-200 rounded-lg cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Quick Toggle Buttons: Flip Horizontal & Alignment Opacity */}
+                  <div className="grid grid-cols-2 gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setIsFlipped(!isFlipped)}
+                      className={`py-2 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                        isFlipped
+                          ? 'bg-rose-50 border-rose-300 text-rose-600 shadow-2xs'
+                          : 'bg-white border-ivory-300 text-charcoal-700 hover:bg-ivory-100'
+                      }`}
+                    >
+                      <FlipHorizontal className="w-3.5 h-3.5" />
+                      <span>Flip Horizontal</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setGarmentOpacity((o) => (o < 1 ? 1.0 : 0.65))}
+                      className={`py-2 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
+                        garmentOpacity < 1
+                          ? 'bg-pistachio-50 border-pistachio-300 text-pistachio-700 shadow-2xs'
+                          : 'bg-white border-ivory-300 text-charcoal-700 hover:bg-ivory-100'
+                      }`}
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>{garmentOpacity < 1 ? 'Solid Mode' : 'Collar Align'}</span>
+                    </button>
+                  </div>
                 </div>
 
-                {/* Reset Placement */}
+                {/* Reset Buttons */}
                 <div className="flex justify-between items-center pt-1 border-t border-ivory-200 text-xs">
                   <span className="text-charcoal-600">Want to start over?</span>
                   <button
-                    onClick={handleResetTransforms}
-                    className="text-rose-500 hover:text-rose-700 font-semibold flex items-center gap-1"
+                    type="button"
+                    onClick={handleResetAll}
+                    className="text-rose-500 hover:text-rose-700 font-semibold flex items-center gap-1 transition-colors"
                   >
                     <RotateCcw className="w-3.5 h-3.5" /> Reset All Adjustments
                   </button>
