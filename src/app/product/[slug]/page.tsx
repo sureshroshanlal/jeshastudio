@@ -23,6 +23,7 @@ import {
 import Header from '@/components/storefront/Header';
 import Footer from '@/components/storefront/Footer';
 import FindTheirFitModal from '@/components/storefront/FindTheirFitModal';
+import VirtualTryOnModal from '@/components/storefront/VirtualTryOnModal';
 import ProductCard from '@/components/storefront/ProductCard';
 import ProductImageZoom from '@/components/storefront/ProductImageZoom';
 import { useJeshaStore } from '@/lib/store';
@@ -44,6 +45,7 @@ export default function ProductDetailsPage() {
   const [childHeightInput, setChildHeightInput] = useState('');
   const [childBuildInput, setChildBuildInput] = useState('Regular');
   const [fitModalOpen, setFitModalOpen] = useState(false);
+  const [tryOnModalOpen, setTryOnModalOpen] = useState(false);
   const [showSizeChart, setShowSizeChart] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
 
@@ -188,9 +190,19 @@ export default function ProductDetailsPage() {
                 <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.2em] font-bold text-rose-500">
                   <Ruler className="w-3.5 h-3.5" /> See the Fit — Model Stats
                 </span>
-                <span className="text-[11px] font-semibold text-charcoal-900 bg-white/90 px-2.5 py-0.5 rounded-full border border-ivory-300">
-                  Wears Size: {product.modelFit.wearingSize}
-                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setTryOnModalOpen(true)}
+                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-600 hover:text-rose-700 bg-rose-100/80 hover:bg-rose-100 px-2.5 py-0.5 rounded-full border border-rose-200 shadow-xs transition-colors"
+                  >
+                    <Sparkles className="w-3 h-3 text-rose-500" />
+                    <span>Try On Your Child</span>
+                  </button>
+                  <span className="text-[11px] font-semibold text-charcoal-900 bg-white/90 px-2.5 py-0.5 rounded-full border border-ivory-300">
+                    Wears Size: {product.modelFit.wearingSize}
+                  </span>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-xs pt-1">
@@ -314,8 +326,36 @@ export default function ProductDetailsPage() {
               </div>
             </div>
 
-            {/* Primary Order on WhatsApp Action */}
-            <div className="space-y-3 pt-2">
+            {/* Action CTAs: Virtual Try-On + WhatsApp Order */}
+            <div className="space-y-2.5 pt-2">
+              {/* Virtual Try-On Primary Button */}
+              <button
+                type="button"
+                onClick={() => setTryOnModalOpen(true)}
+                className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-rose-500 via-rose-600 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-between group border border-rose-400/40"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0 group-hover:rotate-12 transition-transform shadow-inner">
+                    <Sparkles className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <div className="flex items-center gap-2">
+                      <span className="font-serif font-bold text-sm tracking-wide text-white">✨ Virtual Try-On</span>
+                      <span className="text-[9px] bg-white/25 text-white px-2 py-0.5 rounded-full uppercase tracking-wider font-sans font-bold">
+                        100% In-Browser
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-rose-100 font-sans font-normal">
+                      See how this silhouette looks on your child
+                    </div>
+                  </div>
+                </div>
+
+                <span className="text-xs bg-white text-rose-600 font-sans font-bold px-3 py-1.5 rounded-xl shadow-sm group-hover:bg-rose-50 transition-colors flex-shrink-0">
+                  Try Now &rarr;
+                </span>
+              </button>
+
               <a
                 href={generateProductOrderUrl({
                   product,
@@ -505,6 +545,15 @@ export default function ProductDetailsPage() {
         isOpen={fitModalOpen}
         onClose={() => setFitModalOpen(false)}
         productName={product.name}
+      />
+
+      {/* Virtual Try-On AR Modal */}
+      <VirtualTryOnModal
+        isOpen={tryOnModalOpen}
+        onClose={() => setTryOnModalOpen(false)}
+        initialProduct={product}
+        allProducts={products}
+        initialVariant={selectedVariant}
       />
 
       <Footer />

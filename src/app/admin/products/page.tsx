@@ -20,6 +20,7 @@ import { useJeshaStore } from '@/lib/store';
 import { Product, SizeVariant, Gender, StyleCategory, Occasion, ALL_SIZES } from '@/types';
 import { getStandardMeasurement, createSizeVariant } from '@/lib/sizeStandards';
 import ProductImageUploader from '@/components/admin/ProductImageUploader';
+import TryOnCutoutUploader from '@/components/admin/TryOnCutoutUploader';
 import InstagramImportModal from '@/components/admin/InstagramImportModal';
 
 function ProductsManagementContent() {
@@ -94,6 +95,7 @@ function ProductsManagementContent() {
       isNewArrival: true,
       isFestiveEdit: false,
       images: ['https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1200&q=85'],
+      tryOnCutout: '',
       variants: [
         createSizeVariant('22', 1290, 1690, 'JS'),
         createSizeVariant('24', 1290, 1690, 'JS'),
@@ -388,6 +390,11 @@ function ProductsManagementContent() {
                             {p.isNewArrival && (
                               <span className="text-[9px] bg-pistachio-100 text-pistachio-600 font-bold px-1.5 py-0.2 rounded">New</span>
                             )}
+                            {p.tryOnCutout && (
+                              <span className="text-[9px] bg-amber-100 text-amber-700 font-bold px-1.5 py-0.2 rounded flex items-center gap-0.5">
+                                <Sparkles className="w-2.5 h-2.5 text-amber-600" /> VTON Cutout
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -577,10 +584,17 @@ function ProductsManagementContent() {
               </div>
 
               {/* Section 2: Visual Assets & Images */}
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <ProductImageUploader
                   images={formData.images || []}
                   onChange={(newImages) => setFormData((prev) => ({ ...prev, images: newImages }))}
+                />
+
+                <TryOnCutoutUploader
+                  value={formData.tryOnCutout}
+                  slug={formData.slug || (formData.name ? formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : undefined)}
+                  fallbackImage={formData.images?.[0]}
+                  onChange={(cutoutUrl) => setFormData((prev) => ({ ...prev, tryOnCutout: cutoutUrl }))}
                 />
               </div>
 

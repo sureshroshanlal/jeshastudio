@@ -51,6 +51,7 @@ export interface Product {
   isNewArrival: boolean;
   isFestiveEdit: boolean;
   images: string[];
+  tryOnCutout?: string;
   variants: SizeVariant[];
   modelFit: ModelFitInfo;
   details: ProductDetails;

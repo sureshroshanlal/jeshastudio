@@ -88,3 +88,34 @@ export function generateGeneralConciergeUrl(): string {
   const message = `🌸 *Hello Jesha Studio!* 🌸\n\nI am browsing your kids collection and would love to ask a question regarding sizing, availability, and placing an order.`;
   return `https://wa.me/${JESHA_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
+
+export function generateTryOnOrderUrl({
+  product,
+  selectedVariant,
+  childNote,
+}: {
+  product: Product;
+  selectedVariant: SizeVariant;
+  childNote?: string;
+}): string {
+  const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+
+  let message = `✨ *Hello Jesha Studio!* ✨\n\n`;
+  message += `I just tried *${product.name}* (Size ${selectedVariant.size}) on my child in your *Virtual Try-On Studio* and love the look! 🌸\n\n`;
+  message += `👗 *Design:* ${product.name}\n`;
+  message += `📏 *Size Selected:* ${selectedVariant.size}\n`;
+  message += `💰 *Price:* ₹${selectedVariant.price}\n`;
+
+  if (childNote) {
+    message += `👶 *Child Notes:* ${childNote}\n`;
+  }
+
+  if (currentUrl) {
+    message += `🔗 *Product Link:* ${currentUrl}\n`;
+  }
+
+  message += `\nI saved our Try-On snapshot to share with you. Please let me know how to proceed with the order! Thank you!`;
+
+  return `https://wa.me/${JESHA_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
