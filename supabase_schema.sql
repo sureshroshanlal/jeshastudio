@@ -20,12 +20,17 @@ CREATE TABLE IF NOT EXISTS public.products (
     is_new_arrival BOOLEAN NOT NULL DEFAULT false,
     is_festive_edit BOOLEAN NOT NULL DEFAULT false,
     images JSONB NOT NULL DEFAULT '[]'::jsonb, -- array of photo URLs
+    try_on_cutout TEXT, -- Virtual Try-On transparent PNG cutout URL
     variants JSONB NOT NULL DEFAULT '[]'::jsonb, -- array of SizeVariant objects
     model_fit JSONB NOT NULL DEFAULT '{}'::jsonb, -- ModelFitInfo object
     details JSONB NOT NULL DEFAULT '{}'::jsonb, -- ProductDetails object
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- Ensure try_on_cutout exists if table was already created
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS try_on_cutout TEXT;
+
 
 -- 2. Create Orders Table
 CREATE TABLE IF NOT EXISTS public.orders (

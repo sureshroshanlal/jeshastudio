@@ -25,6 +25,7 @@ function ensureDataDir() {
 
 // Data Converters between Postgres snake_case and TypeScript camelCase
 function rowToProduct(row: any): Product {
+  const detailsObj = typeof row.details === 'object' && row.details !== null ? row.details : JSON.parse(row.details || '{}');
   return {
     id: row.id,
     slug: row.slug,
@@ -40,10 +41,10 @@ function rowToProduct(row: any): Product {
     isNewArrival: Boolean(row.is_new_arrival),
     isFestiveEdit: Boolean(row.is_festive_edit),
     images: Array.isArray(row.images) ? row.images : JSON.parse(row.images || '[]'),
-    tryOnCutout: row.try_on_cutout || row.tryOnCutout || undefined,
+    tryOnCutout: row.try_on_cutout || detailsObj.tryOnCutout || row.tryOnCutout || undefined,
     variants: Array.isArray(row.variants) ? row.variants : JSON.parse(row.variants || '[]'),
     modelFit: typeof row.model_fit === 'object' && row.model_fit !== null ? row.model_fit : JSON.parse(row.model_fit || '{}'),
-    details: typeof row.details === 'object' && row.details !== null ? row.details : JSON.parse(row.details || '{}'),
+    details: detailsObj,
     createdAt: row.created_at || new Date().toISOString(),
   };
 }
@@ -68,7 +69,10 @@ function productToRow(product: Product): any {
     try_on_cutout: product.tryOnCutout || null,
     variants: product.variants,
     model_fit: product.modelFit,
-    details: product.details,
+    details: {
+      ...(product.details || {}),
+      tryOnCutout: product.tryOnCutout || undefined,
+    },
     created_at: product.createdAt,
     updated_at: new Date().toISOString(),
   };
