@@ -17,7 +17,8 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { useJeshaStore } from '@/lib/store';
-import { Product, SizeVariant, Gender, StyleCategory, Occasion } from '@/types';
+import { Product, SizeVariant, Gender, StyleCategory, Occasion, ALL_SIZES } from '@/types';
+import { getStandardMeasurement, createSizeVariant } from '@/lib/sizeStandards';
 import ProductImageUploader from '@/components/admin/ProductImageUploader';
 import InstagramImportModal from '@/components/admin/InstagramImportModal';
 
@@ -48,8 +49,8 @@ function ProductsManagementContent() {
     isFestiveEdit: false,
     images: ['https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1200&q=85'],
     variants: [
-      { size: '22', sku: 'JS-NEW-22', stock: 10, price: 1290, mrp: 1690, chestCm: 56, waistCm: 52, lengthCm: 58 },
-      { size: '24', sku: 'JS-NEW-24', stock: 10, price: 1290, mrp: 1690, chestCm: 61, waistCm: 56, lengthCm: 66 },
+      createSizeVariant('22', 1290, 1690, 'JS'),
+      createSizeVariant('24', 1290, 1690, 'JS'),
     ],
     modelFit: {
       modelName: 'Arya',
@@ -94,8 +95,8 @@ function ProductsManagementContent() {
       isFestiveEdit: false,
       images: ['https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1200&q=85'],
       variants: [
-        { size: '22', sku: `JS-${Date.now().toString().slice(-4)}-22`, stock: 8, price: 1290, mrp: 1690, chestCm: 56, waistCm: 52, lengthCm: 58 },
-        { size: '24', sku: `JS-${Date.now().toString().slice(-4)}-24`, stock: 10, price: 1290, mrp: 1690, chestCm: 61, waistCm: 56, lengthCm: 66 },
+        createSizeVariant('22', 1290, 1690, 'JS'),
+        createSizeVariant('24', 1290, 1690, 'JS'),
       ],
       modelFit: {
         modelName: 'Arya',
@@ -166,21 +167,54 @@ function ProductsManagementContent() {
     }));
   };
 
-  const handleAddVariant = () => {
-    const newVariant: SizeVariant = {
-      size: '26',
-      sku: `JS-${Date.now().toString().slice(-4)}-26`,
-      stock: 5,
-      price: formData.price || 1290,
-      mrp: formData.mrp || 1690,
-      chestCm: 64,
-      waistCm: 60,
-      lengthCm: 74,
-    };
+  const handleAddVariant = (preferredSize?: string) => {
+    const existingSizes = new Set((formData.variants || []).map((v) => v.size));
+    const targetSize = preferredSize || ALL_SIZES.find((s) => !existingSizes.has(s)) || '22';
+    
+    const newVariant = createSizeVariant(
+      targetSize,
+      formData.price || 1290,
+      formData.mrp || 1690,
+      formData.name ? formData.name.slice(0, 3) : 'JS'
+    );
+
     setFormData((prev) => ({
       ...prev,
       variants: [...(prev.variants || []), newVariant],
     }));
+  };
+
+  const handleToggleSize = (size: string) => {
+    const variants = formData.variants || [];
+    const existingIndex = variants.findIndex((v) => v.size === size);
+    if (existingIndex >= 0) {
+      setFormData((prev) => ({
+        ...prev,
+        variants: variants.filter((_, i) => i !== existingIndex),
+      }));
+    } else {
+      handleAddVariant(size);
+    }
+  };
+
+  const handleSizeSelect = (index: number, newSize: string) => {
+    const std = getStandardMeasurement(newSize);
+    setFormData((prev) => {
+      const variants = [...(prev.variants || [])];
+      const current = variants[index] || {};
+      variants[index] = {
+        ...current,
+        size: newSize,
+        // On selection of size the stock should default to 1:
+        stock: 1,
+        // Chest and length should auto populate as per the market standards:
+        chestCm: std.chestCm,
+        lengthCm: std.lengthCm,
+        waistCm: std.waistCm,
+        sku: current.sku?.replace(/-\d+$/, `-${newSize}`) || `JS-${Date.now().toString().slice(-4)}-${newSize}`,
+      };
+      return { ...prev, variants };
+    });
   };
 
   const handleRemoveVariant = (index: number) => {
@@ -553,74 +587,172 @@ function ProductsManagementContent() {
               {/* Section 3: Size Variants & Live Stock Matrix */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between border-b border-ivory-200 pb-1">
-                  <h4 className="font-serif font-bold text-sm text-charcoal-900">
-                    3. Size Variants &amp; Stock Count
-                  </h4>
+                  <div>
+                    <h4 className="font-serif font-bold text-sm text-charcoal-900">
+                      3. Size Variants &amp; Stock Count
+                    </h4>
+                    <p className="text-[11px] text-charcoal-500">
+                      Select sizes 16 to 40 (increments of 2). Stock defaults to 1; Chest &amp; Length auto-populate from market standards.
+                    </p>
+                  </div>
                   <button
                     type="button"
-                    onClick={handleAddVariant}
-                    className="text-xs text-rose-500 hover:underline flex items-center gap-1 font-semibold"
+                    onClick={() => handleAddVariant()}
+                    className="text-xs text-rose-500 hover:text-rose-600 hover:underline flex items-center gap-1 font-semibold"
                   >
                     <Plus className="w-3.5 h-3.5" /> Add Size Variant
                   </button>
                 </div>
 
-                <div className="space-y-2">
-                  {(formData.variants || []).map((v, idx) => (
-                    <div key={idx} className="flex flex-wrap items-center gap-2 p-2.5 bg-ivory-50 rounded-xl border border-ivory-200">
-                      <input
-                        type="text"
-                        placeholder="Size (16-40)"
-                        value={v.size}
-                        onChange={(e) => handleVariantChange(idx, 'size', e.target.value)}
-                        className="w-24 p-1.5 rounded-lg border border-ivory-300 bg-white font-semibold text-center"
-                      />
-                      <input
-                        type="text"
-                        placeholder="SKU"
-                        value={v.sku}
-                        onChange={(e) => handleVariantChange(idx, 'sku', e.target.value)}
-                        className="w-28 p-1.5 rounded-lg border border-ivory-300 bg-white"
-                      />
-                      <div className="flex items-center gap-1">
-                        <span className="text-[10px] text-charcoal-600">Stock:</span>
-                        <input
-                          type="number"
-                          placeholder="Stock"
-                          value={v.stock}
-                          onChange={(e) => handleVariantChange(idx, 'stock', parseInt(e.target.value) || 0)}
-                          className="w-16 p-1.5 rounded-lg border border-ivory-300 bg-white text-center font-bold"
-                        />
+                {/* Quick Add / Toggle Size Chips (16 to 40 in increments of 2) */}
+                <div className="p-3 bg-ivory-100/70 rounded-2xl border border-ivory-200 space-y-1.5">
+                  <div className="flex items-center justify-between text-[11px] font-bold text-charcoal-700">
+                    <span className="flex items-center gap-1">
+                      <Ruler className="w-3.5 h-3.5 text-rose-500" />
+                      Quick Toggle Size (16–40):
+                    </span>
+                    <span className="text-[10px] text-charcoal-500 font-normal">
+                      Click to add/remove with auto-standard measurements
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {ALL_SIZES.map((sz) => {
+                      const isAdded = (formData.variants || []).some((v) => v.size === sz);
+                      return (
+                        <button
+                          key={sz}
+                          type="button"
+                          onClick={() => handleToggleSize(sz)}
+                          className={`px-2.5 py-1 text-xs rounded-xl font-bold transition-all flex items-center gap-1 ${
+                            isAdded
+                              ? 'bg-stone-900 text-white shadow-xs'
+                              : 'bg-white hover:bg-ivory-200 text-charcoal-700 border border-ivory-300'
+                          }`}
+                        >
+                          {isAdded && <Check className="w-3 h-3 text-emerald-400" />}
+                          <span>{sz}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Variant List Table/Cards */}
+                <div className="space-y-2.5">
+                  {(formData.variants || []).map((v, idx) => {
+                    const std = getStandardMeasurement(v.size);
+                    return (
+                      <div 
+                        key={idx} 
+                        className="p-3 bg-white rounded-2xl border border-ivory-300 shadow-2xs space-y-2"
+                      >
+                        <div className="flex flex-wrap items-center gap-2">
+                          
+                          {/* Size Dropdown: 16 to 40 in increments of 2 */}
+                          <div className="flex flex-col">
+                            <label className="text-[10px] text-charcoal-500 font-semibold mb-0.5">Size (16-40)</label>
+                            <select
+                              value={v.size}
+                              onChange={(e) => handleSizeSelect(idx, e.target.value)}
+                              className="w-24 p-1.5 rounded-lg border border-ivory-300 bg-ivory-50 font-bold text-charcoal-900 text-xs focus:ring-1 focus:ring-rose-500"
+                            >
+                              {ALL_SIZES.map((sz) => (
+                                <option key={sz} value={sz}>
+                                  Size {sz}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+                          {/* SKU */}
+                          <div className="flex flex-col">
+                            <label className="text-[10px] text-charcoal-500 font-semibold mb-0.5">SKU</label>
+                            <input
+                              type="text"
+                              placeholder="SKU"
+                              value={v.sku}
+                              onChange={(e) => handleVariantChange(idx, 'sku', e.target.value)}
+                              className="w-28 p-1.5 rounded-lg border border-ivory-300 bg-white text-xs font-mono"
+                            />
+                          </div>
+
+                          {/* Stock (defaults to 1) */}
+                          <div className="flex flex-col">
+                            <label className="text-[10px] text-charcoal-500 font-semibold mb-0.5">Stock</label>
+                            <input
+                              type="number"
+                              min="0"
+                              placeholder="1"
+                              value={v.stock}
+                              onChange={(e) => handleVariantChange(idx, 'stock', parseInt(e.target.value) || 0)}
+                              className="w-16 p-1.5 rounded-lg border border-ivory-300 bg-white text-center font-bold text-xs"
+                            />
+                          </div>
+
+                          {/* Chest (cm) - Auto-populated */}
+                          <div className="flex flex-col">
+                            <div className="flex items-center justify-between mb-0.5">
+                              <label className="text-[10px] text-charcoal-500 font-semibold">Chest (cm)</label>
+                            </div>
+                            <input
+                              type="number"
+                              placeholder={`${std.chestCm}`}
+                              value={v.chestCm || ''}
+                              onChange={(e) => handleVariantChange(idx, 'chestCm', parseInt(e.target.value) || 0)}
+                              className="w-20 p-1.5 rounded-lg border border-ivory-300 bg-white text-center text-xs font-medium"
+                            />
+                          </div>
+
+                          {/* Length (cm) - Auto-populated */}
+                          <div className="flex flex-col">
+                            <div className="flex items-center justify-between mb-0.5">
+                              <label className="text-[10px] text-charcoal-500 font-semibold">Length (cm)</label>
+                            </div>
+                            <input
+                              type="number"
+                              placeholder={`${std.lengthCm}`}
+                              value={v.lengthCm || ''}
+                              onChange={(e) => handleVariantChange(idx, 'lengthCm', parseInt(e.target.value) || 0)}
+                              className="w-20 p-1.5 rounded-lg border border-ivory-300 bg-white text-center text-xs font-medium"
+                            />
+                          </div>
+
+                          {/* Remove Variant Button */}
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveVariant(idx)}
+                            className="p-2 text-rose-500 hover:bg-rose-50 rounded-xl ml-auto self-end transition-colors"
+                            title="Remove variant"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+
+                        {/* Standard Measurement Reference Note */}
+                        <div className="flex items-center justify-between text-[10px] text-charcoal-500 px-1 pt-1 border-t border-ivory-100">
+                          <span>
+                            Market Standard for <strong className="text-charcoal-700">Size {v.size}</strong>: Chest ~{std.chestInches}&quot; ({std.chestCm} cm) &bull; Length: {std.lengthCm} cm
+                          </span>
+                          <span className="text-amber-800 font-medium">
+                            Approx: {std.approxAge}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-[10px] text-charcoal-600">Chest:</span>
-                        <input
-                          type="number"
-                          placeholder="Chest cm"
-                          value={v.chestCm || ''}
-                          onChange={(e) => handleVariantChange(idx, 'chestCm', parseInt(e.target.value) || 0)}
-                          className="w-16 p-1.5 rounded-lg border border-ivory-300 bg-white text-center"
-                        />
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-[10px] text-charcoal-600">Length:</span>
-                        <input
-                          type="number"
-                          placeholder="Len cm"
-                          value={v.lengthCm || ''}
-                          onChange={(e) => handleVariantChange(idx, 'lengthCm', parseInt(e.target.value) || 0)}
-                          className="w-16 p-1.5 rounded-lg border border-ivory-300 bg-white text-center"
-                        />
-                      </div>
+                    );
+                  })}
+
+                  {(formData.variants || []).length === 0 && (
+                    <div className="text-center py-6 border border-dashed border-ivory-300 rounded-2xl bg-ivory-50/50">
+                      <p className="text-xs text-charcoal-600">No size variants added yet.</p>
                       <button
                         type="button"
-                        onClick={() => handleRemoveVariant(idx)}
-                        className="p-1.5 text-rose-500 hover:bg-rose-100 rounded-lg ml-auto"
+                        onClick={() => handleAddVariant('22')}
+                        className="mt-2 text-xs font-bold text-rose-600 underline"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        Add Default Size (22)
                       </button>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
 

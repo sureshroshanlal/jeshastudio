@@ -1,4 +1,5 @@
 import { Gender, StyleCategory, Occasion, SizeVariant, Product } from '@/types';
+import { getStandardMeasurement } from './sizeStandards';
 
 // Standard numeric garment sizes supported by Jesha Studio
 export const VALID_JESHA_SIZES = [
@@ -239,21 +240,17 @@ export function parseInstagramCaption(caption: string): ExtractedInstagramProduc
 
   // 7. Generate Size Variants
   const variants: SizeVariant[] = finalSizes.map((sizeStr) => {
-    const numericSize = parseInt(sizeStr, 10);
-    // Approximate chest/length grading for numeric sizes 16-40
-    const chestCm = Math.round(44 + (numericSize - 16) * 1.5);
-    const waistCm = Math.round(chestCm - 4);
-    const lengthCm = Math.round(42 + (numericSize - 16) * 2.2);
+    const std = getStandardMeasurement(sizeStr);
 
     return {
       size: sizeStr,
       sku: `JS-${Date.now().toString().slice(-4)}-${sizeStr}`,
-      stock: 6,
+      stock: 1, // Default to 1
       price,
       mrp,
-      chestCm,
-      waistCm,
-      lengthCm,
+      chestCm: std.chestCm,
+      waistCm: std.waistCm,
+      lengthCm: std.lengthCm,
     };
   });
 
